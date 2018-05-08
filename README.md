@@ -7,10 +7,10 @@ weekly task tracker app
 
 tasks should be created with rules
 example:
-play guitar 30 min -> occurs daily, 1 pt per completion
-code 30 min -> occurs daily, 1 pt per completion
-work out -> occurs daily with max of 3x per week, 1 pt per completion
-cook something new -> occurs 1x per week, 3 pts per completion
+play guitar 30 min -> occurs daily, 1 pt per completion  
+code 30 min -> occurs daily, 1 pt per completion  
+work out -> occurs daily with max of 3x per week, 1 pt per completion  
+cook something new -> occurs 1x per week, 3 pts per completion  
 
 weekly pts get aggregated and can be reviewed on another view with a total graph
 each week has a notes section
