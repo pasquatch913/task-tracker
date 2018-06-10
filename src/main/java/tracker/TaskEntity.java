@@ -10,11 +10,11 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Data
 @Entity
-@Table(name = "Tasks")
+@Table(name = "task_entity")
 public class TaskEntity {
 
     @Id
-    //@GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy=GenerationType.AUTO)
     private Integer id;
     @NonNull
     private String name;
@@ -22,14 +22,17 @@ public class TaskEntity {
     private Integer period;
     @NonNull
     private Integer weight;
+    @NonNull
+    private Integer userId;
 
-    public TaskEntity(String name, Integer period, Integer weight) {
+    public TaskEntity(String name, Integer period, Integer weight, Integer userId) {
         this.name = name;
         this.period = period;
         this.weight = weight;
+        this.userId = userId;
     }
 
-    public String getName() {
-        return this.name;
-    }
+//    public String getName() {
+//        return this.name;
+//    }
 }

@@ -1,0 +1,1 @@
+INSERT INTO task_entity (id, name, period, user_id, weight) VALUES (1, 'Mop Floors', 7, 1, 5), (2, 'Buy groceries', 7, 2, 3), (3, 'Play guitar', 1, 1, 2), (4, 'Code', 1, 2, 2), (5, 'Do Laundry', 7, 1, 2), (6, 'Read', 1, 2, 2);
