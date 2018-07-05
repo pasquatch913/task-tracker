@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Tasks page</title>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+</head>
+<body>
+<fieldset>
+    <legend>Input</legend>
+    <form modelAttribute="taskSubscription" action="newTaskSubscription" method="post">
+        <div>
+            <label for="name"> Name:
+            </label>
+            <input type="text" id="name" name="name">
+            <span></span>
+        </div>
+        <div>
+            <label for="weight">Task points:</label>
+            <input type="text" id="weight" name="weight"
+                   placeholder="Enter 1-5 given how important"/>
+        </div>
+        <div>
+            <label for="period">How many days to complete the task?</label>
+            <input type="text" id="period" name="period">
+        </div>
+        <div>
+            <input type="submit" class="submit" value="Submit" />
+        </div>
+
+    </form>
+</fieldset>
+
+</body>
+</html>

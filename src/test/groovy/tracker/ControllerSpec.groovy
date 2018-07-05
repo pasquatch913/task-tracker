@@ -11,7 +11,7 @@ class ControllerSpec extends Specification {
     MockMvc mockMvc
 
     def setup() {
-        def controller = new TaskController()
+        def controller = new Controller()
         def service = new TaskService()
         mockMvc = MockMvcBuilders.standaloneSetup(controller).build()
         controller.taskService = service
