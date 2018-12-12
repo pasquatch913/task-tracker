@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="511eb53c-7a33-4806-af00-46a04eacc6eb" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/target/classes/tracker/Application.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/tracker/Application.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/tracker/ControllerSpec.class" beforeDir="false" />
-    </list>
+    <list default="true" id="511eb53c-7a33-4806-af00-46a04eacc6eb" name="Default" comment="" />
     <ignored path="$PROJECT_DIR$/target/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -103,7 +100,7 @@
             <entry file="file://$PROJECT_DIR$/src/main/resources/test-server.ldif">
               <provider selected="true" editor-type-id="text-editor">
                 <state relative-caret-position="1886">
-                  <caret line="82" column="9" lean-forward="true" selection-start-line="82" selection-start-column="9" selection-end-line="82" selection-end-column="9" />
+                  <caret line="82" column="9" selection-start-line="82" selection-start-column="9" selection-end-line="82" selection-end-column="9" />
                 </state>
               </provider>
             </entry>
@@ -134,7 +131,7 @@
             <entry file="file://$PROJECT_DIR$/src/main/resources/application.yml">
               <provider selected="true" editor-type-id="text-editor">
                 <state relative-caret-position="437">
-                  <caret line="19" column="16" lean-forward="true" selection-start-line="19" selection-start-column="16" selection-end-line="19" selection-end-column="16" />
+                  <caret line="19" column="16" selection-start-line="19" selection-start-column="16" selection-end-line="19" selection-end-column="16" />
                 </state>
               </provider>
             </entry>
@@ -314,10 +311,6 @@
               <item name="main" type="462c0819:PsiDirectoryNode" />
               <item name="resources" type="462c0819:PsiDirectoryNode" />
             </path>
-            <path>
-              <item name="task-tracker" type="b2602c69:ProjectViewProjectNode" />
-              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
-            </path>
           </expand>
           <select />
         </subPane>
@@ -454,7 +447,7 @@
       <option name="presentableId" value="Default" />
       <updated>1525908433471</updated>
       <workItem from="1544531202461" duration="1733000" />
-      <workItem from="1544618432069" duration="2094000" />
+      <workItem from="1544618432069" duration="2465000" />
     </task>
     <servers />
   </component>
@@ -470,13 +463,12 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="3827000" />
+    <option name="totallyTimeSpent" value="4198000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="2576" height="1056" extended-state="6" />
-    <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.19316375" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.19316375" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Designer" order="2" />
       <window_info id="Favorites" order="3" side_tool="true" />
@@ -488,7 +480,7 @@
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
-      <window_info anchor="bottom" id="Terminal" order="7" visible="true" weight="0.21149674" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="7" visible="true" weight="0.21149674" />
       <window_info anchor="bottom" id="Event Log" order="8" side_tool="true" />
       <window_info anchor="bottom" id="Version Control" order="9" />
       <window_info anchor="bottom" id="Messages" order="10" weight="0.3275488" />
@@ -844,14 +836,14 @@
     <entry file="file://$PROJECT_DIR$/src/main/resources/application.yml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="437">
-          <caret line="19" column="16" lean-forward="true" selection-start-line="19" selection-start-column="16" selection-end-line="19" selection-end-column="16" />
+          <caret line="19" column="16" selection-start-line="19" selection-start-column="16" selection-end-line="19" selection-end-column="16" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/resources/test-server.ldif">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1886">
-          <caret line="82" column="9" lean-forward="true" selection-start-line="82" selection-start-column="9" selection-end-line="82" selection-end-column="9" />
+          <caret line="82" column="9" selection-start-line="82" selection-start-column="9" selection-end-line="82" selection-end-column="9" />
         </state>
       </provider>
     </entry>
