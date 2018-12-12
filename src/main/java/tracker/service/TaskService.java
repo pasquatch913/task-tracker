@@ -27,25 +27,28 @@ public class TaskService {
 
     public void newTask(TaskSubscriptionEntity task) {
         UserEntity user = userRepository.findById(1).orElseThrow(() -> new EntityNotFoundException());
-        TaskSubscriptionEntity updatedTaskSubscription = generateFirstInstance(task);
-        taskSubscriptionRepository.save(updatedTaskSubscription);
-        user.getTaskSubscriptions().add(updatedTaskSubscription);
+//        TaskSubscriptionEntity updatedTaskSubscription = generateFirstInstance(task);
+        taskSubscriptionRepository.save(task);
+        user.getTaskSubscriptions().add(task);
         userRepository.save(user);
     }
 
-    private TaskSubscriptionEntity generateFirstInstance (TaskSubscriptionEntity taskSubscription) {
-        TaskInstanceEntity newTaskInstance = new TaskInstanceEntity(LocalDate.now().plusDays(taskSubscription.getPeriod()));
-        taskInstanceRepository.save(newTaskInstance);
-        taskSubscription.getTaskInstances().add(newTaskInstance);
-        return taskSubscription;
-    }
+//    private TaskSubscriptionEntity generateFirstInstance (TaskSubscriptionEntity taskSubscription) {
+//        TaskInstanceEntity newTaskInstance = new TaskInstanceEntity(LocalDate.now().plusDays(taskSubscription.getPeriod()));
+//        taskInstanceRepository.save(newTaskInstance);
+//        taskSubscription.getTaskInstances().add(newTaskInstance);
+//        return taskSubscription;
+//    }
 
     public void generateTaskInstances () {
         UserEntity user = userRepository.findById(1).orElseThrow(() -> new EntityNotFoundException());
         List<TaskSubscriptionEntity> subscriptions = user.getTaskSubscriptions();
-        subscriptions.stream().filter(n -> !n.getTaskInstances()
-                        .stream().reduce((a,b) -> a.getDueAt().isAfter(b.getDueAt()) && a.getDueAt().isBefore(LocalDate.now().plusDays(n.getPeriod())) ? a:b).get()
-                .getDueAt().equals(LocalDate.now().plusDays(n.getPeriod())) )
+        // only generate new task for a subscription if either the instances list is empty OR the last instance is in the past
+        subscriptions.stream().filter(n ->
+                n.getTaskInstances().isEmpty()
+                        || n.getTaskInstances()
+                        .get(n.getTaskInstances().size() - 1)
+                        .getDueAt().isBefore(LocalDate.now()))
                 .forEach(o -> {
                     TaskInstanceEntity instance = new TaskInstanceEntity(LocalDate.now().plusDays(o.getPeriod()));
                     taskInstanceRepository.save(instance);
