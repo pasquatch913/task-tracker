@@ -1,19 +1,27 @@
 package tracker.controller;
 
+import mapper.TaskMapper;
+import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
+import tracker.entity.TaskDTO;
 import tracker.entity.TaskSubscriptionEntity;
 import tracker.service.TaskService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @org.springframework.stereotype.Controller
 @RequestMapping("/")
 public class Controller {
+
+    TaskMapper mapper = Mappers.getMapper(TaskMapper.class);
 
     @Autowired
     TaskService taskService;
@@ -47,8 +55,12 @@ public class Controller {
     @RequestMapping(value = "/showTaskInstances")
     public ModelAndView showUserTaskInstances () {
         List<TaskSubscriptionEntity> tasks = taskService.returnTaskForUser(1);
+
+        List<TaskDTO> taskDTO = tasks.stream()
+                .map(mapper::taskSubscriptionEntityToTaskDTO)
+                .collect(Collectors.toList());
         ModelAndView mav = new ModelAndView("showTaskInstances");
-        mav.addObject("taskSubscription", tasks);
+        mav.addObject("tasks", taskDTO);
         return mav;
     }
 }

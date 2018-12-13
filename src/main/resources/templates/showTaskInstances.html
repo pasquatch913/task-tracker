@@ -7,10 +7,12 @@
 </head>
 <body>
 <table>
-<tr th:each="task : ${taskSubscription}">
+    <tr th:each="task : ${tasks}">
     <td th:text="${task.name}">Name</td>
+        <td th:text="${task.weight}">Weight</td>
+        <td th:text="${task.necessaryCompletions}">Times to do</td>
+        <td th:text="${task.dueDate}">Due</td>
 </tr>
 </table>
-<p th:text="${taskSubscription}"></p>
 </body>
 </html>

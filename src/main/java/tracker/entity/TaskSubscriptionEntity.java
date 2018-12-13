@@ -26,7 +26,7 @@ public class TaskSubscriptionEntity {
     @NonNull
     private Integer weight;
     @NonNull
-    private Integer minimumCompletions = 1;
+    private Integer necessaryCompletions = 1;
     @OneToMany
     private List<TaskInstanceEntity> taskInstances = new ArrayList<TaskInstanceEntity>();
 
