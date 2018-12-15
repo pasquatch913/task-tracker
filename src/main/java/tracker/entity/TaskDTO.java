@@ -17,5 +17,6 @@ public class TaskDTO {
     private Integer completions;
     private LocalDate dueDate;
     private Integer taskInstanceId;
+    private Boolean active;
 
 }
