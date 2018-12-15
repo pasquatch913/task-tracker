@@ -3,6 +3,7 @@ package mapper;
 import org.mapstruct.DecoratedWith;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.Mappings;
 import tracker.entity.TaskDTO;
 import tracker.entity.TaskSubscriptionEntity;
 
@@ -10,7 +11,9 @@ import tracker.entity.TaskSubscriptionEntity;
 @DecoratedWith(TaskMapperDecorator.class)
 public interface TaskMapper {
 
-    @Mapping(target = "dueDate", ignore = true)
+    @Mappings({
+    @Mapping(target = "dueDate", ignore = true),
+    @Mapping(target = "completions", ignore = true)})
 //    @Mapping(target = "dueDate", expression = "java(taskSubscription.taskInstances.get(taskSubscription.taskInstances.size()).getDueAt())")
     TaskDTO taskSubscriptionEntityToTaskDTO(TaskSubscriptionEntity taskSubscription);
 }

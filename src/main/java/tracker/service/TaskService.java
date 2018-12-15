@@ -1,8 +1,11 @@
 package tracker.service;
 
+import mapper.TaskMapper;
+import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tracker.EntityNotFoundException;
+import tracker.entity.TaskDTO;
 import tracker.entity.TaskInstanceEntity;
 import tracker.entity.TaskSubscriptionEntity;
 import tracker.entity.UserEntity;
@@ -12,6 +15,7 @@ import tracker.repository.UserRepository;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class TaskService {
@@ -24,6 +28,8 @@ public class TaskService {
 
     @Autowired
     TaskInstanceRepository taskInstanceRepository;
+
+    TaskMapper mapper = Mappers.getMapper(TaskMapper.class);
 
     public void newTask(TaskSubscriptionEntity task) {
         UserEntity user = userRepository.findById(1).orElseThrow(() -> new EntityNotFoundException());
@@ -43,6 +49,11 @@ public class TaskService {
     public void generateTaskInstances () {
         UserEntity user = userRepository.findById(1).orElseThrow(() -> new EntityNotFoundException());
         List<TaskSubscriptionEntity> subscriptions = user.getTaskSubscriptions();
+        // list of taskdto that contains all subscriptions and data for most recent instance
+//        List<TaskDTO> tasks = subscriptions.stream().map(mapper::taskSubscriptionEntityToTaskDTO).collect(Collectors.toList());
+
+//        tasks.stream().filter(n -> n.getDueDate() )
+
         // only generate new task for a subscription if either the instances list is empty OR the last instance is in the past
         subscriptions.stream().filter(n ->
                 n.getTaskInstances().isEmpty()
@@ -65,6 +76,13 @@ public class TaskService {
                 .orElseThrow(() -> new EntityNotFoundException())
                 .getTaskSubscriptions();
         return tasks;
+    }
+
+    public TaskInstanceEntity updateTaskInstanceCompletions(Integer id, Integer value) {
+        TaskInstanceEntity taskToUpdate = taskInstanceRepository.findById(id).get();
+        taskToUpdate.setCompletions(value);
+        taskInstanceRepository.save(taskToUpdate);
+        return taskInstanceRepository.findById(id).get();
     }
 
 }

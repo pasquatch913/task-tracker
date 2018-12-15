@@ -17,6 +17,12 @@ public abstract class TaskMapperDecorator implements TaskMapper {
         taskDTO.setDueDate(taskSubscription.getTaskInstances()
                 .get(taskSubscription.getTaskInstances().size() - 1)
                 .getDueAt());
+        taskDTO.setCompletions(taskSubscription.getTaskInstances()
+                .get(taskSubscription.getTaskInstances().size() - 1)
+                .getCompletions());
+        taskDTO.setTaskInstanceId(taskSubscription.getTaskInstances()
+                .get(taskSubscription.getTaskInstances().size() - 1)
+                .getId());
         return taskDTO;
     }
 

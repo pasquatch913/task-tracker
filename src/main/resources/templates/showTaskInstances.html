@@ -4,14 +4,33 @@
     <title>My To Do List</title>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <script type="text/javascript" src="js/TaskInstances.js"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/file.css">
 </head>
 <body>
 <table>
+    <tr>
+        <td>Task Name</td>
+        <td>Task Points</td>
+        <td>Completions Goal</td>
+        <td>Completions So Far</td>
+        <td>Due Date</td>
+    </tr>
     <tr th:each="task : ${tasks}">
-    <td th:text="${task.name}">Name</td>
-        <td th:text="${task.weight}">Weight</td>
-        <td th:text="${task.necessaryCompletions}">Times to do</td>
-        <td th:text="${task.dueDate}">Due</td>
+        <td th:text="${task.name}"></td>
+        <td th:text="${task.weight}"></td>
+        <td th:text="${task.necessaryCompletions}"></td>
+        <td th:text="${task.completions}" th:id="'completions' + ${task.taskInstanceId}"></td>
+        <td th:text="${task.dueDate}"></td>
+        <td><button th:id="'incrementCompletions' + ${task.taskInstanceId}"
+                    th:onclick="'updateCompletions(' + ${task.taskInstanceId}+ ', 1)'">
+            +1 Completions
+        </button></td>
+        <td><button th:id="'decrementCompletions' + ${task.taskInstanceId}"
+                    th:onclick="'updateCompletions(' + ${task.taskInstanceId}+ ', -1)'">
+            -1 Completions
+        </button></td>
 </tr>
 </table>
 </body>

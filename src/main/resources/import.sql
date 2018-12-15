@@ -6,3 +6,20 @@
 
 -- new version
 INSERT INTO application_users (id, first_name, last_name, email, password_hash) VALUES (nextval('hibernate_sequence'), 'John', 'Davis', 'john@email.com', 'XXXX'), (nextval('hibernate_sequence'), 'Jane', 'Doe', 'jane@email.com', 'YYYY');
+
+
+-- dumps for testing
+INSERT INTO public.application_users_task_subscription (user_entity_id, task_subscriptions_id) VALUES (1, 3);
+INSERT INTO public.application_users_task_subscription (user_entity_id, task_subscriptions_id) VALUES (1, 5);
+
+INSERT INTO public.task_subscription (id, name, necessary_completions, period, weight) VALUES (3, 'task1', 1, 1, 1);
+INSERT INTO public.task_subscription (id, name, necessary_completions, period, weight) VALUES (5, 'task2', 1, 7, 5);
+
+INSERT INTO public.task_instance (id, completions, due_at) VALUES (4, 0, '2018-12-15');
+INSERT INTO public.task_instance (id, completions, due_at) VALUES (6, 0, '2018-12-21');
+
+INSERT INTO public.task_subscription_task_instance VALUES (3,4);
+INSERT INTO public.task_subscription_task_instance VALUES (5,6);
+
+INSERT INTO public.application_users_task_subscription (user_entity_id, task_subscriptions_id) VALUES (1, 3);
+INSERT INTO public.application_users_task_subscription (user_entity_id, task_subscriptions_id) VALUES (1, 5);

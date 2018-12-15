@@ -14,6 +14,8 @@ public class TaskDTO {
     private String name;
     private Integer weight;
     private Integer necessaryCompletions;
+    private Integer completions;
     private LocalDate dueDate;
+    private Integer taskInstanceId;
 
 }

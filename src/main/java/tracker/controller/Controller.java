@@ -3,12 +3,13 @@ package tracker.controller;
 import mapper.TaskMapper;
 import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import tracker.entity.TaskDTO;
+import tracker.entity.TaskInstanceEntity;
 import tracker.entity.TaskSubscriptionEntity;
 import tracker.service.TaskService;
 
@@ -54,13 +55,21 @@ public class Controller {
 
     @RequestMapping(value = "/showTaskInstances")
     public ModelAndView showUserTaskInstances () {
-        List<TaskSubscriptionEntity> tasks = taskService.returnTaskForUser(1);
+        // generate tasks instances prior to loading task subscriptions
+        taskService.generateTaskInstances();
 
+        List<TaskSubscriptionEntity> tasks = taskService.returnTaskForUser(1);
         List<TaskDTO> taskDTO = tasks.stream()
                 .map(mapper::taskSubscriptionEntityToTaskDTO)
                 .collect(Collectors.toList());
         ModelAndView mav = new ModelAndView("showTaskInstances");
         mav.addObject("tasks", taskDTO);
         return mav;
+    }
+
+    @PostMapping(value = "/tasks/instances/{id}/completions/{value}")
+    public ResponseEntity updateTaskInstanceCompletions(@PathVariable Integer id, @PathVariable Integer value) {
+        TaskInstanceEntity taskInstanceEntity = taskService.updateTaskInstanceCompletions(id, value);
+        return ResponseEntity.ok(taskInstanceEntity);
     }
 }
