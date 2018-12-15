@@ -29,6 +29,7 @@ public class TaskSubscriptionEntity {
     private Integer necessaryCompletions = 1;
     @OneToMany
     private List<TaskInstanceEntity> taskInstances = new ArrayList<TaskInstanceEntity>();
-
+    @NonNull
+    private Boolean active = true;
 
 }

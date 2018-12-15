@@ -4,11 +4,31 @@
     <title>Tasks page</title>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <script type="text/javascript" src="js/TaskSubscriptions.js"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/file.css">
 </head>
 <body>
 <table>
-    <tr th:each="element : ${tasks}">
-        <td th:text="${element.name}"></td>
+    <tr>
+        <td>Task Name</td>
+        <td>Task Period</td>
+        <td>Points Per Completion</td>
+        <td>Completions Goal</td>
+    </tr>
+    <tr th:each="element : ${tasks}" th:id="'subscription' + ${element.id}">
+        <div th:if="${element.active}">
+            <td th:text="${element.name}"></td>
+            <td th:text="${element.period}"></td>
+            <td th:text="${element.weight}"></td>
+            <td th:text="${element.necessaryCompletions}"></td>
+            <td>
+                <button th:id="'deleteTaskSubscription' + ${element.id}"
+                        th:onclick="'deleteTaskSubscription(' + ${element.id} + ')'">
+                    Delete Task
+                </button>
+            </td>
+        </div>
     </tr>
 </table>
 

@@ -71,4 +71,10 @@ public class Controller {
         TaskInstanceEntity taskInstanceEntity = taskService.updateTaskInstanceCompletions(id, value);
         return ResponseEntity.ok(taskInstanceEntity);
     }
+
+    @DeleteMapping(value = "/tasks/{id}")
+    public ResponseEntity deleteTaskSubscription(@PathVariable Integer id) {
+        taskService.unsubscribe(id);
+        return ResponseEntity.accepted().build();
+    }
 }
