@@ -3,7 +3,6 @@ package tracker.controller;
 import mapper.TaskMapper;
 import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -39,18 +38,18 @@ public class Controller {
         return mav;
     }
 
-    @RequestMapping(value = "/newTask", method = RequestMethod.GET)
+    @GetMapping(value = "/newTask")
     public ModelAndView newTask() {
         ModelAndView mav = new ModelAndView("newTask");
         return mav;
     }
 
-    @RequestMapping(value = "/newTaskSubscription", method = RequestMethod.POST)
+    @PostMapping(value = "/newTaskSubscription")
     public ModelAndView addTaskSubscription(HttpServletRequest request, HttpServletResponse response,
                                             @ModelAttribute("taskSubscription") TaskSubscriptionEntity subscription) {
         taskService.newTask(subscription);
         taskService.generateTaskInstances();
-        return new ModelAndView("done");
+        return new ModelAndView("showTaskSubscriptions");
     }
 
     @RequestMapping(value = "/showTaskInstances")
