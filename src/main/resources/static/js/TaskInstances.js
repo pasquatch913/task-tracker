@@ -7,6 +7,6 @@ function updateCompletions (id, value) {
 
     var url = '/tasks/instances/' + id + '/completions/' + newCompletionsValue;
     $.post(url, function (data, status) {
-       console.log(`${data} and ${status}}`);
+        console.log('request sent!');
     });
 }
