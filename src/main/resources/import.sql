@@ -23,3 +23,5 @@ INSERT INTO public.task_subscription_task_instance VALUES (5,6);
 
 INSERT INTO public.application_users_task_subscription (user_entity_id, task_subscriptions_id) VALUES (1, 3);
 INSERT INTO public.application_users_task_subscription (user_entity_id, task_subscriptions_id) VALUES (1, 5);
+
+ALTER SEQUENCE hibernate_sequence INCREMENT 5;
