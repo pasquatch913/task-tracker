@@ -89,12 +89,18 @@ public class Controller {
     @PostMapping(value = "/tasks/instances/{id}/completions/{value}")
     public ResponseEntity updateTaskInstanceCompletions(@PathVariable Integer id, @PathVariable Integer value) {
         TaskInstanceEntity taskInstanceEntity = taskService.updateTaskInstanceCompletions(id, value);
-        return ResponseEntity.ok(taskInstanceEntity);
+        return ResponseEntity.ok().build();
     }
 
     @DeleteMapping(value = "/tasks/{id}")
     public ResponseEntity deleteTaskSubscription(@PathVariable Integer id) {
         taskService.unsubscribe(id);
         return ResponseEntity.accepted().build();
+    }
+
+    @PostMapping(value = "/tasks/oneTime/{id}/completions/{value}")
+    public ResponseEntity updateOneTimeTaskCompletions(@PathVariable Integer id, @PathVariable Integer value) {
+        OneTimeTaskInstanceEntity taskInstanceEntity = taskService.updateOneTimeTaskCompletions(id, value);
+        return ResponseEntity.ok().build();
     }
 }

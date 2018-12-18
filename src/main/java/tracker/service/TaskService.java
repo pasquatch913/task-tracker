@@ -91,6 +91,13 @@ public class TaskService {
         return tasks;
     }
 
+    public OneTimeTaskInstanceEntity updateOneTimeTaskCompletions(Integer id, Integer value) {
+        OneTimeTaskInstanceEntity taskToUpdate = oneTimeTaskInstanceRepository.findById(id).get();
+        taskToUpdate.setCompletions(value);
+        oneTimeTaskInstanceRepository.save(taskToUpdate);
+        return oneTimeTaskInstanceRepository.findById(id).get();
+    }
+
     private void generateNewInstanceForPeriod(TaskSubscriptionEntity taskSubscriptionEntity) {
         TaskInstanceEntity taskInstanceEntity = new TaskInstanceEntity();
         switch (taskSubscriptionEntity.getPeriod()) {
