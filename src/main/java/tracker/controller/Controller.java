@@ -35,6 +35,7 @@ public class Controller {
     public ModelAndView showTasks() {
         ModelAndView mav = new ModelAndView("showTaskSubscriptions");
         mav.addObject("tasks", taskService.returnTaskForUser(1));
+        mav.addObject("oneTimeTasks", taskService.returnOneTimeTaskForUser(1));
         return mav;
     }
 
@@ -92,8 +93,8 @@ public class Controller {
         return ResponseEntity.ok().build();
     }
 
-    @DeleteMapping(value = "/tasks/{id}")
-    public ResponseEntity deleteTaskSubscription(@PathVariable Integer id) {
+    @PostMapping(value = "/tasks/{id}")
+    public ResponseEntity completeTaskSubscription(@PathVariable Integer id) {
         taskService.unsubscribe(id);
         return ResponseEntity.accepted().build();
     }
@@ -102,5 +103,11 @@ public class Controller {
     public ResponseEntity updateOneTimeTaskCompletions(@PathVariable Integer id, @PathVariable Integer value) {
         OneTimeTaskInstanceEntity taskInstanceEntity = taskService.updateOneTimeTaskCompletions(id, value);
         return ResponseEntity.ok().build();
+    }
+
+    @PostMapping(value = "/tasks/oneTime/{id}")
+    public ResponseEntity completeOneTimeTask(@PathVariable Integer id) {
+        taskService.unsubscribeOneTime(id);
+        return ResponseEntity.accepted().build();
     }
 }

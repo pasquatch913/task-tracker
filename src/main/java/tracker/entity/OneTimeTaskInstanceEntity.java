@@ -28,5 +28,6 @@ public class OneTimeTaskInstanceEntity {
     @NonNull
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate dueDate;
+    private Boolean active = true;
 
 }

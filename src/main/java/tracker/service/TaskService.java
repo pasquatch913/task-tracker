@@ -98,6 +98,12 @@ public class TaskService {
         return oneTimeTaskInstanceRepository.findById(id).get();
     }
 
+    public void unsubscribeOneTime(Integer id) {
+        OneTimeTaskInstanceEntity taskToUpdate = oneTimeTaskInstanceRepository.findById(id).get();
+        taskToUpdate.setActive(false);
+        oneTimeTaskInstanceRepository.save(taskToUpdate);
+    }
+
     private void generateNewInstanceForPeriod(TaskSubscriptionEntity taskSubscriptionEntity) {
         TaskInstanceEntity taskInstanceEntity = new TaskInstanceEntity();
         switch (taskSubscriptionEntity.getPeriod()) {
