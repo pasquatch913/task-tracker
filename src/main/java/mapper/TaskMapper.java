@@ -17,6 +17,5 @@ public interface TaskMapper {
     @Mapping(target = "completions", ignore = true)})
     TaskDTO taskSubscriptionEntityToTaskDTO(TaskSubscriptionEntity taskSubscription);
 
-    @Mapping(target = "period", ignore = true)
     TaskSubscriptionEntity taskSubscriptionDTOToTaskSubscriptionEntity(TaskSubscriptionDTO taskSubscriptionDTO);
 }

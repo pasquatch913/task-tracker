@@ -3,12 +3,9 @@ package tracker.entity;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @Data
 @Entity
@@ -22,7 +19,7 @@ public class TaskInstanceEntity {
     private Integer id;
     @NonNull
     @Column(columnDefinition = "int default 0")
-    private Integer completions;
+    private Integer completions = 0;
     //this doesn't work now
 //    @CreationTimestamp
 //    private LocalDateTime createdAt;

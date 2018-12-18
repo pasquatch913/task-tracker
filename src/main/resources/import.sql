@@ -9,11 +9,8 @@ INSERT INTO application_users (id, first_name, last_name, email, password_hash) 
 
 
 -- dumps for testing
-INSERT INTO public.application_users_task_subscription (user_entity_id, task_subscriptions_id) VALUES (1, 3);
-INSERT INTO public.application_users_task_subscription (user_entity_id, task_subscriptions_id) VALUES (1, 5);
-
 INSERT INTO public.task_subscription (id, name, necessary_completions, period, weight, active) VALUES (3, 'task1', 1, 1, 1, TRUE);
-INSERT INTO public.task_subscription (id, name, necessary_completions, period, weight, active) VALUES (5, 'task2', 1, 7, 5, TRUE);
+INSERT INTO public.task_subscription (id, name, necessary_completions, period, weight, active) VALUES (5, 'task2', 1, 2, 5, TRUE);
 
 INSERT INTO public.task_instance (id, completions, due_at) VALUES (4, 0, '2018-12-15');
 INSERT INTO public.task_instance (id, completions, due_at) VALUES (6, 0, '2018-12-21');

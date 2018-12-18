@@ -13,6 +13,7 @@ import tracker.repository.TaskInstanceRepository;
 import tracker.repository.TaskSubscriptionRepository;
 import tracker.repository.UserRepository;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -48,12 +49,8 @@ public class TaskService {
                         || n.getTaskInstances()
                         .get(n.getTaskInstances().size() - 1)
                         .getDueAt().isBefore(LocalDate.now()))
-                .forEach(o -> {
-                    TaskInstanceEntity instance = new TaskInstanceEntity(LocalDate.now().plusDays(o.getPeriod()));
-                    taskInstanceRepository.save(instance);
-                    o.getTaskInstances().add(instance);
-                    taskSubscriptionRepository.save(o);
-        });
+                .forEach(o -> generateNewInstanceForPeriod(o));
+
         userRepository.save(user);
     }
 
@@ -77,6 +74,26 @@ public class TaskService {
         TaskSubscriptionEntity taskToUpdate = taskSubscriptionRepository.findById(id).get();
         taskToUpdate.setActive(false);
         taskSubscriptionRepository.save(taskToUpdate);
+    }
+
+    private void generateNewInstanceForPeriod(TaskSubscriptionEntity taskSubscriptionEntity) {
+        TaskInstanceEntity taskInstanceEntity = new TaskInstanceEntity();
+        switch (taskSubscriptionEntity.getPeriod()) {
+            case DAILY:
+                taskInstanceEntity.setDueAt(LocalDate.now());
+                break;
+            case WEEKLY:
+                taskInstanceEntity.setDueAt(LocalDate.now().with(DayOfWeek.MONDAY).plusWeeks(1));
+                break;
+            case MONTHLY:
+                taskInstanceEntity.setDueAt(LocalDate.now().withDayOfMonth(LocalDate.now().lengthOfMonth()));
+                break;
+            default:
+                return;
+        }
+        taskInstanceRepository.save(taskInstanceEntity);
+        taskSubscriptionEntity.getTaskInstances().add(taskInstanceEntity);
+        taskSubscriptionRepository.save(taskSubscriptionEntity);
     }
 
 }

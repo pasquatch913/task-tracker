@@ -22,7 +22,7 @@ public class TaskSubscriptionEntity {
     @NonNull
     private String name;
     @NonNull
-    private Integer period;
+    private TaskPeriod period;
     @NonNull
     private Integer weight;
     @NonNull
