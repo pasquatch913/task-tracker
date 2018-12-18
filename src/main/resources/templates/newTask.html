@@ -29,8 +29,8 @@
         <div>
             <label for="period">How many days to complete the task?</label>
             <div id="period" th:each="period : ${periods}">
-                <input id="period-option" type="radio" name="period" th:value="${period}"/>
-                <label for="period-option" th:text="| &nbsp; ${period} |">Something is wrong !</label>
+                <input th:id="'period-option' + ${period}" type="radio" name="period" th:value="${period}"/>
+                <label th:for="'period-option' + ${period}" th:text="| &nbsp; ${period} |">Something is wrong !</label>
             </div>
         </div>
         <div>
