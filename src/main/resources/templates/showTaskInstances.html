@@ -44,23 +44,25 @@
         </td>
     </tr>
     <tr th:each="task : ${oneTimeTasks}">
-        <td th:text="${task.name}"></td>
-        <td th:text="${task.weight}"></td>
-        <td th:text="${task.necessaryCompletions}"></td>
-        <td th:text="${task.completions}" th:id="'completions' + ${task.id}"></td>
-        <td th:text="${task.dueDate}"></td>
-        <td>
-            <button th:id="'incrementCompletions' + ${task.id}"
-                    th:onclick="'updateOneTimeCompletions(' + ${task.id} + ', 1)'">
-                +1 Completions
-            </button>
-        </td>
-        <td>
-            <button th:id="'decrementCompletions' + ${task.id}"
-                    th:onclick="'updateOneTimeCompletions(' + ${task.id} + ', -1)'">
-                -1 Completions
-            </button>
-        </td>
+        <div th:if="${task.active}">
+            <td th:text="${task.name}"></td>
+            <td th:text="${task.weight}"></td>
+            <td th:text="${task.necessaryCompletions}"></td>
+            <td th:text="${task.completions}" th:id="'completions' + ${task.id}"></td>
+            <td th:text="${task.dueDate}"></td>
+            <td>
+                <button th:id="'incrementCompletions' + ${task.id}"
+                        th:onclick="'updateOneTimeCompletions(' + ${task.id} + ', 1)'">
+                    +1 Completions
+                </button>
+            </td>
+            <td>
+                <button th:id="'decrementCompletions' + ${task.id}"
+                        th:onclick="'updateOneTimeCompletions(' + ${task.id} + ', -1)'">
+                    -1 Completions
+                </button>
+            </td>
+        </div>
     </tr>
 </table>
 
