@@ -7,13 +7,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-import tracker.entity.TaskDTO;
-import tracker.entity.TaskInstanceEntity;
-import tracker.entity.TaskSubscriptionEntity;
+import tracker.entity.*;
 import tracker.service.TaskService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -41,14 +40,16 @@ public class Controller {
     @GetMapping(value = "/newTask")
     public ModelAndView newTask() {
         ModelAndView mav = new ModelAndView("newTask");
+        mav.addObject("periods", Arrays.asList(TaskPeriod.values()));
         return mav;
     }
 
     @PostMapping(value = "/newTaskSubscription")
     public ModelAndView addTaskSubscription(HttpServletRequest request, HttpServletResponse response,
-                                            @ModelAttribute("taskSubscription") TaskSubscriptionEntity subscription) {
+                                            @ModelAttribute("newTaskSubscription") TaskSubscriptionDTO subscription) {
         taskService.newTask(subscription);
         taskService.generateTaskInstances();
+        // TODO replace with redirect to /showTaskSubscriptions
         return new ModelAndView("showTaskSubscriptions");
     }
 

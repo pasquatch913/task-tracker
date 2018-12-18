@@ -5,6 +5,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
 import tracker.entity.TaskDTO;
+import tracker.entity.TaskSubscriptionDTO;
 import tracker.entity.TaskSubscriptionEntity;
 
 @Mapper
@@ -14,6 +15,8 @@ public interface TaskMapper {
     @Mappings({
     @Mapping(target = "dueDate", ignore = true),
     @Mapping(target = "completions", ignore = true)})
-//    @Mapping(target = "dueDate", expression = "java(taskSubscription.taskInstances.get(taskSubscription.taskInstances.size()).getDueAt())")
     TaskDTO taskSubscriptionEntityToTaskDTO(TaskSubscriptionEntity taskSubscription);
+
+    @Mapping(target = "period", ignore = true)
+    TaskSubscriptionEntity taskSubscriptionDTOToTaskSubscriptionEntity(TaskSubscriptionDTO taskSubscriptionDTO);
 }

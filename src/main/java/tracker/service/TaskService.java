@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tracker.EntityNotFoundException;
 import tracker.entity.TaskInstanceEntity;
+import tracker.entity.TaskSubscriptionDTO;
 import tracker.entity.TaskSubscriptionEntity;
 import tracker.entity.UserEntity;
 import tracker.repository.TaskInstanceRepository;
@@ -29,10 +30,11 @@ public class TaskService {
 
     TaskMapper mapper = Mappers.getMapper(TaskMapper.class);
 
-    public void newTask(TaskSubscriptionEntity task) {
+    public void newTask(TaskSubscriptionDTO task) {
+        TaskSubscriptionEntity taskSubscriptionEntity = mapper.taskSubscriptionDTOToTaskSubscriptionEntity(task);
         UserEntity user = userRepository.findById(1).orElseThrow(() -> new EntityNotFoundException());
-        taskSubscriptionRepository.save(task);
-        user.getTaskSubscriptions().add(task);
+        taskSubscriptionRepository.save(taskSubscriptionEntity);
+        user.getTaskSubscriptions().add(taskSubscriptionEntity);
         userRepository.save(user);
     }
 

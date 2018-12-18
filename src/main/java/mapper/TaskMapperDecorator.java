@@ -1,6 +1,7 @@
 package mapper;
 
 import tracker.entity.TaskDTO;
+import tracker.entity.TaskSubscriptionDTO;
 import tracker.entity.TaskSubscriptionEntity;
 
 public abstract class TaskMapperDecorator implements TaskMapper {
@@ -26,4 +27,10 @@ public abstract class TaskMapperDecorator implements TaskMapper {
         return taskDTO;
     }
 
+    @Override
+    public TaskSubscriptionEntity taskSubscriptionDTOToTaskSubscriptionEntity(TaskSubscriptionDTO taskSubscriptionDTO) {
+        TaskSubscriptionEntity taskSubscriptionEntity = mapper.taskSubscriptionDTOToTaskSubscriptionEntity(taskSubscriptionDTO);
+        taskSubscriptionEntity.setPeriod(taskSubscriptionDTO.getPeriod().getDays());
+        return taskSubscriptionEntity;
+    }
 }
