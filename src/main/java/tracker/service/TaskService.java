@@ -5,10 +5,8 @@ import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tracker.EntityNotFoundException;
-import tracker.entity.TaskInstanceEntity;
-import tracker.entity.TaskSubscriptionDTO;
-import tracker.entity.TaskSubscriptionEntity;
-import tracker.entity.UserEntity;
+import tracker.entity.*;
+import tracker.repository.OneTimeTaskInstanceRepository;
 import tracker.repository.TaskInstanceRepository;
 import tracker.repository.TaskSubscriptionRepository;
 import tracker.repository.UserRepository;
@@ -29,6 +27,9 @@ public class TaskService {
     @Autowired
     TaskInstanceRepository taskInstanceRepository;
 
+    @Autowired
+    OneTimeTaskInstanceRepository oneTimeTaskInstanceRepository;
+
     TaskMapper mapper = Mappers.getMapper(TaskMapper.class);
 
     public void newTask(TaskSubscriptionDTO task) {
@@ -39,7 +40,21 @@ public class TaskService {
         userRepository.save(user);
     }
 
-    public void generateTaskInstances () {
+    public List<TaskSubscriptionEntity> returnTaskForUser(Integer idUser){
+        generateTaskInstances();
+        List<TaskSubscriptionEntity> tasks = userRepository.findById(1)
+                .orElseThrow(() -> new EntityNotFoundException())
+                .getTaskSubscriptions();
+        return tasks;
+    }
+
+    public void unsubscribe(Integer id) {
+        TaskSubscriptionEntity taskToUpdate = taskSubscriptionRepository.findById(id).get();
+        taskToUpdate.setActive(false);
+        taskSubscriptionRepository.save(taskToUpdate);
+    }
+
+    public void generateTaskInstances() {
         UserEntity user = userRepository.findById(1).orElseThrow(() -> new EntityNotFoundException());
         List<TaskSubscriptionEntity> subscriptions = user.getTaskSubscriptions();
 
@@ -54,15 +69,6 @@ public class TaskService {
         userRepository.save(user);
     }
 
-
-    public List<TaskSubscriptionEntity> returnTaskForUser(Integer idUser){
-        generateTaskInstances();
-        List<TaskSubscriptionEntity> tasks = userRepository.findById(1)
-                .orElseThrow(() -> new EntityNotFoundException())
-                .getTaskSubscriptions();
-        return tasks;
-    }
-
     public TaskInstanceEntity updateTaskInstanceCompletions(Integer id, Integer value) {
         TaskInstanceEntity taskToUpdate = taskInstanceRepository.findById(id).get();
         taskToUpdate.setCompletions(value);
@@ -70,10 +76,19 @@ public class TaskService {
         return taskInstanceRepository.findById(id).get();
     }
 
-    public void unsubscribe(Integer id) {
-        TaskSubscriptionEntity taskToUpdate = taskSubscriptionRepository.findById(id).get();
-        taskToUpdate.setActive(false);
-        taskSubscriptionRepository.save(taskToUpdate);
+    public void newOneTimeTask(OneTimeTaskInstanceEntity taskInstanceEntity) {
+        UserEntity user = userRepository.findById(1).orElseThrow(() -> new EntityNotFoundException());
+        oneTimeTaskInstanceRepository.save(taskInstanceEntity);
+
+        user.getOneTimeTaskInstances().add(taskInstanceEntity);
+        userRepository.save(user);
+    }
+
+    public List<OneTimeTaskInstanceEntity> returnOneTimeTaskForUser(Integer idUser) {
+        List<OneTimeTaskInstanceEntity> tasks = userRepository.findById(1)
+                .orElseThrow(() -> new EntityNotFoundException())
+                .getOneTimeTaskInstances();
+        return tasks;
     }
 
     private void generateNewInstanceForPeriod(TaskSubscriptionEntity taskSubscriptionEntity) {

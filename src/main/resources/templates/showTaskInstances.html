@@ -38,6 +38,30 @@
             </td>
         </div>
     </tr>
+    <tr>
+        <td>
+            One Time Task Instances
+        </td>
+    </tr>
+    <tr th:each="task : ${oneTimeTasks}">
+        <td th:text="${task.name}"></td>
+        <td th:text="${task.weight}"></td>
+        <td th:text="${task.necessaryCompletions}"></td>
+        <td th:text="${task.completions}" th:id="'completions' + ${task.id}"></td>
+        <td th:text="${task.dueDate}"></td>
+        <td>
+            <button th:id="'incrementCompletions' + ${task.id}"
+                    th:onclick="'updateCompletions(' + ${task.id} + ', 1)'">
+                +1 Completions
+            </button>
+        </td>
+        <td>
+            <button th:id="'decrementCompletions' + ${task.id}"
+                    th:onclick="'updateCompletions(' + ${task.id} + ', -1)'">
+                -1 Completions
+            </button>
+        </td>
+    </tr>
 </table>
 
 <div th:replace="fragments/footer :: footer"/>

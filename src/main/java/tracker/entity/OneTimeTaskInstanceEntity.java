@@ -3,31 +3,30 @@ package tracker.entity;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
-import java.util.List;
+import java.time.LocalDate;
 
 @Data
 @Entity
 @NoArgsConstructor
-@Table(name = "application_users")
-public class UserEntity {
+public class OneTimeTaskInstanceEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "id", updatable = false, nullable = false)
     private Integer id;
     @NonNull
-    private String firstName;
+    private String name;
     @NonNull
-    private String lastName;
+    private Integer weight;
     @NonNull
-    private String email;
+    private Integer necessaryCompletions = 0;
     @NonNull
-    private String passwordHash;
-    @OneToMany
-    private List<TaskSubscriptionEntity> taskSubscriptions;
-    @OneToMany
-    private List<OneTimeTaskInstanceEntity> oneTimeTaskInstances;
+    private Integer completions = 0;
+    @NonNull
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate dueDate;
 
 }

@@ -45,6 +45,12 @@ public class Controller {
         return mav;
     }
 
+    @GetMapping(value = "/newOneTimeTask")
+    public ModelAndView newOneTimeTask() {
+        ModelAndView mav = new ModelAndView("newOneTimeTask");
+        return mav;
+    }
+
     @PostMapping(value = "/newTaskSubscription")
     public RedirectView addTaskSubscription(HttpServletRequest request, HttpServletResponse response,
                                             @ModelAttribute("newTaskSubscription") TaskSubscriptionDTO subscription) {
@@ -54,17 +60,29 @@ public class Controller {
         return new RedirectView("/showTasks");
     }
 
+    @PostMapping(value = "/newOneTimeTask")
+    public RedirectView addTaskSubscription(HttpServletRequest request, HttpServletResponse response,
+                                            @ModelAttribute("newOneTimeTask") OneTimeTaskInstanceEntity oneTimeTask) {
+        taskService.newOneTimeTask(oneTimeTask);
+
+        return new RedirectView("/showTaskInstances");
+    }
+
     @RequestMapping(value = "/showTaskInstances")
     public ModelAndView showUserTaskInstances () {
         // generate tasks instances prior to loading task subscriptions
         taskService.generateTaskInstances();
 
         List<TaskSubscriptionEntity> tasks = taskService.returnTaskForUser(1);
-        List<TaskDTO> taskDTO = tasks.stream()
+        List<TaskDTO> taskDTOs = tasks.stream()
                 .map(mapper::taskSubscriptionEntityToTaskDTO)
                 .collect(Collectors.toList());
+
+        List<OneTimeTaskInstanceEntity> oneTimeTasks = taskService.returnOneTimeTaskForUser(1);
+
         ModelAndView mav = new ModelAndView("showTaskInstances");
-        mav.addObject("tasks", taskDTO);
+        mav.addObject("tasks", taskDTOs);
+        mav.addObject("oneTimeTasks", oneTimeTasks);
         return mav;
     }
 
