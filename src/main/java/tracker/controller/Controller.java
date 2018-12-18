@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.RedirectView;
 import tracker.entity.*;
 import tracker.service.TaskService;
 
@@ -45,12 +46,12 @@ public class Controller {
     }
 
     @PostMapping(value = "/newTaskSubscription")
-    public ModelAndView addTaskSubscription(HttpServletRequest request, HttpServletResponse response,
+    public RedirectView addTaskSubscription(HttpServletRequest request, HttpServletResponse response,
                                             @ModelAttribute("newTaskSubscription") TaskSubscriptionDTO subscription) {
         taskService.newTask(subscription);
         taskService.generateTaskInstances();
         // TODO replace with redirect to /showTaskSubscriptions
-        return new ModelAndView("showTaskSubscriptions");
+        return new RedirectView("/showTaskSubscriptions");
     }
 
     @RequestMapping(value = "/showTaskInstances")
