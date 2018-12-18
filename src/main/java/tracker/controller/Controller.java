@@ -50,8 +50,8 @@ public class Controller {
                                             @ModelAttribute("newTaskSubscription") TaskSubscriptionDTO subscription) {
         taskService.newTask(subscription);
         taskService.generateTaskInstances();
-        // TODO replace with redirect to /showTaskSubscriptions
-        return new RedirectView("/showTaskSubscriptions");
+
+        return new RedirectView("/showTasks");
     }
 
     @RequestMapping(value = "/showTaskInstances")
