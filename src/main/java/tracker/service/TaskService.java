@@ -111,7 +111,7 @@ public class TaskService {
                 taskInstanceEntity.setDueAt(LocalDate.now());
                 break;
             case WEEKLY:
-                taskInstanceEntity.setDueAt(LocalDate.now().with(DayOfWeek.MONDAY).plusWeeks(1));
+                taskInstanceEntity.setDueAt(LocalDate.now().with(DayOfWeek.SUNDAY).plusWeeks(1));
                 break;
             case MONTHLY:
                 taskInstanceEntity.setDueAt(LocalDate.now().withDayOfMonth(LocalDate.now().lengthOfMonth()));
