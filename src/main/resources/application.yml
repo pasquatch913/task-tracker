@@ -19,3 +19,7 @@ spring:
       ldif: "classpath:test-server.ldif"
       base-dn: "dc=springframework,dc=org"
       port: 8389
+server:
+  servlet:
+    session:
+      timeout: 30d

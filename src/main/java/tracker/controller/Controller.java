@@ -26,12 +26,12 @@ public class Controller {
     @Autowired
     TaskService taskService;
 
-    @RequestMapping(method = RequestMethod.GET, path = "/")
+    @GetMapping(path = "/")
     public String index(Model model) {
         return "index";
     }
 
-    @RequestMapping("/showTasks")
+    @GetMapping("/showTasks")
     public ModelAndView showTasks() {
         ModelAndView mav = new ModelAndView("showTaskSubscriptions");
         mav.addObject("tasks", taskService.returnTaskForUser(1));
@@ -69,7 +69,7 @@ public class Controller {
         return new RedirectView("/showTaskInstances");
     }
 
-    @RequestMapping(value = "/showTaskInstances")
+    @GetMapping(value = "/showTaskInstances")
     public ModelAndView showUserTaskInstances () {
         // generate tasks instances prior to loading task subscriptions
         taskService.generateTaskInstances();
