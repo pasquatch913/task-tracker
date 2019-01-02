@@ -1,4 +1,4 @@
-package mapper;
+package tracker.mapper;
 
 import org.mapstruct.DecoratedWith;
 import org.mapstruct.Mapper;

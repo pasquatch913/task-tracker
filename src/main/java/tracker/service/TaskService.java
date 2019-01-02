@@ -1,11 +1,11 @@
 package tracker.service;
 
-import mapper.TaskMapper;
 import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tracker.EntityNotFoundException;
 import tracker.entity.*;
+import tracker.mapper.TaskMapper;
 import tracker.repository.OneTimeTaskInstanceRepository;
 import tracker.repository.TaskInstanceRepository;
 import tracker.repository.TaskSubscriptionRepository;

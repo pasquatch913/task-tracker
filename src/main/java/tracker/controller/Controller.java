@@ -1,6 +1,5 @@
 package tracker.controller;
 
-import mapper.TaskMapper;
 import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -9,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 import tracker.entity.*;
+import tracker.mapper.TaskMapper;
 import tracker.service.TaskService;
 
 import javax.servlet.http.HttpServletRequest;

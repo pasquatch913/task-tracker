@@ -1,4 +1,4 @@
-package mapper;
+package tracker.mapper;
 
 import tracker.entity.TaskDTO;
 import tracker.entity.TaskSubscriptionEntity;
