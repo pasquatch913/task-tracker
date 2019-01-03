@@ -11,6 +11,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class TaskDTO {
 
+    private Integer id;
     private String name;
     private Integer weight;
     private Integer necessaryCompletions;
