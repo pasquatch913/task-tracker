@@ -3,8 +3,8 @@ package tracker
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.setup.MockMvcBuilders
 import spock.lang.Specification
-import tracker.controller.Controller
 import tracker.service.TaskService
+import tracker.web.Controller
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 

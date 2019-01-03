@@ -1,18 +1,14 @@
-package tracker.controller;
+package tracker.web;
 
 import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.view.RedirectView;
 import tracker.entity.*;
 import tracker.mapper.TaskMapper;
 import tracker.service.TaskService;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -32,45 +28,40 @@ public class Controller {
     }
 
     @GetMapping("/showTasks")
-    public ModelAndView showTasks() {
-        ModelAndView mav = new ModelAndView("showTaskSubscriptions");
-        mav.addObject("tasks", taskService.returnTaskForUser(1));
-        mav.addObject("oneTimeTasks", taskService.returnOneTimeTaskForUser(1));
-        return mav;
+    public String showTasks(Model model) {
+        model.addAttribute("tasks", taskService.returnTaskForUser(1));
+        model.addAttribute("oneTimeTasks", taskService.returnOneTimeTaskForUser(1));
+        return "showTaskSubscriptions";
     }
 
     @GetMapping(value = "/newTask")
-    public ModelAndView newTask() {
-        ModelAndView mav = new ModelAndView("newTask");
-        mav.addObject("periods", Arrays.asList(TaskPeriod.values()));
-        return mav;
+    public String newTask(Model model) {
+        model.addAttribute("periods", Arrays.asList(TaskPeriod.values()));
+        return "newTask";
     }
 
     @GetMapping(value = "/newOneTimeTask")
-    public ModelAndView newOneTimeTask() {
-        ModelAndView mav = new ModelAndView("newOneTimeTask");
-        return mav;
+    public String newOneTimeTask() {
+        return "newOneTimeTask";
     }
 
     @PostMapping(value = "/newTaskSubscription")
-    public RedirectView addTaskSubscription(HttpServletRequest request, HttpServletResponse response,
-                                            @ModelAttribute("newTaskSubscription") TaskSubscriptionDTO subscription) {
+    public String addTaskSubscription(@ModelAttribute TaskSubscriptionDTO subscription) {
         taskService.newTask(subscription);
         taskService.generateTaskInstances();
 
-        return new RedirectView("/showTasks");
+        return "redirect:/showTasks";
     }
 
     @PostMapping(value = "/newOneTimeTask")
-    public RedirectView addTaskSubscription(HttpServletRequest request, HttpServletResponse response,
-                                            @ModelAttribute("newOneTimeTask") OneTimeTaskInstanceEntity oneTimeTask) {
+    public String addTaskSubscription(@ModelAttribute OneTimeTaskInstanceEntity oneTimeTask) {
         taskService.newOneTimeTask(oneTimeTask);
 
-        return new RedirectView("/showTaskInstances");
+        return "redirect:/showTaskInstances";
     }
 
     @GetMapping(value = "/showTaskInstances")
-    public ModelAndView showUserTaskInstances () {
+    public String showUserTaskInstances(Model model) {
         // generate tasks instances prior to loading task subscriptions
         taskService.generateTaskInstances();
 
@@ -81,10 +72,9 @@ public class Controller {
 
         List<OneTimeTaskInstanceEntity> oneTimeTasks = taskService.returnOneTimeTaskForUser(1);
 
-        ModelAndView mav = new ModelAndView("showTaskInstances");
-        mav.addObject("tasks", taskDTOs);
-        mav.addObject("oneTimeTasks", oneTimeTasks);
-        return mav;
+        model.addAttribute("tasks", taskDTOs);
+        model.addAttribute("oneTimeTasks", oneTimeTasks);
+        return "showTaskInstances";
     }
 
     @PostMapping(value = "/tasks/instances/{id}/completions/{value}")
@@ -110,4 +100,15 @@ public class Controller {
         taskService.unsubscribeOneTime(id);
         return ResponseEntity.accepted().build();
     }
+
+    @GetMapping("/login")
+    public String login() {
+        return "login";
+    }
+
+    @GetMapping("/access-denied")
+    public String accessDenied() {
+        return "/error/access-denied";
+    }
+
 }
