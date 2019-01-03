@@ -1,5 +1,5 @@
 -- new version
--- INSERT INTO application_users (id, first_name, last_name, email, password_hash) VALUES (nextval('hibernate_sequence'), 'John', 'Davis', 'john@email.com', 'XXXX'), (nextval('hibernate_sequence'), 'Jane', 'Doe', 'jane@email.com', 'YYYY');
+-- INSERT INTO public.application_users (id, username, email, password) VALUES (nextval('hibernate_sequence'), 'ben', 'john@email.com', '$2a$10$L4GdGfFSeovJdicxMJSrOuHRS7JXbo4ceB5/c1K8NOb8bMtNzsIa6'), (nextval('hibernate_sequence'), 'Jane', 'jane@email.com', 'YYYY');
 
 -- dumps for testing
 -- INSERT INTO public.task_subscription (id, name, necessary_completions, period, weight, active) VALUES (3, 'task1', 1, 1, 1, TRUE);
@@ -10,4 +10,7 @@
 -- INSERT INTO public.task_subscription_task_instance VALUES (5,6);
 -- INSERT INTO public.application_users_task_subscription (user_entity_id, task_subscriptions_id) VALUES (1, 3);
 -- INSERT INTO public.application_users_task_subscription (user_entity_id, task_subscriptions_id) VALUES (1, 5);
--- select setval('hibernate_sequence', 6);
+--
+-- INSERT INTO public.user_roles (id, role) VALUES (7, 'ADMIN');
+-- INSERT INTO public.application_users_user_roles VALUES (1,7);
+-- select setval('hibernate_sequence', 7);
