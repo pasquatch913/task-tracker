@@ -1,46 +1,52 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      layout:decorate="~{fragments/layout}">
 <head>
     <title>Tasks page</title>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 </head>
 <body>
-<fieldset>
-    <legend>Input</legend>
-    <form modelAttribute="newTaskSubscription" action="newTaskSubscription" method="post">
-        <div>
-            <label for="name"> Name:
-            </label>
-            <input type="text" id="name" name="name">
-            <span></span>
-        </div>
-        <div>
-            <label for="necessaryCompletions"> Number of times to complete task:
-            </label>
-            <input type="text" id="necessaryCompletions" name="necessaryCompletions">
-            <span></span>
-        </div>
-        <div>
-            <label for="weight">Task points:</label>
-            <input type="text" id="weight" name="weight"
-                   placeholder="Enter 1-5 given how important"/>
-        </div>
-        <div>
-            <label for="period">How many days to complete the task?</label>
-            <div id="period" th:each="period : ${periods}">
-                <input th:id="'period-option' + ${period}" type="radio" name="period" th:value="${period}"/>
-                <label th:for="'period-option' + ${period}" th:text="| &nbsp; ${period} |">Something is wrong !</label>
+<div layout:fragment="content" th:remove="tag">
+    <fieldset>
+        <legend>Input</legend>
+        <form modelAttribute="newTaskSubscription" action="newTaskSubscription" method="post">
+            <input
+                    type="hidden"
+                    th:name="${_csrf.parameterName}"
+                    th:value="${_csrf.token}"/>
+            <div>
+                <label for="name"> Name:
+                </label>
+                <input type="text" id="name" name="name">
+                <span></span>
             </div>
-        </div>
-        <div>
-            <input type="submit" class="submit" value="Submit" />
-        </div>
+            <div>
+                <label for="necessaryCompletions"> Number of times to complete task:
+                </label>
+                <input type="text" id="necessaryCompletions" name="necessaryCompletions">
+                <span></span>
+            </div>
+            <div>
+                <label for="weight">Task points:</label>
+                <input type="text" id="weight" name="weight"
+                       placeholder="Enter 1-5 given how important"/>
+            </div>
+            <div>
+                <label for="period">How many days to complete the task?</label>
+                <div id="period" th:each="period : ${periods}">
+                    <input th:id="'period-option' + ${period}" type="radio" name="period" th:value="${period}"/>
+                    <label th:for="'period-option' + ${period}" th:text="| &nbsp; ${period} |">Something is wrong
+                        !</label>
+                </div>
+            </div>
+            <div>
+                <input type="submit" class="submit" value="Submit"/>
+            </div>
 
-    </form>
-</fieldset>
-
-<div th:replace="fragments/footer :: footer"/>
-
+        </form>
+    </fieldset>
+</div>
 </body>
 </html>

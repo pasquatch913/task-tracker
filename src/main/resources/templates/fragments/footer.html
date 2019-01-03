@@ -1,17 +1,27 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">>
 <head></head>
-
 <body>
+<th:block th:fragment="footer">
+    <footer>
+        <div class="container">
+            <p>
+                &copy; Task Tracker
+                <span sec:authorize="isAuthenticated()" style="display: inline-block;">
+                    | Logged user: <span sec:authentication="name"></span> |
+                    <a href="/">Home</a> |
+                    <a href="/showTasks">Show Tasks</a> |
+                    <a href="/showTaskInstances">Show Task Instances</a> |
+                    <a href="/newTask">Create New Task</a> |
+                    <a href="/newOneTimeTask">Create New One-time Task</a> |
+                    <a th:href="@{/logout}">Sign Out</a>
+                </span>
+            </p>
+        </div>
+    </footer>
 
-<div th:fragment="footer">
-    <a href="/">Home</a>
-    <a href="/showTasks">Show Tasks</a>
-    <a href="/showTaskInstances">Show Task Instances</a>
-    <a href="/newTask">Create New Task</a>
-    <a href="/newOneTimeTask">Create New One-time Task</a>
-</div>
+</th:block>
 
 </body>
 </html>

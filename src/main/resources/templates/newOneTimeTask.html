@@ -1,43 +1,49 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      layout:decorate="~{fragments/layout}">
 <head>
     <title>Tasks page</title>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
 </head>
 <body>
-<fieldset>
-    <legend>Input</legend>
-    <form modelAttribute="newOneTimeTask" action="newOneTimeTask" method="post">
-        <div>
-            <label for="name"> Name:
-            </label>
-            <input type="text" id="name" name="name">
-            <span></span>
-        </div>
-        <div>
-            <label for="necessaryCompletions"> Number of times to complete task:
-            </label>
-            <input type="text" id="necessaryCompletions" name="necessaryCompletions">
-            <span></span>
-        </div>
-        <div>
-            <label for="weight">Task points:</label>
-            <input type="text" id="weight" name="weight"
-                   placeholder="Enter 1-5 given how important"/>
-        </div>
-        <div>
-            <label for="date-select">By which day should the task be completed?</label>
-            <input id="date-select" type="date" name="dueDate"/>
-        </div>
-        <div>
-            <input type="submit" class="submit" value="Submit"/>
-        </div>
+<div layout:fragment="content" th:remove="tag">
+    <fieldset>
+        <legend>Input</legend>
+        <form modelAttribute="newOneTimeTask" action="newOneTimeTask" method="post">
+            <input
+                    type="hidden"
+                    th:name="${_csrf.parameterName}"
+                    th:value="${_csrf.token}"/>
+            <div>
+                <label for="name"> Name:
+                </label>
+                <input type="text" id="name" name="name">
+                <span></span>
+            </div>
+            <div>
+                <label for="necessaryCompletions"> Number of times to complete task:
+                </label>
+                <input type="text" id="necessaryCompletions" name="necessaryCompletions">
+                <span></span>
+            </div>
+            <div>
+                <label for="weight">Task points:</label>
+                <input type="text" id="weight" name="weight"
+                       placeholder="Enter 1-5 given how important"/>
+            </div>
+            <div>
+                <label for="date-select">By which day should the task be completed?</label>
+                <input id="date-select" type="date" name="dueDate"/>
+            </div>
+            <div>
+                <input type="submit" class="submit" value="Submit"/>
+            </div>
 
-    </form>
-</fieldset>
-
-<div th:replace="fragments/footer :: footer"/>
-
+        </form>
+    </fieldset>
+</div>
 </body>
 </html>

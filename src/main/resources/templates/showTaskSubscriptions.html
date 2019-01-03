@@ -1,57 +1,59 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      layout:decorate="~{fragments/layout}">
 <head>
     <title>Tasks page</title>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta th:name="_csrf" th:content="${_csrf.token}"/>
+    <meta th:name="_csrf_header" th:content="${_csrf.headerName}"/>
     <script type="text/javascript" src="js/TaskSubscriptions.js"></script>
-    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="css/file.css">
 </head>
 <body>
-<table>
-    <tr>
-        <td>Task Name</td>
-        <td>Task Period</td>
-        <td>Points Per Completion</td>
-        <td>Completions Goal</td>
-    </tr>
-    <tr th:each="element : ${tasks}" th:id="'subscription' + ${element.id}">
-        <div th:if="${element.active}">
-            <td th:text="${element.name}"></td>
-            <td th:text="${element.period}"></td>
-            <td th:text="${element.weight}"></td>
-            <td th:text="${element.necessaryCompletions}"></td>
+<div layout:fragment="content" th:remove="tag">
+    <table>
+        <tr>
+            <td>Task Name</td>
+            <td>Task Period</td>
+            <td>Points Per Completion</td>
+            <td>Completions Goal</td>
+        </tr>
+        <tr th:each="element : ${tasks}" th:id="'subscription' + ${element.id}">
+            <div th:if="${element.active}">
+                <td th:text="${element.name}"></td>
+                <td th:text="${element.period}"></td>
+                <td th:text="${element.weight}"></td>
+                <td th:text="${element.necessaryCompletions}"></td>
+                <td>
+                    <button th:id="'completeTaskSubscription' + ${element.id}"
+                            th:onclick="'completeTaskSubscription(' + ${element.id} + ')'">
+                        Complete Task
+                    </button>
+                </td>
+            </div>
+        </tr>
+        <tr>
             <td>
-                <button th:id="'completeTaskSubscription' + ${element.id}"
-                        th:onclick="'completeTaskSubscription(' + ${element.id} + ')'">
-                    Complete Task
-                </button>
+                One Time Tasks
             </td>
-        </div>
-    </tr>
-    <tr>
-        <td>
-            One Time Tasks
-        </td>
-    </tr>
-    <tr th:each="element : ${oneTimeTasks}" th:id="'oneTime' + ${element.id}">
-        <div th:if="${element.active}">
-            <td th:text="${element.name}"></td>
-            <td th:text="'One Time: ' + ${element.dueDate}"></td>
-            <td th:text="${element.weight}"></td>
-            <td th:text="${element.necessaryCompletions}"></td>
-            <td>
-                <button th:id="'completeOneTime' + ${element.id}"
-                        th:onclick="'completeOneTime(' + ${element.id} + ')'">
-                    Complete Task
-                </button>
-            </td>
-        </div>
-    </tr>
-</table>
-
-<div th:replace="fragments/footer :: footer"/>
+        </tr>
+        <tr th:each="element : ${oneTimeTasks}" th:id="'oneTime' + ${element.id}">
+            <div th:if="${element.active}">
+                <td th:text="${element.name}"></td>
+                <td th:text="'One Time: ' + ${element.dueDate}"></td>
+                <td th:text="${element.weight}"></td>
+                <td th:text="${element.necessaryCompletions}"></td>
+                <td>
+                    <button th:id="'completeOneTime' + ${element.id}"
+                            th:onclick="'completeOneTime(' + ${element.id} + ')'">
+                        Complete Task
+                    </button>
+                </td>
+            </div>
+        </tr>
+    </table>
+</div>
 
 </body>
 </html>
