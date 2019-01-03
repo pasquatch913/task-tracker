@@ -18,16 +18,16 @@ public class UserEntity {
     @Column(name = "id", updatable = false, nullable = false)
     private Integer id;
     @NonNull
-    private String firstName;
-    @NonNull
-    private String lastName;
+    private String username;
     @NonNull
     private String email;
     @NonNull
-    private String passwordHash;
+    private String password;
     @OneToMany
     private List<TaskSubscriptionEntity> taskSubscriptions;
     @OneToMany
     private List<OneTimeTaskInstanceEntity> oneTimeTaskInstances;
+    @OneToMany
+    private List<UserRolesEntity> userRoles;
 
 }

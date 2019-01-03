@@ -1,4 +1,4 @@
-package tracker.controller;
+package tracker.web;
 
 import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
