@@ -15,5 +15,5 @@ public class UserRolesEntity {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "id", updatable = false, nullable = false)
     private Integer id;
-    private String role;
+    private String role = "ADMIN";
 }

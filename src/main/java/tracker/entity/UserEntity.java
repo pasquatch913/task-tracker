@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -24,10 +25,10 @@ public class UserEntity {
     @NonNull
     private String password;
     @OneToMany
-    private List<TaskSubscriptionEntity> taskSubscriptions;
+    private List<TaskSubscriptionEntity> taskSubscriptions = new ArrayList<>();
     @OneToMany
-    private List<OneTimeTaskInstanceEntity> oneTimeTaskInstances;
+    private List<OneTimeTaskInstanceEntity> oneTimeTaskInstances = new ArrayList<>();
     @OneToMany
-    private List<UserRolesEntity> userRoles;
+    private List<UserRolesEntity> userRoles = new ArrayList<>();
 
 }

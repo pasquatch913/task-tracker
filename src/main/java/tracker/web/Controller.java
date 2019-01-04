@@ -137,6 +137,17 @@ public class Controller {
         return "login";
     }
 
+    @GetMapping("/register")
+    public String register() {
+        return "userRegistration";
+    }
+
+    @PostMapping("/register")
+    public String createUser(@ModelAttribute UserDTO userDTO) {
+        userService.createUser(userDTO);
+        return "redirect:/login";
+    }
+
     @GetMapping("/access-denied")
     public String accessDenied() {
         return "/error/access-denied";
