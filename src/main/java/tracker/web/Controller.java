@@ -28,7 +28,7 @@ public class Controller {
 
     @GetMapping(path = "/")
     public String index(Model model) {
-        return "index";
+        return "redirect:/showTaskInstances";
     }
 
     @GetMapping("/showTasks")
