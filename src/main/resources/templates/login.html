@@ -41,12 +41,16 @@
                 </div>
                 <div class="form-group">
                     <div class="row">
-                        <div class="col-sm-6 col-sm-offset-3">
+                        <div class="col-sm-6 col-sm-offset-3 button-box">
                             <input type="submit"
                                    name="login-submit"
                                    id="login-submit"
-                                   class="form-control btn btn-info"
+                                   class="btn btn-info"
                                    value="Log In">
+                            <a th:action="@{/register}" method="get"
+                               class="btn btn-info">
+                                New User? Register here!
+                            </a>
                         </div>
                     </div>
                 </div>

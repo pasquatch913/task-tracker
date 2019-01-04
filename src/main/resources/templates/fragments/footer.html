@@ -7,9 +7,9 @@
     <footer>
         <div class="container">
             <p>
-                &copy; Task Tracker
+                Task Tracker
                 <span sec:authorize="isAuthenticated()" style="display: inline-block;">
-                    | Logged user: <span sec:authentication="name"></span> |
+                    | Logged in as: <span sec:authentication="name"></span> |
                     <a href="/">Home</a> |
                     <a href="/showTasks">Show Tasks</a> |
                     <a href="/showTaskInstances">Show Task Instances</a> |

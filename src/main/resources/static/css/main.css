@@ -22,3 +22,8 @@ footer {
 footer p {
     padding: 15px;
 }
+
+.button-box {
+    text-align: center;
+    margin-top: 20px;
+}
