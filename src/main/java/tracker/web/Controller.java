@@ -144,8 +144,9 @@ public class Controller {
 
     @PostMapping("/register")
     public String createUser(@ModelAttribute UserDTO userDTO) {
-        userService.createUser(userDTO);
-        return "redirect:/login";
+        Boolean success = userService.createUser(userDTO);
+        if (!success) return "redirect:/register?duplicateUsername";
+        else return "redirect:/login";
     }
 
     @GetMapping("/access-denied")

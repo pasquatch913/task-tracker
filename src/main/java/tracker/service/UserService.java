@@ -5,7 +5,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import tracker.DuplicateEntityException;
 import tracker.EntityNotFoundException;
 import tracker.entity.UserDTO;
 import tracker.entity.UserEntity;
@@ -31,9 +30,10 @@ public class UserService {
         return getUserFromUsername(userDetails);
     }
 
-    public void createUser(UserDTO userDTO) {
+    public Boolean createUser(UserDTO userDTO) {
+        // code smell. come up with more elegant way to handle success/failure
         if (userRepository.findByUsername(userDTO.getUsername()).isPresent()) {
-            throw new DuplicateEntityException();
+            return Boolean.FALSE;
         } else {
             UserRolesEntity userRolesEntity = new UserRolesEntity();
             userRolesRepository.save(userRolesEntity);
@@ -44,6 +44,7 @@ public class UserService {
             newUser.setPassword(new BCryptPasswordEncoder().encode(userDTO.getPassword()));
             newUser.getUserRoles().add(userRolesEntity);
             userRepository.save(newUser);
+            return Boolean.TRUE;
         }
     }
 }
