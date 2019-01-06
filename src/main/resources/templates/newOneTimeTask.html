@@ -20,23 +20,27 @@
             <div>
                 <label for="name"> Name:
                 </label>
-                <input type="text" id="name" name="name">
+                <input type="text" id="name" name="name" autofocus="autofocus" required
+                       placeholder="One-time task name">
                 <span></span>
             </div>
             <div>
                 <label for="necessaryCompletions"> Number of times to complete task:
                 </label>
-                <input type="text" id="necessaryCompletions" name="necessaryCompletions">
+                <input type="number" id="necessaryCompletions" name="necessaryCompletions" required min="1"
+                       placeholder="1">
                 <span></span>
             </div>
             <div>
-                <label for="weight">Task points:</label>
-                <input type="text" id="weight" name="weight"
-                       placeholder="Enter 1-5 given how important"/>
+                <label for="weight">Task points (choose value 1-5 to denote how important, where 5 is most
+                    important):</label>
+                <input type="number" id="weight" name="weight" required max="5" min="1"
+                       placeholder="1"/>
             </div>
             <div>
+                <!--TODO validate that this date is today or greater-->
                 <label for="date-select">By which day should the task be completed?</label>
-                <input id="date-select" type="date" name="dueDate"/>
+                <input id="date-select" type="date" name="dueDate" required/>
             </div>
             <div>
                 <input type="submit" class="submit" value="Submit"/>

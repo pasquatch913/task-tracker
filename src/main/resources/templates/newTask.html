@@ -19,22 +19,24 @@
             <div>
                 <label for="name"> Name:
                 </label>
-                <input type="text" id="name" name="name">
+                <input type="text" id="name" name="name" autofocus="autofocus" required placeholder="Task name">
                 <span></span>
             </div>
             <div>
                 <label for="necessaryCompletions"> Number of times to complete task:
                 </label>
-                <input type="text" id="necessaryCompletions" name="necessaryCompletions">
+                <input type="number" id="necessaryCompletions" name="necessaryCompletions" required min="1"
+                       placeholder="1">
                 <span></span>
             </div>
             <div>
-                <label for="weight">Task points:</label>
-                <input type="text" id="weight" name="weight"
-                       placeholder="Enter 1-5 given how important"/>
+                <label for="weight">Task points (choose value 1-5 to denote how important, where 5 is most
+                    important):</label>
+                <input type="number" id="weight" name="weight" required max="5" min="1"
+                       placeholder="1"/>
             </div>
             <div>
-                <label for="period">How many days to complete the task?</label>
+                <label for="period">On what schedule should the task recur?</label>
                 <div id="period" th:each="period : ${periods}">
                     <input th:id="'period-option' + ${period}" type="radio" name="period" th:value="${period}"/>
                     <label th:for="'period-option' + ${period}" th:text="| &nbsp; ${period} |">Something is wrong
