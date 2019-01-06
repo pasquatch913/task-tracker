@@ -1,8 +1,10 @@
-package tracker.entity;
+package tracker.user;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
+import tracker.task.OneTimeTaskInstanceEntity;
+import tracker.task.TaskSubscriptionEntity;
 
 import javax.persistence.*;
 import java.util.ArrayList;

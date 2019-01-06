@@ -3,17 +3,17 @@ package tracker
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.setup.MockMvcBuilders
 import spock.lang.Specification
-import tracker.service.TaskService
-import tracker.web.Controller
+import tracker.task.TaskController
+import tracker.task.TaskService
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 
-class ControllerSpec extends Specification {
+class TaskControllerSpec extends Specification {
 
     MockMvc mockMvc
 
     def setup() {
-        def controller = new Controller()
+        def controller = new TaskController()
         def service = new TaskService()
         mockMvc = MockMvcBuilders.standaloneSetup(controller).build()
         controller.taskService = service

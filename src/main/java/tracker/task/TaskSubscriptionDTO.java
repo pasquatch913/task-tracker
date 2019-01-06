@@ -1,4 +1,4 @@
-package tracker.entity;
+package tracker.task;
 
 import lombok.Data;
 

@@ -1,14 +1,13 @@
-package tracker.web;
+package tracker.task;
 
 import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import tracker.entity.*;
-import tracker.mapper.TaskMapper;
-import tracker.service.TaskService;
-import tracker.service.UserService;
+import tracker.task.mapper.TaskMapper;
+import tracker.user.UserEntity;
+import tracker.user.UserService;
 
 import java.util.Arrays;
 import java.util.List;
@@ -16,7 +15,7 @@ import java.util.stream.Collectors;
 
 @org.springframework.stereotype.Controller
 @RequestMapping("/")
-public class Controller {
+public class TaskController {
 
     TaskMapper mapper = Mappers.getMapper(TaskMapper.class);
 
@@ -130,28 +129,6 @@ public class Controller {
                 .filter(n -> n.getId().equals(id))
                 .forEach(m -> taskService.unsubscribeOneTime(m.getId()));
         return ResponseEntity.accepted().build();
-    }
-
-    @GetMapping("/login")
-    public String login() {
-        return "login";
-    }
-
-    @GetMapping("/register")
-    public String register() {
-        return "userRegistration";
-    }
-
-    @PostMapping("/register")
-    public String createUser(@ModelAttribute UserDTO userDTO) {
-        Boolean success = userService.createUser(userDTO);
-        if (!success) return "redirect:/register?duplicateUsername";
-        else return "redirect:/login";
-    }
-
-    @GetMapping("/access-denied")
-    public String accessDenied() {
-        return "/error/access-denied";
     }
 
 }

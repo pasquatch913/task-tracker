@@ -1,16 +1,11 @@
-package tracker.service;
+package tracker.user;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import tracker.EntityNotFoundException;
-import tracker.entity.UserDTO;
-import tracker.entity.UserEntity;
-import tracker.entity.UserRolesEntity;
-import tracker.repository.UserRepository;
-import tracker.repository.UserRolesRepository;
+import tracker.web.EntityNotFoundException;
 
 @Service
 public class UserService {

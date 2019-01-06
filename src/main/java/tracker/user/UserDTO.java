@@ -1,4 +1,4 @@
-package tracker.entity;
+package tracker.user;
 
 import lombok.Data;
 import lombok.NonNull;

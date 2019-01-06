@@ -1,4 +1,4 @@
-package tracker.entity;
+package tracker.task;
 
 public enum TaskPeriod {
     // TODO remove integer mapping and move logic to service level

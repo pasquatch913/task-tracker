@@ -1,7 +1,6 @@
-package tracker.repository;
+package tracker.task;
 
 import org.springframework.data.repository.CrudRepository;
-import tracker.entity.TaskSubscriptionEntity;
 
 import javax.transaction.Transactional;
 

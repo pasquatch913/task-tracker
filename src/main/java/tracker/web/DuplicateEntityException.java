@@ -1,4 +1,4 @@
-package tracker;
+package tracker.web;
 
 public class DuplicateEntityException extends Exception {
     public DuplicateEntityException() {

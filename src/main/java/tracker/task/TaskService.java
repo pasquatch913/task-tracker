@@ -1,14 +1,12 @@
-package tracker.service;
+package tracker.task;
 
 import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import tracker.entity.*;
-import tracker.mapper.TaskMapper;
-import tracker.repository.OneTimeTaskInstanceRepository;
-import tracker.repository.TaskInstanceRepository;
-import tracker.repository.TaskSubscriptionRepository;
-import tracker.repository.UserRepository;
+import tracker.task.mapper.TaskMapper;
+import tracker.user.UserEntity;
+import tracker.user.UserRepository;
+import tracker.user.UserService;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoField;

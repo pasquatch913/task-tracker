@@ -8,11 +8,11 @@
 //import org.springframework.web.bind.annotation.PathVariable;
 //import org.springframework.web.bind.annotation.PostMapping;
 //import org.springframework.web.bind.annotation.RequestMapping;
-//import tracker.entity.OneTimeTaskInstanceEntity;
-//import tracker.entity.TaskDTO;
-//import tracker.entity.TaskSubscriptionEntity;
-//import tracker.mapper.TaskMapper;
-//import tracker.service.TaskService;
+//import tracker.task.OneTimeTaskInstanceEntity;
+//import tracker.task.TaskDTO;
+//import tracker.task.TaskSubscriptionEntity;
+//import tracker.task.mapper.TaskMapper;
+//import tracker.task.TaskService;
 //
 //import java.util.List;
 //import java.util.stream.Collectors;

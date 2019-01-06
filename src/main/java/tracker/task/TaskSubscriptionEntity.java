@@ -1,17 +1,19 @@
-package tracker.entity;
+package tracker.task;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
-import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
+
+@NoArgsConstructor
 @Data
 @Entity
-@NoArgsConstructor
-public class OneTimeTaskInstanceEntity {
+@Table(name = "task_subscription")
+public class TaskSubscriptionEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -20,14 +22,14 @@ public class OneTimeTaskInstanceEntity {
     @NonNull
     private String name;
     @NonNull
+    private TaskPeriod period;
+    @NonNull
     private Integer weight;
     @NonNull
-    private Integer necessaryCompletions = 0;
+    private Integer necessaryCompletions = 1;
+    @OneToMany
+    private List<TaskInstanceEntity> taskInstances = new ArrayList<TaskInstanceEntity>();
     @NonNull
-    private Integer completions = 0;
-    @NonNull
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private LocalDate dueDate;
     private Boolean active = true;
 
 }

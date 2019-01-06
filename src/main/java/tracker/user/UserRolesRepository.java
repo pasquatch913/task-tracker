@@ -1,7 +1,6 @@
-package tracker.repository;
+package tracker.user;
 
 import org.springframework.data.repository.CrudRepository;
-import tracker.entity.UserRolesEntity;
 
 import javax.transaction.Transactional;
 
