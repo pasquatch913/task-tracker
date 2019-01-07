@@ -1,11 +1,10 @@
-package tracker.web;
+package tracker.task;
 
 import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import tracker.task.*;
 import tracker.task.mapper.TaskMapper;
 import tracker.user.UserService;
 
@@ -14,7 +13,7 @@ import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/api")
-public class BffController {
+public class RestController {
 
     TaskMapper mapper = Mappers.getMapper(TaskMapper.class);
 
@@ -23,6 +22,9 @@ public class BffController {
 
     @Autowired
     UserService userService;
+
+    @Autowired
+    TaskController taskController;
 
     @GetMapping("/tasks")
     public ResponseEntity<List<TaskSubscriptionEntity>> getTaskSubscriptions() {
@@ -51,27 +53,33 @@ public class BffController {
         return ResponseEntity.accepted().build();
     }
 
-    @PostMapping("/tasks/{id}/completions/{value}")
-    public ResponseEntity updateTaskInstanceCompletions(@PathVariable Integer id, @PathVariable Integer value) {
-        taskService.updateTaskInstanceCompletions(id, value);
-        return ResponseEntity.ok().build();
+    @PostMapping("/tasks/{subscriptionId}/instances{id}/completions/{value}")
+    public ResponseEntity updateTaskInstanceCompletions(@PathVariable Integer subscriptionId,
+                                                        @PathVariable Integer id,
+                                                        @PathVariable Integer value) {
+        return taskController.updateTaskInstanceCompletions(subscriptionId, id, value);
+    }
+
+    @PostMapping("/tasks/oneTime/{id}/completions/value")
+    public ResponseEntity updateOneTimeTaskCompletions(@PathVariable Integer id, @PathVariable Integer value) {
+        return taskController.updateOneTimeTaskCompletions(id, value);
     }
 
     @PostMapping("/oneTimeTask")
-    public ResponseEntity createOneTimeTask() {
-        return ResponseEntity.ok().build();
+    public ResponseEntity createOneTimeTask(@RequestBody OneTimeTaskInstanceEntity oneTimeTask) {
+        taskService.newOneTimeTask(oneTimeTask);
+        return ResponseEntity.accepted().build();
     }
 
     @PostMapping("/tasks/{id}")
     public ResponseEntity completeTaskSubscription(@PathVariable Integer id) {
-        taskService.unsubscribe(id);
-        return ResponseEntity.ok().build();
+        return taskController.completeTaskSubscription(id);
     }
 
     @PostMapping("/oneTimeTasks/{id}")
     public ResponseEntity completeOneTimeTask(@PathVariable Integer id) {
-        taskService.unsubscribeOneTime(id);
-        return ResponseEntity.ok().build();
+        return taskController.completeOneTimeTask(id);
     }
 
 }
+
