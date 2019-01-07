@@ -25,7 +25,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private LoggingAccessDeniedHandler accessDeniedHandler;
 
-    //TODO implement security for rest calls: https://www.baeldung.com/securing-a-restful-web-service-with-spring-security
+    // rest auth:
+    // POST /login with body {username: <un>, password: <pw>}
+    // use cookie: $ curl -i -X GET --cookie "JSESSIONID=41DFE202F747668050DD5EDBA9BE346D" localhost:8080/showTasks
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
