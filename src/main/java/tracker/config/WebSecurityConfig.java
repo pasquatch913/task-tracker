@@ -49,9 +49,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .csrf();
 
         http.sessionManagement()
-                .maximumSessions(1)
-                .expiredUrl("/login?logout")
-                .and()
                 .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
                 .invalidSessionUrl("/login");
     }
