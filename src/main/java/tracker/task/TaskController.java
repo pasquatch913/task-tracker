@@ -57,7 +57,7 @@ public class TaskController {
     }
 
     @PostMapping(value = "/newOneTimeTask")
-    public String addTaskSubscription(@ModelAttribute OneTimeTaskInstanceEntity oneTimeTask) {
+    public String addOneTimeTask(@ModelAttribute OneTimeTaskInstanceEntity oneTimeTask) {
         taskService.newOneTimeTask(oneTimeTask);
 
         return "redirect:/showTaskInstances";
@@ -95,7 +95,7 @@ public class TaskController {
         task.getTaskInstances().stream()
                 .filter(m -> m.getId().equals(id))
                 .forEach(m -> taskService.updateTaskInstanceCompletions(m.getId(), value));
-        return ResponseEntity.ok().build();
+        return ResponseEntity.accepted().build();
     }
 
     @PostMapping(value = "/tasks/{id}")
@@ -117,7 +117,7 @@ public class TaskController {
                 .stream()
                 .filter(n -> n.getId().equals(id))
                 .forEach(m -> taskService.updateOneTimeTaskCompletions(m.getId(), value));
-        return ResponseEntity.ok().build();
+        return ResponseEntity.accepted().build();
     }
 
     @PostMapping(value = "/tasks/oneTime/{id}")
