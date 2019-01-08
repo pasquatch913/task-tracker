@@ -46,14 +46,14 @@ public class RestController {
                 .body(taskService.returnOneTimeTaskForUser(userService.getUser()));
     }
 
-    @PostMapping("/tasks")
+    @PostMapping("tasks")
     public ResponseEntity createTaskSubscription(@RequestBody TaskSubscriptionDTO taskSubscriptionDTO) {
         taskService.newTask(taskSubscriptionDTO);
         taskService.generateTaskInstances(userService.getUser());
         return ResponseEntity.accepted().build();
     }
 
-    @PostMapping("/tasks/{subscriptionId}/instances{id}/completions/{value}")
+    @PostMapping("tasks/{subscriptionId}/instances/{id}/completions/{value}")
     public ResponseEntity updateTaskInstanceCompletions(@PathVariable Integer subscriptionId,
                                                         @PathVariable Integer id,
                                                         @PathVariable Integer value) {
