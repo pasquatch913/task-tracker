@@ -3,8 +3,10 @@ package tracker.config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -17,6 +19,7 @@ import javax.sql.DataSource;
 
 @Configuration
 @EnableWebSecurity
+@Order(1)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
@@ -30,19 +33,25 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     // use cookie: $ curl -i -X GET --cookie "JSESSIONID=41DFE202F747668050DD5EDBA9BE346D" localhost:8080/showTasks
 
     @Override
+    public void configure(WebSecurity web) throws Exception {
+        web
+                .ignoring()
+                .antMatchers("/js/**", "/css/**", "/img/**", "/webjars/**", "/web/register");
+    }
+
+    @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/js/**", "/css/**", "/img/**", "/webjars/**", "/register").permitAll()
-                .anyRequest().authenticated()
+                .antMatchers("/web/**").authenticated()
                 .and()
                 .formLogin()
-                .loginPage("/login")
+                .loginPage("/web/login")
                 .permitAll()
                 .and()
                 .logout()
                 .invalidateHttpSession(true)
                 .clearAuthentication(true)
-                .logoutRequestMatcher(new AntPathRequestMatcher("/logout")).logoutSuccessUrl("/login?logout")
+                .logoutRequestMatcher(new AntPathRequestMatcher("/web/logout")).logoutSuccessUrl("/web/login?logout")
                 .permitAll()
                 .and()
                 .exceptionHandling()
@@ -50,9 +59,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .csrf();
 
+        http.authorizeRequests()
+                .antMatchers("/api/**").authenticated()
+                .and()
+                .httpBasic();
+
         http.sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
-                .invalidSessionUrl("/login");
+                .invalidSessionUrl("/web/login");
     }
 
     @Override

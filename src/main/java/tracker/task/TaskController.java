@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Controller
-@RequestMapping("/")
+@RequestMapping("/web")
 public class TaskController {
 
     TaskMapper mapper = Mappers.getMapper(TaskMapper.class);
@@ -28,7 +28,7 @@ public class TaskController {
 
     @GetMapping(path = "/")
     public String index(Model model) {
-        return "redirect:/showTaskInstances";
+        return "redirect:/web/showTaskInstances";
     }
 
     @GetMapping("/showTasks")
@@ -54,14 +54,14 @@ public class TaskController {
         taskService.newTask(subscription);
         taskService.generateTaskInstances(userService.getUser());
 
-        return "redirect:/showTasks";
+        return "redirect:/web/showTasks";
     }
 
     @PostMapping(value = "/newOneTimeTask")
     public String addOneTimeTask(@ModelAttribute OneTimeTaskInstanceEntity oneTimeTask) {
         taskService.newOneTimeTask(oneTimeTask);
 
-        return "redirect:/showTaskInstances";
+        return "redirect:/web/showTaskInstances";
     }
 
     @GetMapping(value = "/showTaskInstances")
