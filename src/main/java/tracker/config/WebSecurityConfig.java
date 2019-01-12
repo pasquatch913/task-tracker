@@ -57,7 +57,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .exceptionHandling()
                 .accessDeniedHandler(accessDeniedHandler)
                 .and()
-                .csrf();
+                .csrf().ignoringAntMatchers("/api/**");
 
         http.authorizeRequests()
                 .antMatchers("/api/**").authenticated()
