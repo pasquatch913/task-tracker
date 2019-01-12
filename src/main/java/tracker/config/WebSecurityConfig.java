@@ -3,7 +3,6 @@ package tracker.config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
@@ -19,7 +18,6 @@ import javax.sql.DataSource;
 
 @Configuration
 @EnableWebSecurity
-@Order(1)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
@@ -36,22 +34,24 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     public void configure(WebSecurity web) throws Exception {
         web
                 .ignoring()
-                .antMatchers("/js/**", "/css/**", "/img/**", "/webjars/**", "/web/register");
+                .antMatchers("/js/**", "/css/**", "/img/**", "/webjars/**");
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
+                .antMatchers("/register").anonymous()
                 .antMatchers("/web/**").authenticated()
                 .and()
                 .formLogin()
-                .loginPage("/web/login")
+                .loginPage("/login")
+                .defaultSuccessUrl("/web/showTasks", true)
                 .permitAll()
                 .and()
                 .logout()
                 .invalidateHttpSession(true)
                 .clearAuthentication(true)
-                .logoutRequestMatcher(new AntPathRequestMatcher("/web/logout")).logoutSuccessUrl("/web/login?logout")
+                .logoutRequestMatcher(new AntPathRequestMatcher("/logout")).logoutSuccessUrl("/login?logout")
                 .permitAll()
                 .and()
                 .exceptionHandling()
@@ -66,7 +66,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
-                .invalidSessionUrl("/web/login");
+                .invalidSessionUrl("/login");
     }
 
     @Override

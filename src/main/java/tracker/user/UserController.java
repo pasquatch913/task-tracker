@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @org.springframework.stereotype.Controller
-@RequestMapping("/web")
+@RequestMapping("/")
 public class UserController {
 
     @Autowired

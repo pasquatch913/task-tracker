@@ -10,11 +10,11 @@
                 Task Tracker
                 <span sec:authorize="isAuthenticated()" style="display: inline-block;">
                     | Logged in as: <span sec:authentication="name"></span> |
-                    <a href="/">Home</a> |
-                    <a href="/showTasks">Show Tasks</a> |
-                    <a href="/showTaskInstances">Show Task Instances</a> |
-                    <a href="/newTask">Create New Task</a> |
-                    <a href="/newOneTimeTask">Create New One-time Task</a> |
+                    <a href="/web/">Home</a> |
+                    <a href="/web/showTasks">Show Tasks</a> |
+                    <a href="/web/showTaskInstances">Show Task Instances</a> |
+                    <a href="/web/newTask">Create New Task</a> |
+                    <a href="/web/newOneTimeTask">Create New One-time Task</a> |
                     <a th:href="@{/logout}">Sign Out</a>
                 </span>
             </p>
