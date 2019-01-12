@@ -28,10 +28,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private LoggingAccessDeniedHandler accessDeniedHandler;
 
-    // rest auth:
-    // POST /login with body {username: <un>, password: <pw>}
-    // use cookie: $ curl -i -X GET --cookie "JSESSIONID=41DFE202F747668050DD5EDBA9BE346D" localhost:8080/showTasks
-
     @Override
     public void configure(WebSecurity web) throws Exception {
         web
