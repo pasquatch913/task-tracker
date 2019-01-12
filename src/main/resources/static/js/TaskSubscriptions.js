@@ -1,5 +1,5 @@
 function completeTaskSubscription(id) {
-    var url = '/tasks/' + id;
+    var url = '/web/tasks/' + id;
     $.ajax({
         url: url,
         type: 'POST',
@@ -11,7 +11,7 @@ function completeTaskSubscription(id) {
 }
 
 function completeOneTime(id) {
-    var url = '/tasks/oneTime/' + id;
+    var url = '/web/tasks/oneTime/' + id;
     $.ajax({
         url: url,
         type: 'POST',

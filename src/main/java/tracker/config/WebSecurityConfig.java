@@ -5,9 +5,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
@@ -23,6 +23,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     DataSource dataSource;
 
     @Autowired
+    BasicAuthEntryPoint basicAuthEntryPoint;
+
+    @Autowired
     private LoggingAccessDeniedHandler accessDeniedHandler;
 
     // rest auth:
@@ -30,13 +33,21 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     // use cookie: $ curl -i -X GET --cookie "JSESSIONID=41DFE202F747668050DD5EDBA9BE346D" localhost:8080/showTasks
 
     @Override
+    public void configure(WebSecurity web) throws Exception {
+        web
+                .ignoring()
+                .antMatchers("/js/**", "/css/**", "/img/**", "/webjars/**");
+    }
+
+    @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/js/**", "/css/**", "/img/**", "/webjars/**", "/register").permitAll()
-                .anyRequest().authenticated()
+                .antMatchers("/register").permitAll()
+                .antMatchers("/web/**").authenticated()
                 .and()
                 .formLogin()
                 .loginPage("/login")
+                .defaultSuccessUrl("/web/showTasks", true)
                 .permitAll()
                 .and()
                 .logout()
@@ -48,15 +59,16 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .exceptionHandling()
                 .accessDeniedHandler(accessDeniedHandler)
                 .and()
-                .csrf();
+                .csrf().ignoringAntMatchers("/api/**");
 
-        http.sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
-                .invalidSessionUrl("/login");
+        http.authorizeRequests()
+                .antMatchers("/api/**").authenticated()
+                .and()
+                .httpBasic().authenticationEntryPoint(basicAuthEntryPoint);
     }
 
-    @Override
-    public void configure(AuthenticationManagerBuilder auth) throws Exception {
+    @Autowired
+    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
         auth.jdbcAuthentication().dataSource(dataSource)
                 .usersByUsernameQuery("select username, password, 1 from application_users where username=?")
                 .authoritiesByUsernameQuery("select username, role from application_users au " +

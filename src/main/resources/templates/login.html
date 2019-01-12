@@ -11,6 +11,10 @@
     <div class="row">
         <div class="col-md-6 col-md-offset-3">
             <h1>Login page</h1>
+            <input
+                    type="hidden"
+                    th:name="${_csrf.parameterName}"
+                    th:value="${_csrf.token}"/>
             <form th:action="@{/login}" method="post">
                 <div th:if="${param.error}">
                     <div class="alert alert-danger">
@@ -47,7 +51,7 @@
                                    id="login-submit"
                                    class="btn btn-info"
                                    value="Log In">
-                            <a th:href="@{/register}"
+                            <a th:href="@{~/register}"
                                class="btn btn-info">
                                 New User? Register here!
                             </a>

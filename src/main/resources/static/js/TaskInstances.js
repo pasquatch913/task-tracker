@@ -5,7 +5,7 @@ function updateCompletions(subscriptionId, instanceId, value) {
     elementToUpdate.innerText =  newCompletionsValue;
 
     //increment the correct taskInstance's counter
-    var url = '/tasks/' + subscriptionId + '/instances/' + instanceId + '/completions/' + newCompletionsValue;
+    var url = '/web/tasks/' + subscriptionId + '/instances/' + instanceId + '/completions/' + newCompletionsValue;
     $.post(url, function (data, status) {
         console.log('request sent!');
     });
@@ -18,7 +18,7 @@ function updateOneTimeCompletions(id, value) {
     elementToUpdate.innerText = newCompletionsValue;
 
     //increment the correct taskInstance's counter
-    var url = '/tasks/oneTime/' + id + '/completions/' + newCompletionsValue;
+    var url = '/web/tasks/oneTime/' + id + '/completions/' + newCompletionsValue;
     $.post(url, function (data, status) {
         console.log('request sent!');
     });
