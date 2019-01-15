@@ -8,8 +8,9 @@ import tracker.user.UserEntity;
 import tracker.user.UserRepository;
 import tracker.user.UserService;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.time.temporal.ChronoField;
+import java.time.temporal.TemporalAdjusters;
 import java.util.List;
 
 @Service
@@ -106,7 +107,7 @@ public class TaskService {
                 taskInstanceEntity.setDueAt(LocalDate.now());
                 break;
             case WEEKLY:
-                taskInstanceEntity.setDueAt(LocalDate.now().with(ChronoField.DAY_OF_WEEK, 1).plusWeeks(1));
+                taskInstanceEntity.setDueAt(LocalDate.now().with(TemporalAdjusters.nextOrSame(DayOfWeek.SATURDAY)));
                 break;
             case MONTHLY:
                 taskInstanceEntity.setDueAt(LocalDate.now().withDayOfMonth(LocalDate.now().lengthOfMonth()));
