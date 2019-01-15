@@ -4,20 +4,23 @@
 <head></head>
 <body>
 <th:block th:fragment="footer">
-    <footer>
-        <div class="container">
-            <p>
+    <footer class="footer bg-primary text-white container-fluid">
+        <div class="row">
+            <div class="col-xs-3 application-name">
                 Task Tracker
-                <span sec:authorize="isAuthenticated()" style="display: inline-block;">
-                    | Logged in as: <span sec:authentication="name"></span> |
-                    <a href="/web/">Home</a> |
-                    <a href="/web/showTasks">Show Tasks</a> |
-                    <a href="/web/showTaskInstances">Show Task Instances</a> |
-                    <a href="/web/newTask">Create New Task</a> |
-                    <a href="/web/newOneTimeTask">Create New One-time Task</a> |
-                    <a th:href="@{/logout}">Sign Out</a>
-                </span>
-            </p>
+            </div>
+            <br/>
+            <div class="col-xs-9 footer-component" sec:authorize="isAuthenticated()">Logged in as:
+                <div style="display: inline-block;" sec:authentication="name"></div>
+                <br/>
+                <a class="col-xs-1" href="/web/">Home</a>
+                <a class="col-xs-1" href="/web/showTasks">Show Tasks</a>
+                <a class="col-xs-1" href="/web/showTaskInstances">Show Task Instances</a>
+                <a class="col-xs-1" href="/web/newTask">Create New Task</a>
+                <a class="col-xs-1" href="/web/newOneTimeTask">Create New One-time Task</a>
+                <a class="col-xs-1" th:href="@{/logout}">Sign Out</a>
+            </div>
+        </div>
         </div>
     </footer>
 
