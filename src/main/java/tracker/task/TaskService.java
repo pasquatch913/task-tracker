@@ -61,7 +61,7 @@ public class TaskService {
                 n.getTaskInstances().isEmpty()
                         || n.getTaskInstances()
                         .get(n.getTaskInstances().size() - 1)
-                        .getDueAt().isBefore(LocalDate.now()))
+                        .getDueAt().isBefore(LocalDate.now().plusDays(1)))
                 .forEach(o -> generateNewInstanceForPeriod(o));
 
         userRepository.save(user);
