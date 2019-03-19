@@ -60,7 +60,7 @@ public class RestController {
         return taskController.updateTaskInstanceCompletions(subscriptionId, id, value);
     }
 
-    @PostMapping("/tasks/oneTime/{id}/completions/value")
+    @PostMapping("/tasks/oneTime/{id}/completions/value/{value}")
     public ResponseEntity updateOneTimeTaskCompletions(@PathVariable Integer id, @PathVariable Integer value) {
         return taskController.updateOneTimeTaskCompletions(id, value);
     }
