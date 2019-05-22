@@ -30,7 +30,7 @@ public class UserEntity {
     private List<TaskSubscriptionEntity> taskSubscriptions = new ArrayList<>();
     @OneToMany
     private List<OneTimeTaskInstanceEntity> oneTimeTaskInstances = new ArrayList<>();
-    @OneToMany
+    @OneToMany(cascade = {CascadeType.ALL})
     private List<UserRolesEntity> userRoles = new ArrayList<>();
 
 }
