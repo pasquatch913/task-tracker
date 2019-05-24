@@ -1,9 +1,12 @@
-package tracker.task;
+package tracker.task.subscription;
 
 import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tracker.task.mapper.TaskMapper;
+import tracker.task.onetime.OneTimeTaskInstanceEntity;
+import tracker.task.onetime.OneTimeTaskInstanceRepository;
+import tracker.task.subscription.*;
 import tracker.user.UserEntity;
 import tracker.user.UserRepository;
 import tracker.user.UserService;
@@ -14,7 +17,7 @@ import java.time.temporal.TemporalAdjusters;
 import java.util.List;
 
 @Service
-public class TaskService {
+public class SubscribedTaskService {
 
     @Autowired
     UserRepository userRepository;
@@ -27,9 +30,6 @@ public class TaskService {
 
     @Autowired
     TaskInstanceRepository taskInstanceRepository;
-
-    @Autowired
-    OneTimeTaskInstanceRepository oneTimeTaskInstanceRepository;
 
     TaskMapper mapper = Mappers.getMapper(TaskMapper.class);
 
@@ -71,32 +71,6 @@ public class TaskService {
         taskToUpdate.setCompletions(value);
         taskInstanceRepository.save(taskToUpdate);
         return taskInstanceRepository.findById(id).get();
-    }
-
-    public void newOneTimeTask(OneTimeTaskInstanceEntity taskInstanceEntity) {
-        UserEntity user = userService.getUser();
-        oneTimeTaskInstanceRepository.save(taskInstanceEntity);
-
-        user.getOneTimeTaskInstances().add(taskInstanceEntity);
-        userRepository.save(user);
-    }
-
-    public List<OneTimeTaskInstanceEntity> returnOneTimeTaskForUser(UserEntity user) {
-        List<OneTimeTaskInstanceEntity> tasks = user.getOneTimeTaskInstances();
-        return tasks;
-    }
-
-    public OneTimeTaskInstanceEntity updateOneTimeTaskCompletions(Integer id, Integer value) {
-        OneTimeTaskInstanceEntity taskToUpdate = oneTimeTaskInstanceRepository.findById(id).get();
-        taskToUpdate.setCompletions(value);
-        oneTimeTaskInstanceRepository.save(taskToUpdate);
-        return oneTimeTaskInstanceRepository.findById(id).get();
-    }
-
-    public void unsubscribeOneTime(Integer id) {
-        OneTimeTaskInstanceEntity taskToUpdate = oneTimeTaskInstanceRepository.findById(id).get();
-        taskToUpdate.setActive(false);
-        oneTimeTaskInstanceRepository.save(taskToUpdate);
     }
 
     private void generateNewInstanceForPeriod(TaskSubscriptionEntity taskSubscriptionEntity) {

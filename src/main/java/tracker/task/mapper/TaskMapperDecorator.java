@@ -1,7 +1,7 @@
 package tracker.task.mapper;
 
 import tracker.task.TaskDTO;
-import tracker.task.TaskSubscriptionEntity;
+import tracker.task.subscription.TaskSubscriptionEntity;
 
 public abstract class TaskMapperDecorator implements TaskMapper {
 

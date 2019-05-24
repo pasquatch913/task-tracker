@@ -5,8 +5,8 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
 import tracker.task.TaskDTO;
-import tracker.task.TaskSubscriptionDTO;
-import tracker.task.TaskSubscriptionEntity;
+import tracker.task.subscription.TaskSubscriptionDTO;
+import tracker.task.subscription.TaskSubscriptionEntity;
 
 @Mapper
 @DecoratedWith(TaskMapperDecorator.class)

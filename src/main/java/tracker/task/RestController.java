@@ -6,6 +6,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import tracker.task.mapper.TaskMapper;
+import tracker.task.onetime.OneTimeTaskInstanceEntity;
+import tracker.task.onetime.OneTimeTaskService;
+import tracker.task.subscription.SubscribedTaskService;
+import tracker.task.subscription.TaskSubscriptionDTO;
+import tracker.task.subscription.TaskSubscriptionEntity;
 import tracker.user.UserService;
 
 import java.util.List;
@@ -18,7 +23,10 @@ public class RestController {
     TaskMapper mapper = Mappers.getMapper(TaskMapper.class);
 
     @Autowired
-    TaskService taskService;
+    SubscribedTaskService subscribedTaskService;
+
+    @Autowired
+    OneTimeTaskService oneTimeTaskService;
 
     @Autowired
     UserService userService;
@@ -29,12 +37,12 @@ public class RestController {
     @GetMapping("/tasks")
     public ResponseEntity<List<TaskSubscriptionEntity>> getTaskSubscriptions() {
         return ResponseEntity.ok()
-                .body(taskService.returnTaskForUser(userService.getUser()));
+                .body(subscribedTaskService.returnTaskForUser(userService.getUser()));
     }
 
     @GetMapping("/taskInstances")
     public ResponseEntity<List<TaskDTO>> getTaskInstances() {
-        List<TaskDTO> tasks = taskService.returnTaskForUser(userService.getUser())
+        List<TaskDTO> tasks = subscribedTaskService.returnTaskForUser(userService.getUser())
                 .stream().map(mapper::taskSubscriptionEntityToTaskDTO)
                 .collect(Collectors.toList());
         return ResponseEntity.ok().body(tasks);
@@ -43,13 +51,13 @@ public class RestController {
     @GetMapping("/oneTimeTasks")
     public ResponseEntity<List<OneTimeTaskInstanceEntity>> getOneTimeTaskInstances() {
         return ResponseEntity.ok()
-                .body(taskService.returnOneTimeTaskForUser(userService.getUser()));
+                .body(oneTimeTaskService.returnOneTimeTaskForUser(userService.getUser()));
     }
 
     @PostMapping("tasks")
     public ResponseEntity createTaskSubscription(@RequestBody TaskSubscriptionDTO taskSubscriptionDTO) {
-        taskService.newTask(taskSubscriptionDTO);
-        taskService.generateTaskInstances(userService.getUser());
+        subscribedTaskService.newTask(taskSubscriptionDTO);
+        subscribedTaskService.generateTaskInstances(userService.getUser());
         return ResponseEntity.accepted().build();
     }
 
@@ -67,7 +75,7 @@ public class RestController {
 
     @PostMapping("/oneTimeTask")
     public ResponseEntity createOneTimeTask(@RequestBody OneTimeTaskInstanceEntity oneTimeTask) {
-        taskService.newOneTimeTask(oneTimeTask);
+        oneTimeTaskService.newOneTimeTask(oneTimeTask);
         return ResponseEntity.accepted().build();
     }
 

@@ -7,6 +7,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import tracker.task.mapper.TaskMapper;
+import tracker.task.onetime.OneTimeTaskInstanceEntity;
+import tracker.task.onetime.OneTimeTaskService;
+import tracker.task.subscription.TaskPeriod;
+import tracker.task.subscription.SubscribedTaskService;
+import tracker.task.subscription.TaskSubscriptionDTO;
+import tracker.task.subscription.TaskSubscriptionEntity;
 import tracker.user.UserEntity;
 import tracker.user.UserService;
 
@@ -21,7 +27,10 @@ public class TaskController {
     TaskMapper mapper = Mappers.getMapper(TaskMapper.class);
 
     @Autowired
-    TaskService taskService;
+    SubscribedTaskService subscribedTaskService;
+
+    @Autowired
+    OneTimeTaskService oneTimeTaskService;
 
     @Autowired
     UserService userService;
@@ -33,8 +42,8 @@ public class TaskController {
 
     @GetMapping("/showTasks")
     public String showTasks(Model model) {
-        model.addAttribute("tasks", taskService.returnTaskForUser(userService.getUser()));
-        model.addAttribute("oneTimeTasks", taskService.returnOneTimeTaskForUser(userService.getUser()));
+        model.addAttribute("tasks", subscribedTaskService.returnTaskForUser(userService.getUser()));
+        model.addAttribute("oneTimeTasks", oneTimeTaskService.returnOneTimeTaskForUser(userService.getUser()));
         return "showTaskSubscriptions";
     }
 
@@ -51,15 +60,15 @@ public class TaskController {
 
     @PostMapping(value = "/newTaskSubscription")
     public String addTaskSubscription(@ModelAttribute TaskSubscriptionDTO subscription) {
-        taskService.newTask(subscription);
-        taskService.generateTaskInstances(userService.getUser());
+        subscribedTaskService.newTask(subscription);
+        subscribedTaskService.generateTaskInstances(userService.getUser());
 
         return "redirect:/web/showTasks";
     }
 
     @PostMapping(value = "/newOneTimeTask")
     public String addOneTimeTask(@ModelAttribute OneTimeTaskInstanceEntity oneTimeTask) {
-        taskService.newOneTimeTask(oneTimeTask);
+        oneTimeTaskService.newOneTimeTask(oneTimeTask);
 
         return "redirect:/web/showTaskInstances";
     }
@@ -68,14 +77,14 @@ public class TaskController {
     public String showUserTaskInstances(Model model) {
         // generate tasks instances prior to loading task subscriptions
 
-        taskService.generateTaskInstances(userService.getUser());
+        subscribedTaskService.generateTaskInstances(userService.getUser());
 
-        List<TaskSubscriptionEntity> tasks = taskService.returnTaskForUser(userService.getUser());
+        List<TaskSubscriptionEntity> tasks = subscribedTaskService.returnTaskForUser(userService.getUser());
         List<TaskDTO> taskDTOs = tasks.stream()
                 .map(mapper::taskSubscriptionEntityToTaskDTO)
                 .collect(Collectors.toList());
 
-        List<OneTimeTaskInstanceEntity> oneTimeTasks = taskService.returnOneTimeTaskForUser(userService.getUser());
+        List<OneTimeTaskInstanceEntity> oneTimeTasks = oneTimeTaskService.returnOneTimeTaskForUser(userService.getUser());
 
         model.addAttribute("tasks", taskDTOs);
         model.addAttribute("oneTimeTasks", oneTimeTasks);
@@ -95,7 +104,7 @@ public class TaskController {
         // only update task instance if it belongs to current user
         task.getTaskInstances().stream()
                 .filter(m -> m.getId().equals(id))
-                .forEach(m -> taskService.updateTaskInstanceCompletions(m.getId(), value));
+                .forEach(m -> subscribedTaskService.updateTaskInstanceCompletions(m.getId(), value));
         return ResponseEntity.accepted().build();
     }
 
@@ -106,7 +115,7 @@ public class TaskController {
         user.getTaskSubscriptions()
                 .stream()
                 .filter(n -> n.getId().equals(id))
-                .forEach(m -> taskService.unsubscribe(m.getId()));
+                .forEach(m -> subscribedTaskService.unsubscribe(m.getId()));
         return ResponseEntity.accepted().build();
     }
 
@@ -117,7 +126,7 @@ public class TaskController {
         user.getOneTimeTaskInstances()
                 .stream()
                 .filter(n -> n.getId().equals(id))
-                .forEach(m -> taskService.updateOneTimeTaskCompletions(m.getId(), value));
+                .forEach(m -> oneTimeTaskService.updateOneTimeTaskCompletions(m.getId(), value));
         return ResponseEntity.accepted().build();
     }
 
@@ -128,7 +137,7 @@ public class TaskController {
         user.getOneTimeTaskInstances()
                 .stream()
                 .filter(n -> n.getId().equals(id))
-                .forEach(m -> taskService.unsubscribeOneTime(m.getId()));
+                .forEach(m -> oneTimeTaskService.unsubscribeOneTime(m.getId()));
         return ResponseEntity.accepted().build();
     }
 

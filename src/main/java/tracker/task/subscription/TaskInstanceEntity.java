@@ -1,4 +1,4 @@
-package tracker.task;
+package tracker.task.subscription;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;

@@ -5,8 +5,8 @@ import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
-import tracker.task.OneTimeTaskInstanceEntity;
-import tracker.task.TaskSubscriptionEntity;
+import tracker.task.onetime.OneTimeTaskInstanceEntity;
+import tracker.task.subscription.TaskSubscriptionEntity;
 
 import javax.persistence.*;
 import java.util.ArrayList;

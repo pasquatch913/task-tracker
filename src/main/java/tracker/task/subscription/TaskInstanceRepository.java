@@ -1,4 +1,4 @@
-package tracker.task;
+package tracker.task.subscription;
 
 import org.springframework.data.repository.CrudRepository;
 

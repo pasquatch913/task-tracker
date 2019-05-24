@@ -2,6 +2,12 @@ package tracker.task
 
 import spock.lang.Specification
 import spock.lang.Subject
+import tracker.task.subscription.TaskInstanceRepository
+import tracker.task.subscription.TaskPeriod
+import tracker.task.subscription.SubscribedTaskService
+import tracker.task.subscription.TaskSubscriptionDTO
+import tracker.task.subscription.TaskSubscriptionEntity
+import tracker.task.subscription.TaskSubscriptionRepository
 import tracker.user.UserEntity
 import tracker.user.UserRepository
 import tracker.user.UserService
@@ -9,10 +15,10 @@ import tracker.user.UserService
 import java.time.LocalDate
 import java.time.Month
 
-class TaskServiceSpec extends Specification {
+class SubscribedTaskServiceSpec extends Specification {
 
     @Subject
-    TaskService service = new TaskService()
+    SubscribedTaskService service = new SubscribedTaskService()
 
     UserRepository mockUserRepository = Mock()
     UserService mockUserService = Mock()
