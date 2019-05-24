@@ -100,23 +100,25 @@ public class TaskService {
     }
 
     private void generateNewInstanceForPeriod(TaskSubscriptionEntity taskSubscriptionEntity) {
-        TaskInstanceEntity taskInstanceEntity = new TaskInstanceEntity();
-        switch (taskSubscriptionEntity.getPeriod()) {
-            case DAILY:
-                taskInstanceEntity.setDueAt(LocalDate.now());
-                break;
-            case WEEKLY:
-                taskInstanceEntity.setDueAt(LocalDate.now().with(TemporalAdjusters.nextOrSame(DayOfWeek.SATURDAY)));
-                break;
-            case MONTHLY:
-                taskInstanceEntity.setDueAt(LocalDate.now().withDayOfMonth(LocalDate.now().lengthOfMonth()));
-                break;
-            default:
-                return;
-        }
-        taskInstanceRepository.save(taskInstanceEntity);
-        taskSubscriptionEntity.getTaskInstances().add(taskInstanceEntity);
+        LocalDate nextDueDate = dueDateForNextInstance(taskSubscriptionEntity);
+        TaskInstanceEntity newTaskInstance = new TaskInstanceEntity(nextDueDate);
+
+        taskInstanceRepository.save(newTaskInstance);
+        taskSubscriptionEntity.getTaskInstances().add(newTaskInstance);
         taskSubscriptionRepository.save(taskSubscriptionEntity);
+    }
+
+    private LocalDate dueDateForNextInstance(TaskSubscriptionEntity subscriptionEntity) {
+        switch (subscriptionEntity.getPeriod()) {
+            case DAILY:
+                return LocalDate.now();
+            case WEEKLY:
+                return LocalDate.now().with(TemporalAdjusters.nextOrSame(DayOfWeek.SATURDAY));
+            case MONTHLY:
+                return LocalDate.now().withDayOfMonth(LocalDate.now().lengthOfMonth());
+            default:
+                return LocalDate.now();
+        }
     }
 
 }

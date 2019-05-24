@@ -27,7 +27,7 @@ public class TaskSubscriptionEntity {
     private Integer weight;
     @NonNull
     private Integer necessaryCompletions = 1;
-    @OneToMany
+    @OneToMany(cascade = {CascadeType.ALL})
     private List<TaskInstanceEntity> taskInstances = new ArrayList<TaskInstanceEntity>();
     @NonNull
     private Boolean active = true;

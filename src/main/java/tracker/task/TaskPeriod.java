@@ -8,7 +8,7 @@ public enum TaskPeriod {
 
     private Integer days;
 
-    private TaskPeriod(Integer days) {
+    TaskPeriod(Integer days) {
         this.days = days;
     }
 
