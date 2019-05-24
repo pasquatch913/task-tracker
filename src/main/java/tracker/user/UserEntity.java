@@ -3,6 +3,8 @@ package tracker.user;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import tracker.task.OneTimeTaskInstanceEntity;
 import tracker.task.TaskSubscriptionEntity;
 
@@ -26,11 +28,14 @@ public class UserEntity {
     private String email;
     @NonNull
     private String password;
-    @OneToMany
+    @OneToMany(cascade = {CascadeType.ALL})
+    @Fetch(value = FetchMode.SUBSELECT)
     private List<TaskSubscriptionEntity> taskSubscriptions = new ArrayList<>();
-    @OneToMany
+    @OneToMany(cascade = {CascadeType.ALL})
+    @Fetch(value = FetchMode.SUBSELECT)
     private List<OneTimeTaskInstanceEntity> oneTimeTaskInstances = new ArrayList<>();
     @OneToMany(cascade = {CascadeType.ALL})
+    @Fetch(value = FetchMode.SUBSELECT)
     private List<UserRolesEntity> userRoles = new ArrayList<>();
 
 }

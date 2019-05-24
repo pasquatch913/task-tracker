@@ -36,7 +36,6 @@ public class TaskService {
     public void newTask(TaskSubscriptionDTO task) {
         TaskSubscriptionEntity taskSubscriptionEntity = mapper.taskSubscriptionDTOToTaskSubscriptionEntity(task);
         UserEntity user = userService.getUser();
-        taskSubscriptionRepository.save(taskSubscriptionEntity);
         user.getTaskSubscriptions().add(taskSubscriptionEntity);
         userRepository.save(user);
     }
