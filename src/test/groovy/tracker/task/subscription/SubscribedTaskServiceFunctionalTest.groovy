@@ -59,7 +59,7 @@ class SubscribedTaskServiceFunctionalTest extends Specification {
         then:
         1 * mockUserService.getUser() >> user
         subscriptionRepository.findAll().size() == 1
-        resultingUser.taskSubscriptions.size() == 0
+        resultingUser.taskSubscriptions.size() == 1
         println(resultingUser.taskSubscriptions)
     }
 
