@@ -1,4 +1,4 @@
-package tracker
+package tracker.task.controller
 
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.setup.MockMvcBuilders

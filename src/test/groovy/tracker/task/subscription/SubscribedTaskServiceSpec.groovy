@@ -1,13 +1,8 @@
-package tracker.task
+package tracker.task.subscription
 
 import spock.lang.Specification
 import spock.lang.Subject
-import tracker.task.subscription.TaskInstanceRepository
-import tracker.task.subscription.TaskPeriod
-import tracker.task.subscription.SubscribedTaskService
-import tracker.task.subscription.TaskSubscriptionDTO
-import tracker.task.subscription.TaskSubscriptionEntity
-import tracker.task.subscription.TaskSubscriptionRepository
+import tracker.task.subscription.*
 import tracker.user.UserEntity
 import tracker.user.UserRepository
 import tracker.user.UserService
@@ -44,7 +39,6 @@ class SubscribedTaskServiceSpec extends Specification {
 
         then:
         1 * mockUserService.getUser() >> new UserEntity()
-        1 * mockSubscriptionRepo.save(_)
         1 * mockUserRepository.save(_)
     }
 
