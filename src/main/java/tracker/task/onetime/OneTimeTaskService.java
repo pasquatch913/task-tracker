@@ -22,7 +22,6 @@ public class OneTimeTaskService {
 
     public void newOneTimeTask(OneTimeTaskInstanceEntity taskInstanceEntity) {
         UserEntity user = userService.getUser();
-        oneTimeTaskInstanceRepository.save(taskInstanceEntity);
 
         user.getOneTimeTaskInstances().add(taskInstanceEntity);
         userRepository.save(user);
