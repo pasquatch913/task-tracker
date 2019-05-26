@@ -26,6 +26,8 @@ public class OneTimeTaskService {
         userRepository.save(user);
     }
 
+    // TODO not sure that this is needed.
+    // now that we're eagerly loading the user tasks, this is accessing the repo unnecessarily
     public List<OneTimeTaskInstanceEntity> returnOneTimeTaskForUser(UserEntity user) {
         List<OneTimeTaskInstanceEntity> tasks = user.getOneTimeTaskInstances();
         return tasks;
