@@ -1,9 +1,9 @@
 package tracker.task.onetime;
 
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 import javax.transaction.Transactional;
 
 @Transactional
-public interface OneTimeTaskInstanceRepository extends CrudRepository<OneTimeTaskInstanceEntity, Integer> {
+public interface OneTimeTaskInstanceRepository extends JpaRepository<OneTimeTaskInstanceEntity, Integer> {
 }
