@@ -20,6 +20,7 @@ import javax.transaction.Transactional
 
 import static org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace.ANY
 
+@Transactional
 @ActiveProfiles("test")
 @AutoConfigureTestDatabase(connection = EmbeddedDatabaseConnection.H2, replace = ANY)
 @SpringBootTest
@@ -37,20 +38,31 @@ class SubscribedTaskServiceFunctionalTest extends Specification {
 
     UserService mockUserService = Mock()
 
+    def task1 = new TaskSubscriptionEntity(name: "my task",
+            period: TaskPeriod.DAILY,
+            weight: 3,
+            necessaryCompletions: 3,
+            taskInstances: [])
+    def task2 = new TaskSubscriptionEntity(name: "my task",
+            period: TaskPeriod.WEEKLY,
+            weight: 2,
+            necessaryCompletions: 4,
+            taskInstances: [])
+    def initialUser = new UserEntity(id: 1, username: "me", email: "me@me.com", password: "XXXX",
+            taskSubscriptions: [task1, task2], oneTimeTaskInstances: [], userRoles: [new UserRolesEntity()])
+
     def setup() {
         service.userService = mockUserService
+        userRepository.save(initialUser)
     }
 
-    @Transactional
     def "creating a new task results in appropriate artifacts"() {
         given:
         def taskDto = new TaskSubscriptionDTO(name: "myTask",
                 necessaryCompletions: 1,
                 weight: 2,
                 period: TaskPeriod.WEEKLY)
-        def user = new UserEntity(id: 1, username: "me", email: "me@me.com", password: "XXXX",
-                taskSubscriptions: [], oneTimeTaskInstances: [], userRoles: [new UserRolesEntity()])
-        userRepository.save(user)
+        UserEntity user = userRepository.findByUsername("me").get()
 
         when:
         service.newTask(taskDto)
@@ -58,9 +70,23 @@ class SubscribedTaskServiceFunctionalTest extends Specification {
 
         then:
         1 * mockUserService.getUser() >> user
-        subscriptionRepository.findAll().size() == 1
-        resultingUser.taskSubscriptions.size() == 1
+        subscriptionRepository.findAll().size() == 3
+        resultingUser.taskSubscriptions.size() == 3
         println(resultingUser.taskSubscriptions)
+    }
+
+    def "generating new instances works as expected"() {
+        given:
+        UserEntity user = userRepository.findByUsername("me").get()
+
+        when:
+        service.generateTaskInstances(user)
+        UserEntity resultingUser = userRepository.findByUsername("me").get()
+
+        then:
+        resultingUser.taskSubscriptions.every {
+            it -> it.taskInstances.size() == 1
+        }
     }
 
 }
