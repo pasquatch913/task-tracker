@@ -75,11 +75,11 @@ class SubscribedTaskServiceFunctionalTest extends Specification {
                 necessaryCompletions: 1,
                 weight: 2,
                 period: TaskPeriod.WEEKLY)
-        UserEntity user = userRepository.findByUsername("me").get()
+        def user = userRepository.findByUsername("me").get()
 
         when:
         service.newTask(taskDto)
-        UserEntity resultingUser = userRepository.findByUsername("me").get()
+        def resultingUser = userRepository.findByUsername("me").get()
 
         then:
         1 * mockUserService.getUser() >> user
@@ -90,7 +90,7 @@ class SubscribedTaskServiceFunctionalTest extends Specification {
 
     def "generating new instances works as expected"() {
         given:
-        UserEntity user = userRepository.findByUsername("me").get()
+        def user = userRepository.findByUsername("me").get()
 
         when:
         service.generateTaskInstances(user)
@@ -101,6 +101,46 @@ class SubscribedTaskServiceFunctionalTest extends Specification {
         userSubscriptions.get(1).taskInstances.get(0).dueAt >= LocalDate.now()
         userSubscriptions.get(2).taskInstances.get(1).dueAt == LocalDate.now()
         instanceRepository.findAll().size() == 4
+    }
+
+    def "retrieving tasks works as expected"() {
+        given:
+        def user = userRepository.findByUsername("me").get()
+
+        when:
+        def result = service.returnTaskForUser(user)
+
+        then:
+        result.get(0).taskInstances.get(0).dueAt == LocalDate.now()
+        result.get(1).taskInstances.get(0).dueAt >= LocalDate.now()
+        result.get(2).taskInstances.get(1).dueAt == LocalDate.now()
+        instanceRepository.findAll().size() == 4
+    }
+
+    def "unsubscribing from task by ID results in inactive subscription"() {
+        given:
+        def user = userRepository.findByUsername("me").get()
+
+        when:
+        service.unsubscribe(user.taskSubscriptions.get(0).id)
+        def resultingUser = userRepository.findByUsername("me").get()
+
+        then:
+        !resultingUser.taskSubscriptions.get(0).active
+    }
+
+    def "updating task instance completions changes the task completion count"() {
+        given:
+        def taskInstanceToUpdate = subscriptionRepository.findFirstByName(task1.name).get().taskInstances.get(0)
+
+        when:
+        def result = service.updateTaskInstanceCompletions(taskInstanceToUpdate.id, value)
+
+        then:
+        result.completions == value
+
+        where:
+        value << [3, 300, -3, 0]
     }
 
 }
