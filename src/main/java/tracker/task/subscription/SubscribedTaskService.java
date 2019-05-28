@@ -92,7 +92,7 @@ public class SubscribedTaskService {
         return subscription.getTaskInstances().isEmpty()
                 || subscription.getTaskInstances()
                 .get(subscription.getTaskInstances().size() - 1)
-                .getDueAt().isBefore(LocalDate.now().plusDays(1));
+                .getDueAt().isBefore(LocalDate.now());
     }
 
 }

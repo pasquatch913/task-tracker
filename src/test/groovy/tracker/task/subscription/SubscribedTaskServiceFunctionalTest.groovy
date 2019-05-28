@@ -17,6 +17,7 @@ import tracker.user.UserRolesEntity
 import tracker.user.UserService
 
 import javax.transaction.Transactional
+import java.time.LocalDate
 
 import static org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace.ANY
 
@@ -34,6 +35,9 @@ class SubscribedTaskServiceFunctionalTest extends Specification {
     TaskSubscriptionRepository subscriptionRepository
 
     @Autowired
+    TaskInstanceRepository instanceRepository
+
+    @Autowired
     UserRepository userRepository
 
     UserService mockUserService = Mock()
@@ -42,18 +46,27 @@ class SubscribedTaskServiceFunctionalTest extends Specification {
             period: TaskPeriod.DAILY,
             weight: 3,
             necessaryCompletions: 3,
-            taskInstances: [])
-    def task2 = new TaskSubscriptionEntity(name: "my task",
+            taskInstances: [new TaskInstanceEntity(dueAt: LocalDate.now())])
+    def task2 = new TaskSubscriptionEntity(name: "my weekly task",
             period: TaskPeriod.WEEKLY,
             weight: 2,
             necessaryCompletions: 4,
             taskInstances: [])
+    def task3 = new TaskSubscriptionEntity(name: "my old task",
+            period: TaskPeriod.DAILY,
+            weight: 2,
+            necessaryCompletions: 4,
+            taskInstances: [new TaskInstanceEntity(dueAt: LocalDate.now().minusDays(3))])
     def initialUser = new UserEntity(id: 1, username: "me", email: "me@me.com", password: "XXXX",
-            taskSubscriptions: [task1, task2], oneTimeTaskInstances: [], userRoles: [new UserRolesEntity()])
+            taskSubscriptions: [task1, task2, task3], oneTimeTaskInstances: [], userRoles: [new UserRolesEntity()])
 
     def setup() {
         service.userService = mockUserService
         userRepository.save(initialUser)
+    }
+
+    def cleanup() {
+        userRepository.deleteAll()
     }
 
     def "creating a new task results in appropriate artifacts"() {
@@ -70,8 +83,8 @@ class SubscribedTaskServiceFunctionalTest extends Specification {
 
         then:
         1 * mockUserService.getUser() >> user
-        subscriptionRepository.findAll().size() == 3
-        resultingUser.taskSubscriptions.size() == 3
+        subscriptionRepository.findAll().size() == 4
+        resultingUser.taskSubscriptions.size() == 4
         println(resultingUser.taskSubscriptions)
     }
 
@@ -81,12 +94,13 @@ class SubscribedTaskServiceFunctionalTest extends Specification {
 
         when:
         service.generateTaskInstances(user)
-        UserEntity resultingUser = userRepository.findByUsername("me").get()
+        def userSubscriptions = userRepository.findByUsername("me").get().getTaskSubscriptions()
 
         then:
-        resultingUser.taskSubscriptions.every {
-            it -> it.taskInstances.size() == 1
-        }
+        userSubscriptions.get(0).taskInstances.get(0).dueAt == LocalDate.now()
+        userSubscriptions.get(1).taskInstances.get(0).dueAt >= LocalDate.now()
+        userSubscriptions.get(2).taskInstances.get(1).dueAt == LocalDate.now()
+        instanceRepository.findAll().size() == 4
     }
 
 }
