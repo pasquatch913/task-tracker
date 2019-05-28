@@ -2,13 +2,11 @@ package tracker.task.subscription
 
 import spock.lang.Specification
 import spock.lang.Subject
-import tracker.task.subscription.*
 import tracker.user.UserEntity
 import tracker.user.UserRepository
 import tracker.user.UserService
 
 import java.time.LocalDate
-import java.time.Month
 
 class SubscribedTaskServiceSpec extends Specification {
 
@@ -45,7 +43,6 @@ class SubscribedTaskServiceSpec extends Specification {
     def "due date calculator works as expected"() {
         given:
         def taskSubscription = new TaskSubscriptionEntity(id: 1, name: "my task", period: period, weight: 2, taskInstances: [])
-        LocalDate.now() >> date
 
         when:
         def result = service.dueDateForNextInstance(taskSubscription)
@@ -53,13 +50,11 @@ class SubscribedTaskServiceSpec extends Specification {
         result == expected
 
         where:
-        period             | date                              | expected
-        TaskPeriod.DAILY   | LocalDate.now()                   | LocalDate.now()
-        TaskPeriod.WEEKLY  | LocalDate.of(2019, Month.MAY, 24) | LocalDate.of(2019, Month.MAY, 25)
-        TaskPeriod.WEEKLY  | LocalDate.of(2019, Month.MAY, 25) | LocalDate.of(2019, Month.MAY, 25)
-        TaskPeriod.WEEKLY  | LocalDate.of(2019, Month.MAY, 19) | LocalDate.of(2019, Month.MAY, 25)
-        TaskPeriod.MONTHLY | LocalDate.of(2019, Month.MAY, 1)  | LocalDate.of(2019, Month.MAY, 31)
-        TaskPeriod.MONTHLY | LocalDate.of(2019, Month.MAY, 31) | LocalDate.of(2019, Month.MAY, 31)
+        period             | expected
+        TaskPeriod.DAILY   | LocalDate.now()
+        TaskPeriod.WEEKLY  | LocalDate.now().plusDays(7 - LocalDate.now().getDayOfWeek().value - 1)
+        // contrived but *shrug* best i can do right now
+        TaskPeriod.MONTHLY | LocalDate.now().withDayOfMonth(LocalDate.now().lengthOfMonth())
     }
 
     def "generating task instance saves "() {
@@ -82,7 +77,7 @@ class SubscribedTaskServiceSpec extends Specification {
 
         where:
         name            | period           | weight | completionsGoal
-        "my daily task" | TaskPeriod.DAILY | 1      | null
+        "my daily task" | TaskPeriod.DAILY | 1      | 2
     }
 
 }

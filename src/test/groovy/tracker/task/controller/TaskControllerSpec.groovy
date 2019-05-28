@@ -16,17 +16,17 @@ class TaskControllerSpec extends Specification {
         def controller = new TaskController()
         def service = new SubscribedTaskService()
         mockMvc = MockMvcBuilders.standaloneSetup(controller).build()
-        controller.taskService = service
+        controller.subscribedTaskService = service
     }
 
     def "root route returns 200"() {
         when:
-        def response = mockMvc.perform(get("/")).andReturn().response
+        def response = mockMvc.perform(get("/web/")).andReturn().response
         def body = response.content
 
         then:
         println(response)
-        response.status == 200
+        response.status == 302
         body != null
     }
 
