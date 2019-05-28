@@ -4,9 +4,6 @@ import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tracker.task.mapper.TaskMapper;
-import tracker.task.onetime.OneTimeTaskInstanceEntity;
-import tracker.task.onetime.OneTimeTaskInstanceRepository;
-import tracker.task.subscription.*;
 import tracker.user.UserEntity;
 import tracker.user.UserRepository;
 import tracker.user.UserService;
@@ -55,12 +52,8 @@ public class SubscribedTaskService {
     public void generateTaskInstances(UserEntity user) {
         List<TaskSubscriptionEntity> subscriptions = user.getTaskSubscriptions();
 
-        // only generate new task for a subscription if either the instances list is empty OR the last instance is in the past
-        subscriptions.stream().filter(n ->
-                n.getTaskInstances().isEmpty()
-                        || n.getTaskInstances()
-                        .get(n.getTaskInstances().size() - 1)
-                        .getDueAt().isBefore(LocalDate.now().plusDays(1)))
+        // if any subscription doesn't have an instance in the future, generate it
+        subscriptions.stream().filter(this::noFutureTasks)
                 .forEach(this::generateNewInstanceForPeriod);
 
         userRepository.save(user);
@@ -93,6 +86,13 @@ public class SubscribedTaskService {
             default:
                 return LocalDate.now();
         }
+    }
+
+    private Boolean noFutureTasks(TaskSubscriptionEntity subscription) {
+        return subscription.getTaskInstances().isEmpty()
+                || subscription.getTaskInstances()
+                .get(subscription.getTaskInstances().size() - 1)
+                .getDueAt().isBefore(LocalDate.now().plusDays(1));
     }
 
 }
