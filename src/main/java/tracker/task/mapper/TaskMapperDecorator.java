@@ -1,6 +1,6 @@
 package tracker.task.mapper;
 
-import tracker.task.TaskDTO;
+import tracker.task.TaskInstanceDTO;
 import tracker.task.subscription.TaskSubscriptionEntity;
 
 public abstract class TaskMapperDecorator implements TaskMapper {
@@ -12,18 +12,18 @@ public abstract class TaskMapperDecorator implements TaskMapper {
     }
 
     @Override
-    public TaskDTO taskSubscriptionEntityToTaskDTO(TaskSubscriptionEntity taskSubscription) {
-        TaskDTO taskDTO = mapper.taskSubscriptionEntityToTaskDTO(taskSubscription);
-        taskDTO.setDueDate(taskSubscription.getTaskInstances()
+    public TaskInstanceDTO taskSubscriptionEntityToTaskInstanceDTO(TaskSubscriptionEntity taskSubscription) {
+        TaskInstanceDTO taskInstanceDTO = mapper.taskSubscriptionEntityToTaskInstanceDTO(taskSubscription);
+        taskInstanceDTO.setDueDate(taskSubscription.getTaskInstances()
                 .get(taskSubscription.getTaskInstances().size() - 1)
                 .getDueAt());
-        taskDTO.setCompletions(taskSubscription.getTaskInstances()
+        taskInstanceDTO.setCompletions(taskSubscription.getTaskInstances()
                 .get(taskSubscription.getTaskInstances().size() - 1)
                 .getCompletions());
-        taskDTO.setTaskInstanceId(taskSubscription.getTaskInstances()
+        taskInstanceDTO.setTaskInstanceId(taskSubscription.getTaskInstances()
                 .get(taskSubscription.getTaskInstances().size() - 1)
                 .getId());
-        return taskDTO;
+        return taskInstanceDTO;
     }
 
 }

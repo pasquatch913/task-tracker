@@ -10,11 +10,9 @@ import tracker.task.onetime.OneTimeTaskInstanceEntity;
 import tracker.task.onetime.OneTimeTaskService;
 import tracker.task.subscription.SubscribedTaskService;
 import tracker.task.subscription.TaskSubscriptionDTO;
-import tracker.task.subscription.TaskSubscriptionEntity;
 import tracker.user.UserService;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/api")
@@ -35,16 +33,14 @@ public class RestController {
     TaskController taskController;
 
     @GetMapping("/tasks")
-    public ResponseEntity<List<TaskSubscriptionEntity>> getTaskSubscriptions() {
+    public ResponseEntity<List<TaskSubscriptionDTO>> getTaskSubscriptions() {
         return ResponseEntity.ok()
-                .body(subscribedTaskService.returnTaskForUser(userService.getUser()));
+                .body(subscribedTaskService.returnTaskSubscriptionsForUser(userService.getUser()));
     }
 
     @GetMapping("/taskInstances")
-    public ResponseEntity<List<TaskDTO>> getTaskInstances() {
-        List<TaskDTO> tasks = subscribedTaskService.returnTaskForUser(userService.getUser())
-                .stream().map(mapper::taskSubscriptionEntityToTaskDTO)
-                .collect(Collectors.toList());
+    public ResponseEntity<List<TaskInstanceDTO>> getTaskInstances() {
+        List<TaskInstanceDTO> tasks = subscribedTaskService.returnTaskInstancesForUser(userService.getUser());
         return ResponseEntity.ok().body(tasks);
     }
 

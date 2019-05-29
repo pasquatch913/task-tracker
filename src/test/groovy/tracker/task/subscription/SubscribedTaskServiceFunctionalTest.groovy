@@ -103,18 +103,34 @@ class SubscribedTaskServiceFunctionalTest extends Specification {
         instanceRepository.findAll().size() == 4
     }
 
-    def "retrieving tasks works as expected"() {
+    def "retrieving task subscriptions works as expected"() {
         given:
         def user = userRepository.findByUsername("me").get()
 
         when:
-        def result = service.returnTaskForUser(user)
+        def result = service.returnTaskSubscriptionsForUser(user)
 
         then:
-        result.get(0).taskInstances.get(0).dueAt == LocalDate.now()
-        result.get(1).taskInstances.get(0).dueAt >= LocalDate.now()
-        result.get(2).taskInstances.get(1).dueAt == LocalDate.now()
+        result.get(0).name == task1.name
+        result.get(1).name == task2.name
+        result.get(2).name == task3.name
+        instanceRepository.findAll().size() == 2
+    }
+
+    def "retrieving task instances works as expected"() {
+        given:
+        def user = userRepository.findByUsername("me").get()
+
+        when:
+        def result = service.returnTaskInstancesForUser(user)
+
+        then:
+        //new tasks generated
         instanceRepository.findAll().size() == 4
+        // only 1 instance returned for each subscription
+        result.findAll { n -> n.name == task1.name }.size() == 1
+        result.findAll { n -> n.name == task2.name }.size() == 1
+        result.findAll { n -> n.name == task3.name }.size() == 1
     }
 
     def "unsubscribing from task by ID results in inactive subscription"() {
@@ -134,10 +150,10 @@ class SubscribedTaskServiceFunctionalTest extends Specification {
         def taskInstanceToUpdate = subscriptionRepository.findFirstByName(task1.name).get().taskInstances.get(0)
 
         when:
-        def result = service.updateTaskInstanceCompletions(taskInstanceToUpdate.id, value)
+        service.updateTaskInstanceCompletions(taskInstanceToUpdate.id, value)
 
         then:
-        result.completions == value
+        instanceRepository.findById(taskInstanceToUpdate.id).get().completions == value
 
         where:
         value << [3, 300, -3, 0]

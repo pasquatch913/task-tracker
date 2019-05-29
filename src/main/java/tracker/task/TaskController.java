@@ -9,10 +9,9 @@ import org.springframework.web.bind.annotation.*;
 import tracker.task.mapper.TaskMapper;
 import tracker.task.onetime.OneTimeTaskInstanceEntity;
 import tracker.task.onetime.OneTimeTaskService;
-import tracker.task.subscription.TaskPeriod;
 import tracker.task.subscription.SubscribedTaskService;
+import tracker.task.subscription.TaskPeriod;
 import tracker.task.subscription.TaskSubscriptionDTO;
-import tracker.task.subscription.TaskSubscriptionEntity;
 import tracker.user.UserEntity;
 import tracker.user.UserService;
 
@@ -42,7 +41,7 @@ public class TaskController {
 
     @GetMapping("/showTasks")
     public String showTasks(Model model) {
-        model.addAttribute("tasks", subscribedTaskService.returnTaskForUser(userService.getUser()));
+        model.addAttribute("tasks", subscribedTaskService.returnTaskSubscriptionsForUser(userService.getUser()));
         model.addAttribute("oneTimeTasks", oneTimeTaskService.returnOneTimeTaskForUser(userService.getUser()));
         return "showTaskSubscriptions";
     }
@@ -79,14 +78,11 @@ public class TaskController {
 
         subscribedTaskService.generateTaskInstances(userService.getUser());
 
-        List<TaskSubscriptionEntity> tasks = subscribedTaskService.returnTaskForUser(userService.getUser());
-        List<TaskDTO> taskDTOs = tasks.stream()
-                .map(mapper::taskSubscriptionEntityToTaskDTO)
-                .collect(Collectors.toList());
+        List<TaskInstanceDTO> taskInstances = subscribedTaskService.returnTaskInstancesForUser(userService.getUser());
 
         List<OneTimeTaskInstanceEntity> oneTimeTasks = oneTimeTaskService.returnOneTimeTaskForUser(userService.getUser());
 
-        model.addAttribute("tasks", taskDTOs);
+        model.addAttribute("tasks", taskInstances);
         model.addAttribute("oneTimeTasks", oneTimeTasks);
         return "showTaskInstances";
     }
@@ -96,15 +92,15 @@ public class TaskController {
                                                         @PathVariable Integer id,
                                                         @PathVariable Integer value) {
         UserEntity user = userService.getUser();
-        // find the relevant task subscription (will only be 1 match at most)
-        TaskSubscriptionEntity task = user.getTaskSubscriptions()
-                .stream()
-                .filter(n -> n.getId().equals(subscriptionId))
-                .collect(Collectors.toList()).get(0);
+
         // only update task instance if it belongs to current user
-        task.getTaskInstances().stream()
-                .filter(m -> m.getId().equals(id))
-                .forEach(m -> subscribedTaskService.updateTaskInstanceCompletions(m.getId(), value));
+        if (subscribedTaskService.verifyTaskInstance(user, subscriptionId, id)) {
+            TaskInstanceDTO instance = subscribedTaskService.returnTaskInstancesForUser(user).stream()
+                    .filter(n -> n.getTaskInstanceId().equals(id))
+                    .collect(Collectors.toList()).get(0);
+
+            updateTaskInstanceCompletions(subscriptionId, instance.getTaskInstanceId(), value);
+        }
         return ResponseEntity.accepted().build();
     }
 

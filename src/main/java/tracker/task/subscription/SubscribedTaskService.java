@@ -3,6 +3,7 @@ package tracker.task.subscription;
 import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import tracker.task.TaskInstanceDTO;
 import tracker.task.mapper.TaskMapper;
 import tracker.user.UserEntity;
 import tracker.user.UserRepository;
@@ -12,6 +13,7 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.temporal.TemporalAdjusters;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class SubscribedTaskService {
@@ -37,10 +39,19 @@ public class SubscribedTaskService {
         userRepository.save(user);
     }
 
-    public List<TaskSubscriptionEntity> returnTaskForUser(UserEntity user) {
+    public List<TaskSubscriptionDTO> returnTaskSubscriptionsForUser(UserEntity user) {
+        List<TaskSubscriptionEntity> tasks = user.getTaskSubscriptions();
+        return tasks.stream()
+                .map(mapper::taskSubscriptionEntityToTaskSubscriptionDTO)
+                .collect(Collectors.toList());
+    }
+
+    public List<TaskInstanceDTO> returnTaskInstancesForUser(UserEntity user) {
         generateTaskInstances(user);
         List<TaskSubscriptionEntity> tasks = user.getTaskSubscriptions();
-        return tasks;
+        return tasks.stream()
+                .map(mapper::taskSubscriptionEntityToTaskInstanceDTO)
+                .collect(Collectors.toList());
     }
 
     public void unsubscribe(Integer id) {
@@ -59,11 +70,22 @@ public class SubscribedTaskService {
         userRepository.save(user);
     }
 
-    public TaskInstanceEntity updateTaskInstanceCompletions(Integer id, Integer value) {
+    public Boolean verifyTaskInstance(UserEntity user, Integer subscriptionId, Integer instanceId) {
+        // find the relevant task subscription (will only be 1 match at most)
+        TaskSubscriptionEntity task = user.getTaskSubscriptions()
+                .stream()
+                .filter(n -> n.getId().equals(subscriptionId))
+                .collect(Collectors.toList()).get(0);
+        // if the current user has one match for subscription and task ID, return true
+        return task.getTaskInstances().stream()
+                .filter(m -> m.getId().equals(instanceId))
+                .collect(Collectors.toList()).size() == 1;
+    }
+
+    public void updateTaskInstanceCompletions(Integer id, Integer value) {
         TaskInstanceEntity taskToUpdate = taskInstanceRepository.findById(id).get();
         taskToUpdate.setCompletions(value);
         taskInstanceRepository.save(taskToUpdate);
-        return taskInstanceRepository.findById(id).get();
     }
 
     private void generateNewInstanceForPeriod(TaskSubscriptionEntity taskSubscriptionEntity) {
