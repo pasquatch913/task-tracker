@@ -47,7 +47,7 @@ public class TaskController {
         return "showTaskSubscriptions";
     }
 
-    @GetMapping(value = "/newTask")
+    @GetMapping(value = "/newTaskSubscription")
     public String newTask(Model model) {
         model.addAttribute("periods", Arrays.asList(TaskPeriod.values()));
         return "newTask";

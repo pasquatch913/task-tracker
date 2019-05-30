@@ -83,4 +83,17 @@ class TaskControllerSpec extends Specification {
         model.get("oneTimeTasks").get(1).name == taskOneTimes.get(1).name
     }
 
+    def "requests for the create new subscriptions page return the newTask view"() {
+        when:
+        def response = mockMvc.perform(get("/web/newTaskSubscription"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("newTask"))
+                .andExpect(model().attributeExists("periods"))
+                .andReturn()
+        def model = response.modelAndView.model
+
+        then:
+        model.get("periods").size() == Arrays.asList(TaskPeriod.values()).size()
+    }
+
 }
