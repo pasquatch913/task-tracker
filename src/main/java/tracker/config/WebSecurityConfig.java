@@ -43,7 +43,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .formLogin()
                 .loginPage("/login")
-                .defaultSuccessUrl("/web/showTasks", true)
+                .defaultSuccessUrl("/web/showTaskSubscriptions", true)
                 .permitAll()
                 .and()
                 .logout()

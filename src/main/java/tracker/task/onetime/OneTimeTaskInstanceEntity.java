@@ -3,7 +3,6 @@ package tracker.task.onetime;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -26,7 +25,6 @@ public class OneTimeTaskInstanceEntity {
     @NonNull
     private Integer completions = 0;
     @NonNull
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate dueDate;
     private Boolean active = true;
 

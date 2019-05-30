@@ -1,12 +1,10 @@
 package tracker.task;
 
-import org.mapstruct.factory.Mappers;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import tracker.task.mapper.TaskMapper;
 import tracker.task.onetime.OneTimeTaskDTO;
 import tracker.task.onetime.OneTimeTaskService;
 import tracker.task.subscription.SubscribedTaskService;
@@ -19,20 +17,17 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@RequiredArgsConstructor
 @Controller
 @RequestMapping("/web")
 public class TaskController {
 
-    TaskMapper mapper = Mappers.getMapper(TaskMapper.class);
+    private final SubscribedTaskService subscribedTaskService;
 
-    @Autowired
-    SubscribedTaskService subscribedTaskService;
+    private final OneTimeTaskService oneTimeTaskService;
 
-    @Autowired
-    OneTimeTaskService oneTimeTaskService;
+    private final UserService userService;
 
-    @Autowired
-    UserService userService;
 
     @GetMapping(path = "/")
     public String index(Model model) {
@@ -62,7 +57,7 @@ public class TaskController {
         subscribedTaskService.newTask(subscription);
         subscribedTaskService.generateTaskInstances(userService.getUser());
 
-        return "redirect:/web/showTasks";
+        return "redirect:/web/showTaskSubscriptions";
     }
 
     @PostMapping(value = "/newOneTimeTask")

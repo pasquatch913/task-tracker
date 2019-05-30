@@ -28,18 +28,15 @@ class TaskControllerSpec extends Specification {
 
     MockMvc mockMvc
 
-    @Subject
-    TaskController controller = new TaskController()
-
     UserService mockUserService = Mock()
     SubscribedTaskService mockSubService = Mock()
     OneTimeTaskService mockOneTimeService = Mock()
 
+    @Subject
+    TaskController controller = new TaskController(mockSubService, mockOneTimeService, mockUserService)
+
     def setup() {
         mockMvc = MockMvcBuilders.standaloneSetup(controller).build()
-        controller.subscribedTaskService = mockSubService
-        controller.userService = mockUserService
-        controller.oneTimeTaskService = mockOneTimeService
     }
 
     def taskSubs = [new TaskSubscriptionDTO(name: "my first subscription", necessaryCompletions: 2,
@@ -130,7 +127,7 @@ class TaskControllerSpec extends Specification {
         def response = mockMvc.perform(post("/web/newTaskSubscription")
                 .flashAttr("newTaskSubscription", request))
                 .andExpect(status().isFound())
-                .andExpect(view().name("redirect:/web/showTasks"))
+                .andExpect(view().name("redirect:/web/showTaskSubscriptions"))
                 .andReturn()
         def model = response.modelAndView.model
 
