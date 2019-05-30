@@ -50,12 +50,12 @@ public class TaskController {
     @GetMapping(value = "/newTaskSubscription")
     public String newTask(Model model) {
         model.addAttribute("periods", Arrays.asList(TaskPeriod.values()));
-        return "newTask";
+        return "newTaskSubscriptionView";
     }
 
     @GetMapping(value = "/newOneTimeTask")
     public String newOneTimeTask() {
-        return "newOneTimeTask";
+        return "newOneTimeTaskView";
     }
 
     @PostMapping(value = "/newTaskSubscription")
