@@ -6,6 +6,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders
 import spock.lang.Specification
 import spock.lang.Subject
 import tracker.task.TaskController
+import tracker.task.TaskInstanceDTO
 import tracker.task.onetime.OneTimeTaskDTO
 import tracker.task.onetime.OneTimeTaskService
 import tracker.task.subscription.SubscribedTaskService
@@ -44,6 +45,13 @@ class TaskControllerSpec extends Specification {
                     new TaskSubscriptionDTO(name: "my second subscription", necessaryCompletions: 3,
                             weight: 2, period: TaskPeriod.WEEKLY),
     ]
+
+    def taskInstances = [new TaskInstanceDTO(id: 3, name: "my first subscription", weight: 3, necessaryCompletions: 2,
+            completions: 1, dueDate: LocalDate.now().minusDays(1), taskInstanceId: 11, active: true),
+                         new TaskInstanceDTO(id: 3, name: "my first subscription", weight: 3, necessaryCompletions: 2,
+                                 completions: 1, dueDate: LocalDate.now(), taskInstanceId: 12, active: true),
+                         new TaskInstanceDTO(id: 6, name: "my second subscription", weight: 2, necessaryCompletions: 3,
+                                 completions: 0, dueDate: LocalDate.now().plusDays(4), taskInstanceId: 13, active: true)]
 
     def taskOneTimes = [new OneTimeTaskDTO(id: 2, name: "my first one time", weight: 3,
             necessaryCompletions: 6, completions: 2, dueDate: LocalDate.now().plusDays(7)),
@@ -145,6 +153,24 @@ class TaskControllerSpec extends Specification {
         then:
         1 * mockOneTimeService.newOneTimeTask(request)
         model.get("newOneTimeTask").name == request.name
+    }
+
+    def "requests to show task instances return view containing both one time and subscribed tasks"() {
+        when:
+        def response = mockMvc.perform(get("/web/showTaskInstances"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("showTaskInstancesView"))
+                .andExpect(model().attributeExists("tasks", "oneTimeTasks"))
+                .andReturn()
+        def model = response.modelAndView.model
+
+        then:
+        3 * mockUserService.getUser() >> user
+        1 * mockSubService.returnTaskInstancesForUser(_) >> taskInstances
+        1 * mockOneTimeService.returnOneTimeTaskForUser(_) >> taskOneTimes
+        model.size() == 2
+        model.get("tasks").get(0).name == taskSubs.get(0).name
+        model.get("oneTimeTasks").get(1).name == taskOneTimes.get(1).name
     }
 
 }

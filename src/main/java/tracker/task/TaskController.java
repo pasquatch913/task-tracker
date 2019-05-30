@@ -39,11 +39,11 @@ public class TaskController {
         return "redirect:/web/showTaskInstances";
     }
 
-    @GetMapping("/showTasks")
+    @GetMapping("/showTaskSubscriptions")
     public String showTasks(Model model) {
         model.addAttribute("tasks", subscribedTaskService.returnTaskSubscriptionsForUser(userService.getUser()));
         model.addAttribute("oneTimeTasks", oneTimeTaskService.returnOneTimeTaskForUser(userService.getUser()));
-        return "showTaskSubscriptions";
+        return "showTaskSubscriptionsView";
     }
 
     @GetMapping(value = "/newTaskSubscription")
@@ -84,7 +84,7 @@ public class TaskController {
 
         model.addAttribute("tasks", taskInstances);
         model.addAttribute("oneTimeTasks", oneTimeTasks);
-        return "showTaskInstances";
+        return "showTaskInstancesView";
     }
 
     @PostMapping(value = "/tasks/{subscriptionId}/instances/{id}/completions/{value}")
