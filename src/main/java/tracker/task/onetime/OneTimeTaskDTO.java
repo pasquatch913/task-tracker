@@ -14,9 +14,9 @@ public class OneTimeTaskDTO {
     private Integer Id;
     private String name;
     private Integer weight;
-    private Integer necessaryCompletions;
-    private Integer completions;
+    private Integer necessaryCompletions = 1;
+    private Integer completions = 0;
     private LocalDate dueDate;
-    private Boolean active;
+    private Boolean active = true;
 
 }

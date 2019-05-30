@@ -57,7 +57,7 @@ class OneTimeTaskServiceFunctionalTest extends Specification {
 
     def "creating a new one time task results in appropriate artifacts"() {
         given:
-        def myNewTask = new OneTimeTaskInstanceEntity(name: "myTask",
+        def myNewTask = new OneTimeTaskDTO(name: "myTask",
                 necessaryCompletions: 1,
                 weight: 2,
                 dueDate: LocalDate.now())
