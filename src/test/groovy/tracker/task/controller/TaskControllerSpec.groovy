@@ -76,9 +76,9 @@ class TaskControllerSpec extends Specification {
 
     def "requests to show tasks return view containing both one time and subscribed tasks"() {
         when:
-        def response = mockMvc.perform(get("/web/showTasks"))
+        def response = mockMvc.perform(get("/web/showTaskSubscriptions"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("showTaskSubscriptions"))
+                .andExpect(view().name("showTaskSubscriptionsView"))
                 .andExpect(model().attributeExists("tasks", "oneTimeTasks"))
                 .andReturn()
         def model = response.modelAndView.model
@@ -191,5 +191,25 @@ class TaskControllerSpec extends Specification {
         1 * mockSubService.returnTaskInstancesForUser(user) >> taskInstances
         1 * mockSubService.updateTaskInstanceCompletions(instanceId, value)
     }
+
+    def "requests to update task completions don't invoke service methods if user mismatch"() {
+        given:
+        def subscriptionId = taskInstances.get(0).id
+        def instanceId = taskInstances.get(0).taskInstanceId
+        def value = 17
+
+        when:
+        mockMvc.perform(
+                post("/web/tasks/${subscriptionId}/instances/${instanceId}/completions/${value}"))
+                .andExpect(status().isBadRequest())
+                .andReturn()
+
+        then:
+        1 * mockUserService.getUser() >> user
+        1 * mockSubService.verifyTaskInstance(user, subscriptionId, instanceId) >> false
+        0 * mockSubService.returnTaskInstancesForUser(user) >> taskInstances
+        0 * mockSubService.updateTaskInstanceCompletions(instanceId, value)
+    }
+
 
 }

@@ -100,8 +100,10 @@ public class TaskController {
                     .collect(Collectors.toList()).get(0);
 
             subscribedTaskService.updateTaskInstanceCompletions(instance.getTaskInstanceId(), value);
+            return ResponseEntity.accepted().build();
+        } else {
+            return ResponseEntity.badRequest().body("no such task for this user");
         }
-        return ResponseEntity.accepted().build();
     }
 
     @PostMapping(value = "/tasks/{id}")
