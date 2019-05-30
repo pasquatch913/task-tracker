@@ -7,10 +7,6 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.ActiveProfiles
 import spock.lang.Specification
 import spock.lang.Subject
-import tracker.task.subscription.SubscribedTaskService
-import tracker.task.subscription.TaskPeriod
-import tracker.task.subscription.TaskSubscriptionDTO
-import tracker.task.subscription.TaskSubscriptionRepository
 import tracker.user.UserEntity
 import tracker.user.UserRepository
 import tracker.user.UserRolesEntity
