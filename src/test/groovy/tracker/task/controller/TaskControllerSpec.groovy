@@ -12,6 +12,7 @@ import tracker.task.onetime.OneTimeTaskService
 import tracker.task.subscription.SubscribedTaskService
 import tracker.task.subscription.TaskPeriod
 import tracker.task.subscription.TaskSubscriptionDTO
+import tracker.task.subscription.TaskSubscriptionEntity
 import tracker.user.UserEntity
 import tracker.user.UserRolesEntity
 import tracker.user.UserService
@@ -61,7 +62,8 @@ class TaskControllerSpec extends Specification {
                                 necessaryCompletions: 3, completions: 0, dueDate: LocalDate.now().plusDays(2))]
 
     def user = new UserEntity(id: 1, username: "me", email: "me@me.com", password: "XXXX",
-            taskSubscriptions: [], oneTimeTaskInstances: [], userRoles: [new UserRolesEntity()])
+            taskSubscriptions: [new TaskSubscriptionEntity(id: 3), new TaskSubscriptionEntity(id: 6)],
+            oneTimeTaskInstances: [], userRoles: [new UserRolesEntity()])
 
     def "root route returns redirect"() {
         when:
@@ -211,5 +213,34 @@ class TaskControllerSpec extends Specification {
         0 * mockSubService.updateTaskInstanceCompletions(instanceId, value)
     }
 
+    def "requests to deactivate task succeed if the user owns the task"() {
+        given:
+        def subscriptionId = taskInstances.get(0).id
+
+        when:
+        mockMvc.perform(
+                post("/web/tasks/${subscriptionId}"))
+                .andExpect(status().isAccepted())
+                .andReturn()
+
+        then:
+        1 * mockUserService.getUser() >> user
+        1 * mockSubService.unsubscribe(subscriptionId)
+    }
+
+    def "requests to deactivate task fail if the user doesn't own the task"() {
+        given:
+        def subscriptionId = 32
+
+        when:
+        mockMvc.perform(
+                post("/web/tasks/${subscriptionId}"))
+                .andExpect(status().isAccepted())
+                .andReturn()
+
+        then:
+        1 * mockUserService.getUser() >> user
+        0 * mockSubService.unsubscribe(subscriptionId)
+    }
 
 }
