@@ -18,6 +18,7 @@ import tracker.user.UserService
 import java.time.LocalDate
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
 
 class TaskControllerSpec extends Specification {
@@ -106,6 +107,26 @@ class TaskControllerSpec extends Specification {
 
         then:
         model.size() == 0
+    }
+
+    def "requests to create new task subscription invoke service methods and redirect"() {
+        given:
+        def request = new TaskSubscriptionDTO(name: "my new subscription",
+                necessaryCompletions: 1, weight: 1, period: TaskPeriod.MONTHLY)
+
+        when:
+        def response = mockMvc.perform(post("/web/newTaskSubscription")
+                .flashAttr("newTaskSubscription", request))
+                .andExpect(status().isFound())
+                .andExpect(view().name("redirect:/web/showTasks"))
+                .andReturn()
+        def model = response.modelAndView.model
+
+        then:
+        1 * mockSubService.newTask(request)
+        1 * mockUserService.getUser() >> user
+        1 * mockSubService.generateTaskInstances(_)
+        model.get("newTaskSubscription").name == request.name
     }
 
 }

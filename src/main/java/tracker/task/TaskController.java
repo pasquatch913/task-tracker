@@ -59,7 +59,7 @@ public class TaskController {
     }
 
     @PostMapping(value = "/newTaskSubscription")
-    public String addTaskSubscription(@ModelAttribute TaskSubscriptionDTO subscription) {
+    public String addTaskSubscription(@ModelAttribute("newTaskSubscription") TaskSubscriptionDTO subscription) {
         subscribedTaskService.newTask(subscription);
         subscribedTaskService.generateTaskInstances(userService.getUser());
 
