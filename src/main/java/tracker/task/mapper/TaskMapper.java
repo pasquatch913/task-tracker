@@ -24,4 +24,7 @@ public interface TaskMapper {
     TaskSubscriptionDTO taskSubscriptionEntityToTaskSubscriptionDTO(TaskSubscriptionEntity taskSubscriptionEntity);
 
     OneTimeTaskDTO oneTimeTaskInstanceEntityToOneTimeTaskDTO(OneTimeTaskInstanceEntity oneTimeTaskInstanceEntity);
+
+    OneTimeTaskInstanceEntity oneTimeTaskDTOToOneTimeTaskInstanceEntity(OneTimeTaskDTO oneTimeTaskDTO);
+
 }

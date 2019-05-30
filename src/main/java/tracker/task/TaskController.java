@@ -8,7 +8,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import tracker.task.mapper.TaskMapper;
 import tracker.task.onetime.OneTimeTaskDTO;
-import tracker.task.onetime.OneTimeTaskInstanceEntity;
 import tracker.task.onetime.OneTimeTaskService;
 import tracker.task.subscription.SubscribedTaskService;
 import tracker.task.subscription.TaskPeriod;
@@ -67,7 +66,7 @@ public class TaskController {
     }
 
     @PostMapping(value = "/newOneTimeTask")
-    public String addOneTimeTask(@ModelAttribute OneTimeTaskInstanceEntity oneTimeTask) {
+    public String addOneTimeTask(@ModelAttribute("newOneTimeTask") OneTimeTaskDTO oneTimeTask) {
         oneTimeTaskService.newOneTimeTask(oneTimeTask);
 
         return "redirect:/web/showTaskInstances";

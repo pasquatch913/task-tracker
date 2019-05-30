@@ -129,4 +129,22 @@ class TaskControllerSpec extends Specification {
         model.get("newTaskSubscription").name == request.name
     }
 
+    def "requests to create new one time task invoke service methods and redirect"() {
+        given:
+        def request = new OneTimeTaskDTO(id: 999, name: "my new one time task",
+                necessaryCompletions: 1, weight: 1, dueDate: LocalDate.MAX)
+
+        when:
+        def response = mockMvc.perform(post("/web/newOneTimeTask")
+                .flashAttr("newOneTimeTask", request))
+                .andExpect(status().isFound())
+                .andExpect(view().name("redirect:/web/showTaskInstances"))
+                .andReturn()
+        def model = response.modelAndView.model
+
+        then:
+        1 * mockOneTimeService.newOneTimeTask(request)
+        model.get("newOneTimeTask").name == request.name
+    }
+
 }

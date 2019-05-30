@@ -25,9 +25,9 @@ public class OneTimeTaskService {
 
     TaskMapper mapper = Mappers.getMapper(TaskMapper.class);
 
-    public void newOneTimeTask(OneTimeTaskInstanceEntity taskInstanceEntity) {
+    public void newOneTimeTask(OneTimeTaskDTO oneTimeTask) {
         UserEntity user = userService.getUser();
-        user.getOneTimeTaskInstances().add(taskInstanceEntity);
+        user.getOneTimeTaskInstances().add(mapper.oneTimeTaskDTOToOneTimeTaskInstanceEntity(oneTimeTask));
         userRepository.save(user);
     }
 
