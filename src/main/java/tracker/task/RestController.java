@@ -6,8 +6,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import tracker.task.mapper.TaskMapper;
+import tracker.task.onetime.OneTimeTaskController;
 import tracker.task.onetime.OneTimeTaskDTO;
 import tracker.task.onetime.OneTimeTaskService;
+import tracker.task.subscription.SubscribedTaskController;
 import tracker.task.subscription.SubscribedTaskService;
 import tracker.task.subscription.TaskSubscriptionDTO;
 import tracker.user.UserService;
@@ -30,7 +32,13 @@ public class RestController {
     UserService userService;
 
     @Autowired
-    TaskController taskController;
+    SharedTaskController sharedTaskController;
+
+    @Autowired
+    SubscribedTaskController subscribedTaskController;
+
+    @Autowired
+    OneTimeTaskController oneTimeTaskController;
 
     @GetMapping("/tasks")
     public ResponseEntity<List<TaskSubscriptionDTO>> getTaskSubscriptions() {
@@ -61,12 +69,12 @@ public class RestController {
     public ResponseEntity updateTaskInstanceCompletions(@PathVariable Integer subscriptionId,
                                                         @PathVariable Integer id,
                                                         @PathVariable Integer value) {
-        return taskController.updateTaskInstanceCompletions(subscriptionId, id, value);
+        return subscribedTaskController.updateTaskInstanceCompletions(subscriptionId, id, value);
     }
 
     @PostMapping("/tasks/oneTime/{id}/completions/value/{value}")
     public ResponseEntity updateOneTimeTaskCompletions(@PathVariable Integer id, @PathVariable Integer value) {
-        return taskController.updateOneTimeTaskCompletions(id, value);
+        return oneTimeTaskController.updateOneTimeTaskCompletions(id, value);
     }
 
     @PostMapping("/oneTimeTask")
@@ -77,12 +85,12 @@ public class RestController {
 
     @PostMapping("/tasks/{id}")
     public ResponseEntity completeTaskSubscription(@PathVariable Integer id) {
-        return taskController.completeTaskSubscription(id);
+        return subscribedTaskController.completeTaskSubscription(id);
     }
 
     @PostMapping("/oneTimeTasks/{id}")
     public ResponseEntity completeOneTimeTask(@PathVariable Integer id) {
-        return taskController.completeOneTimeTask(id);
+        return oneTimeTaskController.completeOneTimeTask(id);
     }
 
 }
