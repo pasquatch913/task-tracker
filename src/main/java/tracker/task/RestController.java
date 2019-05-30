@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import tracker.task.mapper.TaskMapper;
+import tracker.task.onetime.OneTimeTaskDTO;
 import tracker.task.onetime.OneTimeTaskInstanceEntity;
 import tracker.task.onetime.OneTimeTaskService;
 import tracker.task.subscription.SubscribedTaskService;
@@ -45,7 +46,7 @@ public class RestController {
     }
 
     @GetMapping("/oneTimeTasks")
-    public ResponseEntity<List<OneTimeTaskInstanceEntity>> getOneTimeTaskInstances() {
+    public ResponseEntity<List<OneTimeTaskDTO>> getOneTimeTaskInstances() {
         return ResponseEntity.ok()
                 .body(oneTimeTaskService.returnOneTimeTaskForUser(userService.getUser()));
     }

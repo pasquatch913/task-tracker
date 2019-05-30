@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import tracker.task.mapper.TaskMapper;
+import tracker.task.onetime.OneTimeTaskDTO;
 import tracker.task.onetime.OneTimeTaskInstanceEntity;
 import tracker.task.onetime.OneTimeTaskService;
 import tracker.task.subscription.SubscribedTaskService;
@@ -80,7 +81,7 @@ public class TaskController {
 
         List<TaskInstanceDTO> taskInstances = subscribedTaskService.returnTaskInstancesForUser(userService.getUser());
 
-        List<OneTimeTaskInstanceEntity> oneTimeTasks = oneTimeTaskService.returnOneTimeTaskForUser(userService.getUser());
+        List<OneTimeTaskDTO> oneTimeTasks = oneTimeTaskService.returnOneTimeTaskForUser(userService.getUser());
 
         model.addAttribute("tasks", taskInstances);
         model.addAttribute("oneTimeTasks", oneTimeTasks);

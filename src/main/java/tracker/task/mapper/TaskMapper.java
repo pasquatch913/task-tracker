@@ -5,6 +5,8 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
 import tracker.task.TaskInstanceDTO;
+import tracker.task.onetime.OneTimeTaskDTO;
+import tracker.task.onetime.OneTimeTaskInstanceEntity;
 import tracker.task.subscription.TaskSubscriptionDTO;
 import tracker.task.subscription.TaskSubscriptionEntity;
 
@@ -20,4 +22,6 @@ public interface TaskMapper {
     TaskSubscriptionEntity taskSubscriptionDTOToTaskSubscriptionEntity(TaskSubscriptionDTO taskSubscriptionDTO);
 
     TaskSubscriptionDTO taskSubscriptionEntityToTaskSubscriptionDTO(TaskSubscriptionEntity taskSubscriptionEntity);
+
+    OneTimeTaskDTO oneTimeTaskInstanceEntityToOneTimeTaskDTO(OneTimeTaskInstanceEntity oneTimeTaskInstanceEntity);
 }
