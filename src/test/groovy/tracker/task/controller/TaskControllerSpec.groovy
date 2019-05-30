@@ -173,4 +173,23 @@ class TaskControllerSpec extends Specification {
         model.get("oneTimeTasks").get(1).name == taskOneTimes.get(1).name
     }
 
+    def "requests to update task completions result in service method calls"() {
+        given:
+        def subscriptionId = taskInstances.get(0).id
+        def instanceId = taskInstances.get(0).taskInstanceId
+        def value = 17
+
+        when:
+        mockMvc.perform(
+                post("/web/tasks/${subscriptionId}/instances/${instanceId}/completions/${value}"))
+                .andExpect(status().isAccepted())
+                .andReturn()
+
+        then:
+        1 * mockUserService.getUser() >> user
+        1 * mockSubService.verifyTaskInstance(user, subscriptionId, instanceId) >> true
+        1 * mockSubService.returnTaskInstancesForUser(user) >> taskInstances
+        1 * mockSubService.updateTaskInstanceCompletions(instanceId, value)
+    }
+
 }

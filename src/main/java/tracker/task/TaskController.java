@@ -99,7 +99,7 @@ public class TaskController {
                     .filter(n -> n.getTaskInstanceId().equals(id))
                     .collect(Collectors.toList()).get(0);
 
-            updateTaskInstanceCompletions(subscriptionId, instance.getTaskInstanceId(), value);
+            subscribedTaskService.updateTaskInstanceCompletions(instance.getTaskInstanceId(), value);
         }
         return ResponseEntity.accepted().build();
     }
