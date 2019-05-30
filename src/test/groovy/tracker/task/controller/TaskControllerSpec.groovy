@@ -8,6 +8,7 @@ import spock.lang.Subject
 import tracker.task.TaskController
 import tracker.task.TaskInstanceDTO
 import tracker.task.onetime.OneTimeTaskDTO
+import tracker.task.onetime.OneTimeTaskInstanceEntity
 import tracker.task.onetime.OneTimeTaskService
 import tracker.task.subscription.SubscribedTaskService
 import tracker.task.subscription.TaskPeriod
@@ -63,7 +64,8 @@ class TaskControllerSpec extends Specification {
 
     def user = new UserEntity(id: 1, username: "me", email: "me@me.com", password: "XXXX",
             taskSubscriptions: [new TaskSubscriptionEntity(id: 3), new TaskSubscriptionEntity(id: 6)],
-            oneTimeTaskInstances: [], userRoles: [new UserRolesEntity()])
+            oneTimeTaskInstances: [new OneTimeTaskInstanceEntity(id: 2), new OneTimeTaskInstanceEntity(id: 4), new OneTimeTaskInstanceEntity(id: 5)],
+            userRoles: [new UserRolesEntity()])
 
     def "root route returns redirect"() {
         when:
@@ -241,6 +243,38 @@ class TaskControllerSpec extends Specification {
         then:
         1 * mockUserService.getUser() >> user
         0 * mockSubService.unsubscribe(subscriptionId)
+    }
+
+    def "requests to update one time task completions result in service method calls"() {
+        given:
+        def taskId = taskOneTimes.get(0).id
+        def value = 47
+
+        when:
+        mockMvc.perform(
+                post("/web/tasks/oneTime/${taskId}/completions/${value}"))
+                .andExpect(status().isAccepted())
+                .andReturn()
+
+        then:
+        1 * mockUserService.getUser() >> user
+        1 * mockOneTimeService.updateOneTimeTaskCompletions(taskId, value)
+    }
+
+    def "requests to update one time task completions executes no service calls if the user doesn't own task"() {
+        given:
+        def taskId = 37
+        def value = 47
+
+        when:
+        mockMvc.perform(
+                post("/web/tasks/oneTime/${taskId}/completions/${value}"))
+                .andExpect(status().isAccepted())
+                .andReturn()
+
+        then:
+        1 * mockUserService.getUser() >> user
+        0 * mockOneTimeService.updateOneTimeTaskCompletions(taskId, value)
     }
 
 }
