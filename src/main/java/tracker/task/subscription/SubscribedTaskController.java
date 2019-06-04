@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Controller
-@RequestMapping("/web/subscription")
+@RequestMapping("/web/subscriptions")
 public class SubscribedTaskController {
 
     private final SubscribedTaskService subscribedTaskService;

@@ -9,7 +9,7 @@ import tracker.user.UserService;
 
 @RequiredArgsConstructor
 @Controller
-@RequestMapping("/web/oneTime")
+@RequestMapping("/web/oneTimes")
 public class OneTimeTaskController {
 
     private final OneTimeTaskService oneTimeTaskService;

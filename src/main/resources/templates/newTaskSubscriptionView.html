@@ -11,7 +11,7 @@
 <div layout:fragment="content" th:remove="tag">
     <fieldset>
         <legend>Input</legend>
-        <form modelAttribute="newTaskSubscription" action="/web/newTaskSubscription" method="post">
+        <form modelAttribute="newTaskSubscription" action="/web/subscriptions/newTask" method="post">
             <input
                     type="hidden"
                     th:name="${_csrf.parameterName}"
