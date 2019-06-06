@@ -1,9 +1,11 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/mydb
-    #    url: jdbc:postgresql://tasktracker.cngmb0hrfw6b.us-east-1.rds.amazonaws.com:5432/task
-    username: postgres
-    password: password
+    url: jdbc:postgresql://tasktracker.cngmb0hrfw6b.us-east-1.rds.amazonaws.com:5432/task
+    username: ${USERNAME}
+    password: ${PASSWORD}
+  #    url: jdbc:postgresql://localhost:5432/mydb
+  #    username: postgres
+  #    password: password
   jpa:
     hibernate:
       ddl-auto: validate
