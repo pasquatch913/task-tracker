@@ -24,7 +24,7 @@ h1 {
     color: aliceblue;
 }
 
-footer {
+.footer {
     position: fixed;
     height: 100px;
     bottom: 0;

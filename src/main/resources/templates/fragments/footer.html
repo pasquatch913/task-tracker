@@ -5,22 +5,17 @@
 <body>
 <th:block th:fragment="footer">
     <footer class="footer bg-primary text-white container-fluid">
-        <div class="row">
-            <div class="col-xs-3 application-name">
-                Task Tracker
-            </div>
-            <br/>
-            <div class="col-xs-9 footer-component" sec:authorize="isAuthenticated()">Logged in as:
-                <div style="display: inline-block;" sec:authentication="name"></div>
-                <br/>
-                <a class="col-xs-1" href="/web/">Home</a>
-                <a class="col-xs-1" href="/web/showTaskSubscriptions">Show Tasks</a>
-                <a class="col-xs-1" href="/web/showTaskInstances">Show Task Instances</a>
-                <a class="col-xs-1" href="/web/subscriptions/newTask">Create New Task</a>
-                <a class="col-xs-1" href="/web/oneTimes/newTask">Create New One-time Task</a>
-                <a class="col-xs-1" th:href="@{/logout}">Sign Out</a>
-            </div>
+        <div class="row">Task Tracker</div>
+        <div class="row" sec:authorize="isAuthenticated()">Logged in as:&nbsp;
+            <div style="display: inline-block;" sec:authentication="name"></div>
         </div>
+        <div class="row">
+            <a class="col-xs-1" href="/web/">Home</a>&nbsp;|&nbsp;
+            <a class="col-xs-1" href="/web/showTaskSubscriptions">Show Tasks</a>&nbsp;|&nbsp;
+            <a class="col-xs-1" href="/web/showTaskInstances">Show Task Instances</a>&nbsp;|&nbsp;
+            <a class="col-xs-1" href="/web/subscriptions/newTask">Create New Task</a>&nbsp;|&nbsp;
+            <a class="col-xs-1" href="/web/oneTimes/newTask">Create New One-time Task</a>&nbsp;|&nbsp;
+            <a class="col-xs-1" th:href="@{/logout}">Sign Out</a>
         </div>
     </footer>
 
