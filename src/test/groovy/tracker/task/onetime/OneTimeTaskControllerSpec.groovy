@@ -26,7 +26,7 @@ class OneTimeTaskControllerSpec extends Specification {
 
     DataFixture data = new DataFixture()
 
-    def baseURL = "/web/oneTime/"
+    def baseURL = "/web/oneTimes/"
 
     def setup() {
         mockMvc = MockMvcBuilders.standaloneSetup(controller).build()

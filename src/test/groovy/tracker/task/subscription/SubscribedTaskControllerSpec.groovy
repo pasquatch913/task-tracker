@@ -24,7 +24,7 @@ class SubscribedTaskControllerSpec extends Specification {
 
     DataFixture data = new DataFixture()
 
-    def baseURL = "/web/subscription/"
+    def baseURL = "/web/subscriptions/"
 
     def setup() {
         mockMvc = MockMvcBuilders.standaloneSetup(controller).build()
