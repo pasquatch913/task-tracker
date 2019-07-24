@@ -87,13 +87,6 @@
       <version>2.9.9</version>
     </dependency>
 
-    <!--&lt;!&ndash; JAXB API &ndash;&gt;-->
-    <!--<dependency>-->
-    <!--<groupId>javax.xml.bind</groupId>-->
-    <!--<artifactId>jaxb-api</artifactId>-->
-    <!--<version>2.2.11</version>-->
-    <!--</dependency>-->
-
     <!-- security -->
     <dependency>
       <groupId>org.springframework.boot</groupId>
