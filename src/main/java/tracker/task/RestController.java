@@ -14,7 +14,9 @@ import tracker.task.subscription.SubscribedTaskService;
 import tracker.task.subscription.TaskSubscriptionDTO;
 import tracker.user.UserService;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/api")
@@ -41,6 +43,20 @@ public class RestController {
     OneTimeTaskController oneTimeTaskController;
 
     @GetMapping("/tasks")
+    public ResponseEntity<List<TaskDTO>> getTasks() {
+        // TODO: should update other controller to include method to return TaskDTO directly
+        List<TaskDTO> subs = subscribedTaskService.returnTaskInstancesForUser(userService.getUser())
+                .stream().map(mapper::taskInstanceDTOToTaskDTO).collect(Collectors.toList());
+        List<TaskDTO> oneTimes = oneTimeTaskService.returnOneTimeTaskForUser(userService.getUser())
+                .stream().map(mapper::oneTimeTaskDTOToTaskDTO).collect(Collectors.toList());
+        List<TaskDTO> allTasks = new ArrayList<>();
+        allTasks.addAll(subs);
+        allTasks.addAll(oneTimes);
+        return ResponseEntity.ok()
+                .body(allTasks);
+    }
+
+    @GetMapping("/taskSubscriptions")
     public ResponseEntity<List<TaskSubscriptionDTO>> getTaskSubscriptions() {
         return ResponseEntity.ok()
                 .body(subscribedTaskService.returnTaskSubscriptionsForUser(userService.getUser()));

@@ -4,6 +4,7 @@ import org.mapstruct.DecoratedWith;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
+import tracker.task.TaskDTO;
 import tracker.task.TaskInstanceDTO;
 import tracker.task.onetime.OneTimeTaskDTO;
 import tracker.task.onetime.OneTimeTaskInstanceEntity;
@@ -26,5 +27,10 @@ public interface TaskMapper {
     OneTimeTaskDTO oneTimeTaskInstanceEntityToOneTimeTaskDTO(OneTimeTaskInstanceEntity oneTimeTaskInstanceEntity);
 
     OneTimeTaskInstanceEntity oneTimeTaskDTOToOneTimeTaskInstanceEntity(OneTimeTaskDTO oneTimeTaskDTO);
+
+    // same data type for subscriptions and instances
+    TaskDTO taskInstanceDTOToTaskDTO(TaskInstanceDTO taskSubscriptionDTO);
+
+    TaskDTO oneTimeTaskDTOToTaskDTO(OneTimeTaskDTO oneTimeTaskDTO);
 
 }
