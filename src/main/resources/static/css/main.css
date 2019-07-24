@@ -1,18 +1,26 @@
+@import url(https://cdn.jsdelivr.net/gh/tonsky/FiraCode@1.206/distr/fira_code.css);
+
 .main-body {
     padding-bottom: 200px;
 }
 
+body {
+    background-color: #262535;
+    color: #d3fcd5;
+    font-family: 'Fira Code', monospace;
+}
+
 table{
     border-collapse:collapse;
-    border:1px solid #000000;
+    border: 1px solid #98a6d4;
 }
 
 table td{
-    border:1px solid #000000;
+    border: 1px solid #98a6d4;
 }
 
 h1 {
-    color: #78ab46;
+    color: #d3fcd5;
 }
 
 .button-box {
@@ -20,8 +28,36 @@ h1 {
     margin-top: 20px;
 }
 
+.table-buttons {
+    background-color: #564d80;
+    border-color: #564d80;
+    color: #98a6d4;
+    margin: 5px;
+}
+
+.table-due-date {
+    white-space: nowrap;
+}
+
+.table-data {
+    text-align: center;
+}
+
+.app-buttons {
+    background-color: #564d80;
+    border-color: #564d80;
+    color: #98a6d4;
+}
+
+.app-buttons:hover {
+    background-color: #564d80;
+    border-color: #564d80;
+    color: #ffffff;
+}
+
 .footer a {
-    color: aliceblue;
+    color: #98a6d4;
+    /*background-color: #44344f;*/
 }
 
 .footer {
@@ -29,4 +65,7 @@ h1 {
     height: 100px;
     bottom: 0;
     width: 100%;
+    color: #d3fcd5;
+    background-color: #564d80;
 }
+

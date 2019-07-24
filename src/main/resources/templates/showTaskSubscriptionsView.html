@@ -14,40 +14,40 @@
 <div layout:fragment="content" th:remove="tag">
     <table>
         <tr>
-            <td>Task Name</td>
-            <td>Task Period</td>
-            <td>Points Per Completion</td>
-            <td>Completions Goal</td>
+            <td>Task name</td>
+            <td>Task period</td>
+            <td>Points per completion</td>
+            <td>Completions goal</td>
         </tr>
         <tr th:each="element : ${tasks}" th:id="'subscription' + ${element.id}">
             <div th:if="${element.active}">
                 <td th:text="${element.name}"></td>
-                <td th:text="${element.period}"></td>
-                <td th:text="${element.weight}"></td>
-                <td th:text="${element.necessaryCompletions}"></td>
+                <td class="table-data" th:text="${element.period}"></td>
+                <td class="table-data" th:text="${element.weight}"></td>
+                <td class="table-data" th:text="${element.necessaryCompletions}"></td>
                 <td>
-                    <button th:id="'completeTaskSubscription' + ${element.id}"
+                    <button class="btn table-buttons" th:id="'completeTaskSubscription' + ${element.id}"
                             th:onclick="'completeTaskSubscription(' + ${element.id} + ')'">
-                        Complete Task
+                        Unsubscribe from periodic task
                     </button>
                 </td>
             </div>
         </tr>
         <tr>
             <td>
-                One Time Tasks
+                One-time tasks
             </td>
         </tr>
         <tr th:each="element : ${oneTimeTasks}" th:id="'oneTime' + ${element.id}">
             <div th:if="${element.active}">
                 <td th:text="${element.name}"></td>
-                <td th:text="'One Time: ' + ${element.dueDate}"></td>
-                <td th:text="${element.weight}"></td>
-                <td th:text="${element.necessaryCompletions}"></td>
+                <td class="table-data" th:text="'One Time: ' + ${element.dueDate}"></td>
+                <td class="table-data" th:text="${element.weight}"></td>
+                <td class="table-data" th:text="${element.necessaryCompletions}"></td>
                 <td>
-                    <button th:id="'completeOneTime' + ${element.id}"
+                    <button class="btn table-buttons" th:id="'completeOneTime' + ${element.id}"
                             th:onclick="'completeOneTime(' + ${element.id} + ')'">
-                        Complete Task
+                        Complete one-time task
                     </button>
                 </td>
             </div>

@@ -10,32 +10,35 @@
 <body>
 <div layout:fragment="content" th:remove="tag">
     <fieldset>
-        <legend>Input</legend>
+        <legend>Create new task subscription:</legend>
         <form modelAttribute="newTaskSubscription" action="/web/subscriptions/newTask" method="post">
             <input
                     type="hidden"
                     th:name="${_csrf.parameterName}"
                     th:value="${_csrf.token}"/>
-            <div>
-                <label for="name"> Name:
+            <div class="row">
+                <label for="name" class="col-md-3"> Name:
                 </label>
-                <input type="text" id="name" name="name" autofocus="autofocus" required placeholder="Task name">
+                <input type="text" class="form-control col-md-9" id="name" name="name" autofocus="autofocus" required
+                       placeholder="Task name">
                 <span></span>
             </div>
-            <div>
-                <label for="necessaryCompletions"> Number of times to complete task:
+            <div class="row">
+                <label for="necessaryCompletions" class="col-md-6"> Number of times to complete task:
                 </label>
-                <input type="number" id="necessaryCompletions" name="necessaryCompletions" required min="1"
+                <input type="number" class="form-control col-md-6" id="necessaryCompletions" name="necessaryCompletions"
+                       required min="1"
                        placeholder="1">
                 <span></span>
             </div>
-            <div>
-                <label for="weight">Task points (choose value 1-5 to denote how important, where 5 is most
+            <div class="row">
+                <label for="weight" class="col-md-6">Task points (choose value 1-5 to denote how important, where 5 is
+                    most
                     important):</label>
-                <input type="number" id="weight" name="weight" required max="5" min="1"
+                <input type="number" class="form-control col-md-6" id="weight" name="weight" required max="5" min="1"
                        placeholder="1"/>
             </div>
-            <div>
+            <div class="row">
                 <label for="period">On what schedule should the task recur?</label>
                 <div id="period" th:each="period : ${periods}">
                     <input th:id="'period-option' + ${period}" type="radio" name="period" th:value="${period}"/>
@@ -44,7 +47,7 @@
                 </div>
             </div>
             <div>
-                <input type="submit" class="submit" value="Submit"/>
+                <input type="submit" class="submit btn btn-info app-buttons" value="Subscribe"/>
             </div>
 
         </form>
