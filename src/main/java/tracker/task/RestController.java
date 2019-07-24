@@ -65,22 +65,21 @@ public class RestController {
         return ResponseEntity.accepted().build();
     }
 
-    @PostMapping("tasks/{subscriptionId}/instances/{id}/completions/{value}")
-    public ResponseEntity updateTaskInstanceCompletions(@PathVariable Integer subscriptionId,
-                                                        @PathVariable Integer id,
+    @PostMapping("tasks/instances/{id}/completions/{value}")
+    public ResponseEntity updateTaskInstanceCompletions(@PathVariable Integer id,
                                                         @PathVariable Integer value) {
-        return subscribedTaskController.updateTaskInstanceCompletions(subscriptionId, id, value);
-    }
-
-    @PostMapping("/tasks/oneTime/{id}/completions/value/{value}")
-    public ResponseEntity updateOneTimeTaskCompletions(@PathVariable Integer id, @PathVariable Integer value) {
-        return oneTimeTaskController.updateOneTimeTaskCompletions(id, value);
+        return subscribedTaskController.updateTaskInstanceCompletions(id, value);
     }
 
     @PostMapping("/oneTimeTask")
     public ResponseEntity createOneTimeTask(@RequestBody OneTimeTaskDTO oneTimeTask) {
         oneTimeTaskService.newOneTimeTask(oneTimeTask);
         return ResponseEntity.accepted().build();
+    }
+
+    @PostMapping("/tasks/oneTime/{id}/completions/{value}")
+    public ResponseEntity updateOneTimeTaskCompletions(@PathVariable Integer id, @PathVariable Integer value) {
+        return oneTimeTaskController.updateOneTimeTaskCompletions(id, value);
     }
 
     @PostMapping("/tasks/{id}")

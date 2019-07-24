@@ -35,14 +35,14 @@ public class SubscribedTaskController {
         return "redirect:/web/showTaskSubscriptions";
     }
 
-    @PostMapping(value = "/{subscriptionId}/instances/{id}/completions/{value}")
-    public ResponseEntity updateTaskInstanceCompletions(@PathVariable Integer subscriptionId,
+    @PostMapping(value = "/instances/{id}/completions/{value}")
+    public ResponseEntity updateTaskInstanceCompletions(
                                                         @PathVariable Integer id,
                                                         @PathVariable Integer value) {
         UserEntity user = userService.getUser();
 
         // only update task instance if it belongs to current user
-        if (subscribedTaskService.verifyTaskInstance(user, subscriptionId, id)) {
+        if (subscribedTaskService.verifyTaskInstance(user, id)) {
             TaskInstanceDTO instance = subscribedTaskService.returnTaskInstancesForUser(user).stream()
                     .filter(n -> n.getTaskInstanceId().equals(id))
                     .collect(Collectors.toList()).get(0);

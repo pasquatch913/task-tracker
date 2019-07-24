@@ -65,38 +65,36 @@ class SubscribedTaskControllerSpec extends Specification {
 
     def "requests to update task completions result in service method calls"() {
         given:
-        def subscriptionId = data.taskInstances().get(0).id
         def instanceId = data.taskInstances().get(0).taskInstanceId
         def value = 17
 
         when:
         mockMvc.perform(
-                post("${baseURL}${subscriptionId}/instances/${instanceId}/completions/${value}"))
+                post("${baseURL}/instances/${instanceId}/completions/${value}"))
                 .andExpect(status().isAccepted())
                 .andReturn()
 
         then:
         1 * mockUserService.getUser() >> data.user()
-        1 * mockSubService.verifyTaskInstance(data.user(), subscriptionId, instanceId) >> true
+        1 * mockSubService.verifyTaskInstance(data.user(), instanceId) >> true
         1 * mockSubService.returnTaskInstancesForUser(data.user()) >> data.taskInstances()
         1 * mockSubService.updateTaskInstanceCompletions(instanceId, value)
     }
 
     def "requests to update task completions don't invoke service methods if user mismatch"() {
         given:
-        def subscriptionId = data.taskInstances().get(0).id
         def instanceId = data.taskInstances().get(0).taskInstanceId
         def value = 17
 
         when:
         mockMvc.perform(
-                post("${baseURL}${subscriptionId}/instances/${instanceId}/completions/${value}"))
+                post("${baseURL}/instances/${instanceId}/completions/${value}"))
                 .andExpect(status().isBadRequest())
                 .andReturn()
 
         then:
         1 * mockUserService.getUser() >> data.user()
-        1 * mockSubService.verifyTaskInstance(data.user(), subscriptionId, instanceId) >> false
+        1 * mockSubService.verifyTaskInstance(data.user(), instanceId) >> false
         0 * mockSubService.returnTaskInstancesForUser(data.user()) >> data.taskInstances()
         0 * mockSubService.updateTaskInstanceCompletions(instanceId, value)
     }

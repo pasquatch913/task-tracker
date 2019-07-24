@@ -80,4 +80,28 @@ class SubscribedTaskServiceSpec extends Specification {
         "my daily task" | TaskPeriod.DAILY | 1      | 2
     }
 
+    def "getting Active Instances returns list of task instances for active subscriptions only"() {
+        given:
+        def taskSubscription1 = new TaskSubscriptionEntity(name: "my old task",
+                period: TaskPeriod.DAILY,
+                weight: 2,
+                necessaryCompletions: 4,
+                active: Boolean.FALSE,
+                taskInstances: [new TaskInstanceEntity(dueAt: LocalDate.now().minusDays(3))])
+        def taskSubscription2 = new TaskSubscriptionEntity(name: "my otRher task",
+                period: TaskPeriod.WEEKLY,
+                weight: 2,
+                necessaryCompletions: 4,
+                taskInstances: [new TaskInstanceEntity(dueAt: LocalDate.now().plusDays(3)),
+                                new TaskInstanceEntity(dueAt: LocalDate.now().minusMonths(2)),
+                                new TaskInstanceEntity(dueAt: LocalDate.now().minusMonths(1))])
+        def user = new UserEntity(taskSubscriptions: [taskSubscription1, taskSubscription2])
+
+        when:
+        def result = service.getActiveInstances(user)
+
+        then:
+        result.size() == 2
+    }
+
 }

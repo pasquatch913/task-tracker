@@ -70,16 +70,27 @@ public class SubscribedTaskService {
         userRepository.save(user);
     }
 
-    public Boolean verifyTaskInstance(UserEntity user, Integer subscriptionId, Integer instanceId) {
-        // find the relevant task subscription (will only be 1 match at most)
-        TaskSubscriptionEntity task = user.getTaskSubscriptions()
-                .stream()
-                .filter(n -> n.getId().equals(subscriptionId))
-                .collect(Collectors.toList()).get(0);
-        // if the current user has one match for subscription and task ID, return true
-        return task.getTaskInstances().stream()
-                .filter(m -> m.getId().equals(instanceId))
+    public Boolean verifyTaskInstance(UserEntity user, Integer instanceId) {
+        // only search active tasks to determine if instance being updated belongs to user
+        return getActiveInstances(user).stream()
+                .filter(n -> n.getId().equals(instanceId))
                 .collect(Collectors.toList()).size() == 1;
+    }
+
+    public List<TaskInstanceEntity> getActiveInstances(UserEntity user) {
+        return getActiveSubscriptions(user).stream()
+                .flatMap(n -> n.getTaskInstances()
+                        .stream()
+                        // TODO: should clean up as this is hacky
+                        .filter(m -> m.getDueAt().isAfter(LocalDate.now().minusMonths(2))))
+                .collect(Collectors.toList());
+    }
+
+    private List<TaskSubscriptionEntity> getActiveSubscriptions(UserEntity user) {
+        return user.getTaskSubscriptions()
+                .stream()
+                .filter(TaskSubscriptionEntity::getActive)
+                .collect(Collectors.toList());
     }
 
     public void updateTaskInstanceCompletions(Integer id, Integer value) {
