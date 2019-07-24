@@ -30,13 +30,13 @@
                 <td class="table-due-date table-data" th:text="${task.dueDate}"></td>
                 <td>
                     <button class="btn table-buttons" th:id="'incrementCompletions' + ${task.taskInstanceId}"
-                            th:onclick="'updateCompletions(' + ${task.id} + ',' + ${task.taskInstanceId} + ',1)'">
+                            th:onclick="'updateCompletions(' + ${task.taskInstanceId} + ',1)'">
                         +1 completions
                     </button>
                 </td>
                 <td>
                     <button class="btn table-buttons" th:id="'decrementCompletions' + ${task.taskInstanceId}"
-                            th:onclick="'updateCompletions(' + ${task.id} + ',' + ${task.taskInstanceId} + ',-1)'">
+                            th:onclick="'updateCompletions(' + ${task.taskInstanceId} + ',-1)'">
                         -1 completions
                     </button>
                 </td>

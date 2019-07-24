@@ -1,11 +1,11 @@
-function updateCompletions(subscriptionId, instanceId, value) {
+function updateCompletions(instanceId, value) {
     //find the right element to increment in browser
     var elementToUpdate = document.getElementById("completions" + instanceId);
     var newCompletionsValue = parseInt(elementToUpdate.innerText) + value;
     elementToUpdate.innerText =  newCompletionsValue;
 
     //increment the correct taskInstance's counter
-    var url = '/web/subscriptions/' + subscriptionId + '/instances/' + instanceId + '/completions/' + newCompletionsValue;
+    var url = '/web/subscriptions/instances/' + instanceId + '/completions/' + newCompletionsValue;
     $.post(url, function (data, status) {
         console.log('request sent!');
     });
