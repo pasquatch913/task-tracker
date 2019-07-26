@@ -56,6 +56,24 @@ public class RestController {
                 .body(allTasks);
     }
 
+    @GetMapping("/tasks/active")
+    public ResponseEntity<List<TaskDTO>> getActiveTasks() {
+        // TODO: should update other controller to include method to return TaskDTO directly
+        List<TaskDTO> subs = subscribedTaskService.returnTaskInstancesForUser(userService.getUser())
+                .stream().map(mapper::taskInstanceDTOToTaskDTO)
+                .filter(TaskDTO::getActive)
+                .collect(Collectors.toList());
+        List<TaskDTO> oneTimes = oneTimeTaskService.returnOneTimeTaskForUser(userService.getUser())
+                .stream().map(mapper::oneTimeTaskDTOToTaskDTO)
+                .filter(TaskDTO::getActive)
+                .collect(Collectors.toList());
+        List<TaskDTO> allTasks = new ArrayList<>();
+        allTasks.addAll(subs);
+        allTasks.addAll(oneTimes);
+        return ResponseEntity.ok()
+                .body(allTasks);
+    }
+
     @GetMapping("/taskSubscriptions")
     public ResponseEntity<List<TaskSubscriptionDTO>> getTaskSubscriptions() {
         return ResponseEntity.ok()
