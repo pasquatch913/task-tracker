@@ -40,10 +40,12 @@
             </div>
             <div class="row">
                 <label for="period">On what schedule should the task recur?</label>
-                <div id="period" th:each="period : ${periods}">
-                    <input th:id="'period-option' + ${period}" type="radio" name="period" th:value="${period}"/>
-                    <label th:for="'period-option' + ${period}" th:text="| &nbsp; ${period} |">Something is wrong
-                        !</label>
+                <div style="margin-left:200px">
+                    <div id="period" th:each="period : ${periods}">
+                        <input th:id="'period-option' + ${period}" type="radio" name="period" th:value="${period}"/>
+                        <label th:for="'period-option' + ${period}" th:text="| &nbsp; ${period} |">Something is wrong
+                            !</label>
+                    </div>
                 </div>
             </div>
             <div>
