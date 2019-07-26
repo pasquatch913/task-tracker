@@ -99,6 +99,12 @@ public class RestController {
         return ResponseEntity.accepted().build();
     }
 
+    @PostMapping("tasks/{id}/completions/{value}")
+    public ResponseEntity updateTaskCompletions(@PathVariable Integer id,
+                                                @PathVariable Integer value) {
+        return sharedTaskController.updateTaskCompletions(id, value);
+    }
+
     @PostMapping("tasks/instances/{id}/completions/{value}")
     public ResponseEntity updateTaskInstanceCompletions(@PathVariable Integer id,
                                                         @PathVariable Integer value) {

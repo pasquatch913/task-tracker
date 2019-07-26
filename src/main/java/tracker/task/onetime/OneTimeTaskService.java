@@ -40,6 +40,12 @@ public class OneTimeTaskService {
         return tasks;
     }
 
+    public Boolean verifyOneTimeTask(UserEntity user, Integer taskId) {
+        return user.getOneTimeTaskInstances().stream()
+                .filter(n -> n.getId().equals(taskId))
+                .collect(Collectors.toList()).size() == 1;
+    }
+
     public OneTimeTaskDTO updateOneTimeTaskCompletions(Integer id, Integer value) {
         OneTimeTaskInstanceEntity taskToUpdate = oneTimeTaskInstanceRepository.findById(id).get();
         taskToUpdate.setCompletions(value);
