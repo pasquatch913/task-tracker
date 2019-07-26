@@ -29,7 +29,8 @@ public interface TaskMapper {
     OneTimeTaskInstanceEntity oneTimeTaskDTOToOneTimeTaskInstanceEntity(OneTimeTaskDTO oneTimeTaskDTO);
 
     // same data type for subscriptions and instances
-    TaskDTO taskInstanceDTOToTaskDTO(TaskInstanceDTO taskSubscriptionDTO);
+    @Mapping(source = "taskInstanceId", target = "id")
+    TaskDTO taskInstanceDTOToTaskDTO(TaskInstanceDTO instanceDTO);
 
     TaskDTO oneTimeTaskDTOToTaskDTO(OneTimeTaskDTO oneTimeTaskDTO);
 
