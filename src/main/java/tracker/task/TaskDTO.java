@@ -19,5 +19,6 @@ public class TaskDTO {
     private Integer weight;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate dueDate;
+    private Boolean active;
 
 }
