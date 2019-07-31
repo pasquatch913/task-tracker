@@ -20,5 +20,6 @@ public class TaskDTO {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate dueDate;
     private Boolean active;
+    private Boolean recurring;
 
 }

@@ -30,8 +30,10 @@ public interface TaskMapper {
 
     // same data type for subscriptions and instances
     @Mapping(source = "taskInstanceId", target = "id")
+    @Mapping(target = "recurring", constant = "true")
     TaskDTO taskInstanceDTOToTaskDTO(TaskInstanceDTO instanceDTO);
 
+    @Mapping(target = "recurring", constant = "false")
     TaskDTO oneTimeTaskDTOToTaskDTO(OneTimeTaskDTO oneTimeTaskDTO);
 
 }
