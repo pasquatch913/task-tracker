@@ -90,7 +90,7 @@ public class SharedTaskController {
                     .filter(n -> n.getTaskInstanceId().equals(id))
                     .collect(Collectors.toList()).get(0);
 
-            subscribedTaskService.unsubscribe(instance.getTaskInstanceId());
+            subscribedTaskService.unsubscribe(instance.getId());
             return ResponseEntity.accepted().build();
         } else if (oneTimeTaskService.verifyOneTimeTask(user, id)) {
             user.getOneTimeTaskInstances()
