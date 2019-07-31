@@ -80,4 +80,27 @@ public class SharedTaskController {
         }
     }
 
+    @PostMapping(value = "/tasks/complete/{id}")
+    public ResponseEntity completeTask(@PathVariable Integer id) {
+        UserEntity user = userService.getUser();
+
+        // only update task instance if it belongs to current user
+        if (subscribedTaskService.verifyTaskInstance(user, id)) {
+            TaskInstanceDTO instance = subscribedTaskService.returnTaskInstancesForUser(user).stream()
+                    .filter(n -> n.getTaskInstanceId().equals(id))
+                    .collect(Collectors.toList()).get(0);
+
+            subscribedTaskService.unsubscribe(instance.getTaskInstanceId());
+            return ResponseEntity.accepted().build();
+        } else if (oneTimeTaskService.verifyOneTimeTask(user, id)) {
+            user.getOneTimeTaskInstances()
+                    .stream()
+                    .filter(n -> n.getId().equals(id))
+                    .forEach(m -> oneTimeTaskService.unsubscribeOneTime(m.getId()));
+            return ResponseEntity.accepted().build();
+        } else {
+            return ResponseEntity.badRequest().body("no such task for this user");
+        }
+    }
+
 }

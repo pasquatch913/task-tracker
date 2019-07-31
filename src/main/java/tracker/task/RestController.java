@@ -122,15 +122,11 @@ public class RestController {
         return oneTimeTaskController.updateOneTimeTaskCompletions(id, value);
     }
 
-    @PostMapping("/tasks/{id}")
-    public ResponseEntity completeTaskSubscription(@PathVariable Integer id) {
-        return subscribedTaskController.completeTaskSubscription(id);
+    @PostMapping("/tasks/complete/{id}")
+    public ResponseEntity completeTask(@PathVariable Integer id) {
+        return sharedTaskController.completeTask(id);
     }
 
-    @PostMapping("/oneTimeTasks/{id}")
-    public ResponseEntity completeOneTimeTask(@PathVariable Integer id) {
-        return oneTimeTaskController.completeOneTimeTask(id);
-    }
 
 }
 
