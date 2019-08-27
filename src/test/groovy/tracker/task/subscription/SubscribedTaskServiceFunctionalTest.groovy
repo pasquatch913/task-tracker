@@ -96,7 +96,7 @@ class SubscribedTaskServiceFunctionalTest extends Specification {
         userSubscriptions.get(0).taskInstances.get(0).dueAt == LocalDate.now()
         userSubscriptions.get(1).taskInstances.get(0).dueAt >= LocalDate.now()
         userSubscriptions.get(2).taskInstances.get(1).dueAt == LocalDate.now()
-        instanceRepository.findAll().size() == 4
+        instanceRepository.findAll().size() == 5
     }
 
     def "retrieving task subscriptions works as expected"() {
@@ -122,7 +122,7 @@ class SubscribedTaskServiceFunctionalTest extends Specification {
 
         then:
         //new tasks generated
-        instanceRepository.findAll().size() == 4
+        instanceRepository.findAll().size() == 5
         // only 1 instance returned for each subscription
         result.findAll { n -> n.name == task1.name }.size() == 1
         result.findAll { n -> n.name == task2.name }.size() == 1

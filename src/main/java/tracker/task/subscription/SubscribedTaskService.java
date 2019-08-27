@@ -124,8 +124,10 @@ public class SubscribedTaskService {
     private Boolean noFutureTasks(TaskSubscriptionEntity subscription) {
         return subscription.getTaskInstances().isEmpty()
                 || subscription.getTaskInstances()
-                .get(subscription.getTaskInstances().size() - 1)
-                .getDueAt().isBefore(LocalDate.now());
+                .stream()
+                .filter(n -> !n.getDueAt().isBefore(LocalDate.now()))
+                .collect(Collectors.toList())
+                .size() >= 0;
     }
 
 }
