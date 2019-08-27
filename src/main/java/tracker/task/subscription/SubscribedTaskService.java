@@ -125,7 +125,10 @@ public class SubscribedTaskService {
         return subscription.getTaskInstances().isEmpty()
                 || subscription.getTaskInstances()
                 .stream()
-                .filter(n -> !n.getDueAt().isBefore(LocalDate.now()))
+                .filter(n -> !(
+                        n.getDueAt().isBefore(LocalDate.now()) ||
+                                n.getDueAt().isEqual(LocalDate.now())
+                ))
                 .collect(Collectors.toList())
                 .size() >= 0;
     }
