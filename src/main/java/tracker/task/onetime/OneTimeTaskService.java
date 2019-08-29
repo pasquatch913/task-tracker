@@ -3,6 +3,7 @@ package tracker.task.onetime;
 import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import tracker.task.analytics.TaskCompletionEntity;
 import tracker.task.mapper.TaskMapper;
 import tracker.user.UserEntity;
 import tracker.user.UserRepository;
@@ -49,6 +50,7 @@ public class OneTimeTaskService {
     public OneTimeTaskDTO updateOneTimeTaskCompletions(Integer id, Integer value) {
         OneTimeTaskInstanceEntity taskToUpdate = oneTimeTaskInstanceRepository.findById(id).get();
         taskToUpdate.setCompletions(value);
+        taskToUpdate.getTaskCompletions().add(new TaskCompletionEntity());
         oneTimeTaskInstanceRepository.save(taskToUpdate);
         return mapper.oneTimeTaskInstanceEntityToOneTimeTaskDTO(oneTimeTaskInstanceRepository.findById(id).get());
     }

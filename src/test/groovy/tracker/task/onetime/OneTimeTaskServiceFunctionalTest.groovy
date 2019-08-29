@@ -85,7 +85,7 @@ class OneTimeTaskServiceFunctionalTest extends Specification {
         result.size() == 2
     }
 
-    def "updates to one time task results in correct completion number"() {
+    def "updates to one time task results in correct completion number and create task completions"() {
         given:
         def taskToUpdate = oneTimeTaskInstanceRepository.findAllByName(task1.name).get(0)
 
@@ -94,6 +94,11 @@ class OneTimeTaskServiceFunctionalTest extends Specification {
 
         then:
         resultTask.completions == value
+
+        and:
+        oneTimeTaskInstanceRepository.findAllByName(task1.name).get(0).taskCompletions.every {
+            1 == 1
+        }
 
         where:
         value << [0, 2, 999, -2]
