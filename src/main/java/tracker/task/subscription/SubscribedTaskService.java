@@ -4,6 +4,7 @@ import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tracker.task.TaskInstanceDTO;
+import tracker.task.analytics.TaskCompletionEntity;
 import tracker.task.mapper.TaskMapper;
 import tracker.user.UserEntity;
 import tracker.user.UserRepository;
@@ -95,7 +96,21 @@ public class SubscribedTaskService {
 
     public void updateTaskInstanceCompletions(Integer id, Integer value) {
         TaskInstanceEntity taskToUpdate = taskInstanceRepository.findById(id).get();
-        taskToUpdate.setCompletions(value);
+
+        if (value > taskToUpdate.getCompletions()) {
+            taskToUpdate.setCompletions(value);
+            while (taskToUpdate.getTaskCompletions().size() < value) {
+                taskToUpdate.getTaskCompletions().add(new TaskCompletionEntity());
+            }
+        }
+        if (0 < value && value < taskToUpdate.getCompletions()) {
+            taskToUpdate.setCompletions(value);
+            while (taskToUpdate.getTaskCompletions().size() > value) {
+                TaskCompletionEntity lastElement = taskToUpdate.getTaskCompletions()
+                        .get(taskToUpdate.getTaskCompletions().size() - 1);
+                taskToUpdate.getTaskCompletions().remove(lastElement);
+            }
+        }
         taskInstanceRepository.save(taskToUpdate);
     }
 

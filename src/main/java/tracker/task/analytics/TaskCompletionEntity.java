@@ -16,7 +16,6 @@ public class TaskCompletionEntity {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "id", updatable = false, nullable = false)
     private Integer id;
-    @Basic(optional = false)
     @Column(name = "created_at")
     private LocalDateTime completionTime = LocalDateTime.now();
 

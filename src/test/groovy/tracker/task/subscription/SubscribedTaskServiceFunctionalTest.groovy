@@ -14,6 +14,7 @@ import tracker.user.UserService
 
 import javax.transaction.Transactional
 import java.time.LocalDate
+import java.time.LocalDateTime
 
 import static org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace.ANY
 
@@ -152,14 +153,51 @@ class SubscribedTaskServiceFunctionalTest extends Specification {
         given:
         def taskInstanceToUpdate = subscriptionRepository.findFirstByName(task1.name).get().taskInstances.get(0)
 
+        expect:
+        taskInstanceToUpdate.taskCompletions.size() == 0
+
         when:
-        service.updateTaskInstanceCompletions(taskInstanceToUpdate.id, value)
+        service.updateTaskInstanceCompletions(taskInstanceToUpdate.id, 4)
 
         then:
-        instanceRepository.findById(taskInstanceToUpdate.id).get().completions == value
+        def resultTask1 = instanceRepository.findById(taskInstanceToUpdate.id).get()
+        resultTask1.completions == 4
+        resultTask1.taskCompletions.size() == 4
+        resultTask1.taskCompletions.every {
+            it ->
+                it.completionTime.isBefore(LocalDateTime.now()) &&
+                        it.completionTime.isAfter(LocalDateTime.now().minusMinutes(5))
+        }
 
-        where:
-        value << [3, 300, -3, 0]
+        when:
+        service.updateTaskInstanceCompletions(taskInstanceToUpdate.id, 1)
+
+        then:
+        def resultTask2 = instanceRepository.findById(taskInstanceToUpdate.id).get()
+        resultTask2.completions == 1
+        def secondTaskCompletionsList = resultTask2.taskCompletions
+        secondTaskCompletionsList.size() == 1
+        secondTaskCompletionsList.get(0).completionTime.isBefore(LocalDateTime.now()) &&
+                secondTaskCompletionsList.get(0).completionTime.isAfter(LocalDateTime.now().minusMinutes(5))
+
+        when:
+        service.updateTaskInstanceCompletions(taskInstanceToUpdate.id, 1)
+
+        then:
+        def resultTask3 = instanceRepository.findById(taskInstanceToUpdate.id).get()
+        resultTask3.completions == 1
+        def thirdTaskCompletionsList = resultTask2.taskCompletions
+        thirdTaskCompletionsList.size() == 1
+        thirdTaskCompletionsList.get(0).completionTime.isBefore(LocalDateTime.now()) &&
+                secondTaskCompletionsList.get(0).completionTime.isAfter(LocalDateTime.now().minusMinutes(5))
+
+        when:
+        service.updateTaskInstanceCompletions(taskInstanceToUpdate.id, -5)
+
+        then:
+        def resultTask4 = instanceRepository.findById(taskInstanceToUpdate.id).get()
+        resultTask4.completions == 1
+        resultTask4.taskCompletions.size() == 1
     }
 
 }
