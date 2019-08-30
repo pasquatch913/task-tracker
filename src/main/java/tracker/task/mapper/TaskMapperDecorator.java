@@ -1,7 +1,10 @@
 package tracker.task.mapper;
 
 import tracker.task.TaskInstanceDTO;
+import tracker.task.subscription.TaskInstanceEntity;
 import tracker.task.subscription.TaskSubscriptionEntity;
+
+import java.util.Collections;
 
 public abstract class TaskMapperDecorator implements TaskMapper {
 
@@ -14,15 +17,10 @@ public abstract class TaskMapperDecorator implements TaskMapper {
     @Override
     public TaskInstanceDTO taskSubscriptionEntityToTaskInstanceDTO(TaskSubscriptionEntity taskSubscription) {
         TaskInstanceDTO taskInstanceDTO = mapper.taskSubscriptionEntityToTaskInstanceDTO(taskSubscription);
-        taskInstanceDTO.setDueDate(taskSubscription.getTaskInstances()
-                .get(taskSubscription.getTaskInstances().size() - 1)
-                .getDueAt());
-        taskInstanceDTO.setCompletions(taskSubscription.getTaskInstances()
-                .get(taskSubscription.getTaskInstances().size() - 1)
-                .getCompletions());
-        taskInstanceDTO.setTaskInstanceId(taskSubscription.getTaskInstances()
-                .get(taskSubscription.getTaskInstances().size() - 1)
-                .getId());
+        TaskInstanceEntity latestTaskInstance = Collections.max(taskSubscription.getTaskInstances(), new TaskInstanceComparator());
+        taskInstanceDTO.setDueDate(latestTaskInstance.getDueAt());
+        taskInstanceDTO.setCompletions(latestTaskInstance.getCompletions());
+        taskInstanceDTO.setTaskInstanceId(latestTaskInstance.getId());
         return taskInstanceDTO;
     }
 
