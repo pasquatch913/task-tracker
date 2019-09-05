@@ -57,12 +57,21 @@ public class SubscribedTaskService {
         }
         if (task.getPeriod() != null) {
             userTaskSubscription.setPeriod(task.getPeriod());
+            List<TaskInstanceEntity> listOfTasks = userTaskSubscription.getTaskInstances();
+            TaskInstanceEntity currentInstance = listOfTasks.get(listOfTasks.size() - 1);
+            updateTaskInstanceDueDate(currentInstance, task.getPeriod());
         }
         if (task.getActive() == Boolean.FALSE) {
             userTaskSubscription.setActive(Boolean.FALSE);
         }
         taskSubscriptionRepository.save(userTaskSubscription);
         return mapper.taskSubscriptionEntityToTaskSubscriptionDTO(userTaskSubscription);
+    }
+
+    private TaskInstanceEntity updateTaskInstanceDueDate(TaskInstanceEntity currentInstance, TaskPeriod newPeriod) {
+        currentInstance.setDueAt(dueDateForNextInstance(newPeriod));
+        taskInstanceRepository.save(currentInstance);
+        return currentInstance;
     }
 
     public List<TaskSubscriptionDTO> returnTaskSubscriptionsForUser(UserEntity user) {
@@ -140,7 +149,7 @@ public class SubscribedTaskService {
     }
 
     private void generateNewInstanceForPeriod(TaskSubscriptionEntity taskSubscriptionEntity) {
-        LocalDate nextDueDate = dueDateForNextInstance(taskSubscriptionEntity);
+        LocalDate nextDueDate = dueDateForNextInstance(taskSubscriptionEntity.getPeriod());
         TaskInstanceEntity newTaskInstance = new TaskInstanceEntity(nextDueDate);
 
         taskInstanceRepository.save(newTaskInstance);
@@ -148,8 +157,8 @@ public class SubscribedTaskService {
         taskSubscriptionRepository.save(taskSubscriptionEntity);
     }
 
-    private LocalDate dueDateForNextInstance(TaskSubscriptionEntity subscriptionEntity) {
-        switch (subscriptionEntity.getPeriod()) {
+    private LocalDate dueDateForNextInstance(TaskPeriod period) {
+        switch (period) {
             case DAILY:
                 return LocalDate.now();
             case WEEKLY:

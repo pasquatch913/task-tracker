@@ -129,26 +129,19 @@ class SubscribedTaskServiceSpec extends Specification {
         then:
         1 * mockSubscriptionRepo.findById(updateReq.id) >> Optional.of(subscription)
         1 * mockSubscriptionRepo.save(_)
+        numberInstanceUpdates * mockInstanceRepo.save(_)
         result == expectedResult
 
         where:
-        name          | completionsGoal | weight | period | active || expectedResult
-        null          | null            | null   | null   | null   || new TaskSubscriptionDTO(id: 1, name: "my old task", period: DAILY, weight: 2, necessaryCompletions: 4, active: true)
-        null          | null            | null   | null   | false  || new TaskSubscriptionDTO(id: 1, name: "my old task", period: DAILY, weight: 2, necessaryCompletions: 4, active: false)
-        "my new name" | null            | 57     | null   | null   || new TaskSubscriptionDTO(id: 1, name: "my new name", period: DAILY, weight: 57, necessaryCompletions: 4, active: true)
-        "all"         | 1               | 1      | WEEKLY | null   || new TaskSubscriptionDTO(id: 1, name: "all", period: WEEKLY, weight: 1, necessaryCompletions: 1, active: true)
-
+        name          | completionsGoal | weight | period | active || numberInstanceUpdates | expectedResult
+        null          | null            | null   | null   | null   || 0                     | new TaskSubscriptionDTO(id: 1, name: "my old task", period: DAILY, weight: 2, necessaryCompletions: 4, active: true)
+        null          | null            | null   | null   | false  || 0                     | new TaskSubscriptionDTO(id: 1, name: "my old task", period: DAILY, weight: 2, necessaryCompletions: 4, active: false)
+        "my new name" | null            | 57     | null   | null   || 0                     | new TaskSubscriptionDTO(id: 1, name: "my new name", period: DAILY, weight: 57, necessaryCompletions: 4, active: true)
+        "all"         | 1               | 1      | WEEKLY | null   || 1                     | new TaskSubscriptionDTO(id: 1, name: "all", period: WEEKLY, weight: 1, necessaryCompletions: 1, active: true)
     }
 
     def "updates to nonexistent subscriptions throw exception"() {
         given:
-        def taskSubscription1 = new TaskSubscriptionEntity(id: 1,
-                name: "my old task",
-                period: DAILY,
-                weight: 2,
-                necessaryCompletions: 4,
-                active: true,
-                taskInstances: [new TaskInstanceEntity(dueAt: LocalDate.now().minusDays(3))])
         def taskUpdateRequest = new TaskSubscriptionDTO(id: 999,
                 name: "my old task",
                 necessaryCompletions: 3,
