@@ -48,7 +48,7 @@ class SubscribedTaskServiceSpec extends Specification {
         def taskSubscription = new TaskSubscriptionEntity(id: 1, name: "my task", period: period, weight: 2, taskInstances: [])
 
         when:
-        def result = service.dueDateForNextInstance(taskSubscription)
+        def result = service.dueDateForNextInstance(taskSubscription.period)
         then:
         result == expected
 
