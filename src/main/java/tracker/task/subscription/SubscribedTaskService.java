@@ -42,7 +42,6 @@ public class SubscribedTaskService {
     }
 
     // TODO: use as deactivate endpoint?
-    // need to handle cascading update on current task instance
     public TaskSubscriptionDTO updateTask(TaskSubscriptionDTO task) {
         TaskSubscriptionEntity userTaskSubscription = taskSubscriptionRepository.findById(task.getId())
                 .orElseThrow(EntityNotFoundException::new);

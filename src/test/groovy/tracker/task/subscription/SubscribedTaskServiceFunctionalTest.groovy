@@ -13,8 +13,10 @@ import tracker.user.UserRolesEntity
 import tracker.user.UserService
 
 import javax.transaction.Transactional
+import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.LocalDateTime
+import java.time.temporal.TemporalAdjusters
 
 import static org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace.ANY
 
@@ -43,7 +45,9 @@ class SubscribedTaskServiceFunctionalTest extends Specification {
             period: TaskPeriod.DAILY,
             weight: 3,
             necessaryCompletions: 3,
-            taskInstances: [new TaskInstanceEntity(dueAt: LocalDate.now())])
+            taskInstances: [
+                    new TaskInstanceEntity(dueAt: LocalDate.now().minusDays(1)),
+                    new TaskInstanceEntity(dueAt: LocalDate.now())])
     def task2 = new TaskSubscriptionEntity(name: "my new weekly task",
             period: TaskPeriod.WEEKLY,
             weight: 2,
@@ -99,12 +103,12 @@ class SubscribedTaskServiceFunctionalTest extends Specification {
         def userSubscriptions = userRepository.findByUsername("me").get().getTaskSubscriptions()
 
         then:
-        userSubscriptions.get(0).taskInstances.get(0).dueAt == LocalDate.now()
+        userSubscriptions.get(0).taskInstances.get(1).dueAt == LocalDate.now()
         userSubscriptions.get(1).taskInstances.get(0).dueAt >= LocalDate.now()
         userSubscriptions.get(2).taskInstances.get(1).dueAt == LocalDate.now()
         userSubscriptions.get(3).taskInstances.size() == 1 &&
                 userSubscriptions.get(3).taskInstances.get(0).dueAt == LocalDate.now()
-        instanceRepository.findAll().size() == 5
+        instanceRepository.findAll().size() == 6
     }
 
     def "retrieving task subscriptions works as expected"() {
@@ -118,7 +122,7 @@ class SubscribedTaskServiceFunctionalTest extends Specification {
         result.get(0).name == task1.name
         result.get(1).name == task2.name
         result.get(2).name == task3.name
-        instanceRepository.findAll().size() == 3
+        instanceRepository.findAll().size() == 4
     }
 
     def "retrieving task instances works as expected"() {
@@ -130,7 +134,7 @@ class SubscribedTaskServiceFunctionalTest extends Specification {
 
         then:
         //new tasks generated
-        instanceRepository.findAll().size() == 5
+        instanceRepository.findAll().size() == 6
         // only 1 instance returned for each subscription
         result.findAll { n -> n.name == task1.name }.size() == 1
         result.findAll { n -> n.name == task2.name }.size() == 1
@@ -200,4 +204,37 @@ class SubscribedTaskServiceFunctionalTest extends Specification {
         resultTask4.taskCompletions.size() == 1
     }
 
+
+    def "Updates to subscription details result in update to instance due date"() {
+        given:
+        def taskId = subscriptionRepository.findFirstByName(task1.name).get().id
+        def taskUpdateRequest = new TaskSubscriptionDTO(id: taskId,
+                name: "new task name",
+                period: TaskPeriod.MONTHLY)
+        def nextUpdateRequest = new TaskSubscriptionDTO(id: taskId,
+                name: "newer task name",
+                period: TaskPeriod.WEEKLY)
+
+        when:
+        service.updateTask(taskUpdateRequest)
+
+        then:
+        def subscription = subscriptionRepository.findById(taskId).get()
+        subscription.name == taskUpdateRequest.name
+        subscription.period == taskUpdateRequest.period
+        def newDueDate = subscription.taskInstances.last().dueAt
+        // below condition gives meaningless affirmation on the last day of each month
+        newDueDate != LocalDate.now() || LocalDate.now() == LocalDate.now().withDayOfMonth(LocalDate.now().lengthOfMonth())
+
+        when:
+        service.updateTask(nextUpdateRequest)
+
+        then:
+        def subscription2 = subscriptionRepository.findById(taskId).get()
+        subscription2.name == nextUpdateRequest.name
+        subscription2.period == nextUpdateRequest.period
+        def newDueDate2 = subscription.taskInstances.last().dueAt
+        // below condition gives meaningless affirmation if the last day of the week is also today and the last day of the month
+        newDueDate2 != LocalDate.now() || LocalDate.now().with(TemporalAdjusters.nextOrSame(DayOfWeek.SATURDAY))
+    }
 }
