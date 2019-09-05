@@ -8,6 +8,7 @@ import tracker.task.mapper.TaskMapper;
 import tracker.user.UserEntity;
 import tracker.user.UserRepository;
 import tracker.user.UserService;
+import tracker.web.EntityNotFoundException;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -37,6 +38,30 @@ public class SubscribedTaskService {
         UserEntity user = userService.getUser();
         user.getTaskSubscriptions().add(taskSubscriptionEntity);
         userRepository.save(user);
+    }
+
+    // TODO: use as deactivate endpoint?
+    // need to handle cascading update on current task instance
+    public TaskSubscriptionDTO updateTask(TaskSubscriptionDTO task) {
+        TaskSubscriptionEntity userTaskSubscription = taskSubscriptionRepository.findById(task.getId())
+                .orElseThrow(EntityNotFoundException::new);
+        if (task.getName() != null) {
+            userTaskSubscription.setName(task.getName());
+        }
+        if (task.getNecessaryCompletions() != null) {
+            userTaskSubscription.setNecessaryCompletions(task.getNecessaryCompletions());
+        }
+        if (task.getWeight() != null) {
+            userTaskSubscription.setWeight(task.getWeight());
+        }
+        if (task.getPeriod() != null) {
+            userTaskSubscription.setPeriod(task.getPeriod());
+        }
+        if (task.getActive() == Boolean.FALSE) {
+            userTaskSubscription.setActive(Boolean.FALSE);
+        }
+        taskSubscriptionRepository.save(userTaskSubscription);
+        return mapper.taskSubscriptionEntityToTaskSubscriptionDTO(userTaskSubscription);
     }
 
     public List<TaskSubscriptionDTO> returnTaskSubscriptionsForUser(UserEntity user) {
