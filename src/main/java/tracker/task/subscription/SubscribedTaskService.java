@@ -17,6 +17,8 @@ import java.time.temporal.TemporalAdjusters;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static java.lang.Boolean.FALSE;
+
 @Service
 public class SubscribedTaskService {
 
@@ -41,7 +43,6 @@ public class SubscribedTaskService {
         userRepository.save(user);
     }
 
-    // TODO: use as deactivate endpoint?
     public TaskSubscriptionDTO updateTask(TaskSubscriptionDTO task) {
         TaskSubscriptionEntity userTaskSubscription = taskSubscriptionRepository.findById(task.getId())
                 .orElseThrow(EntityNotFoundException::new);
@@ -60,8 +61,8 @@ public class SubscribedTaskService {
             TaskInstanceEntity currentInstance = listOfTasks.get(listOfTasks.size() - 1);
             updateTaskInstanceDueDate(currentInstance, task.getPeriod());
         }
-        if (task.getActive() == Boolean.FALSE) {
-            userTaskSubscription.setActive(Boolean.FALSE);
+        if (task.getActive() == FALSE) {
+            userTaskSubscription.setActive(FALSE);
         }
         taskSubscriptionRepository.save(userTaskSubscription);
         return mapper.taskSubscriptionEntityToTaskSubscriptionDTO(userTaskSubscription);
