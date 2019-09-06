@@ -8,9 +8,12 @@ import tracker.task.mapper.TaskMapper;
 import tracker.user.UserEntity;
 import tracker.user.UserRepository;
 import tracker.user.UserService;
+import tracker.web.EntityNotFoundException;
 
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static java.lang.Boolean.FALSE;
 
 @Service
 public class OneTimeTaskService {
@@ -39,6 +42,28 @@ public class OneTimeTaskService {
                 .map(mapper::oneTimeTaskInstanceEntityToOneTimeTaskDTO)
                 .collect(Collectors.toList());
         return tasks;
+    }
+
+    public OneTimeTaskDTO updateOneTimeTask(OneTimeTaskDTO task) {
+        OneTimeTaskInstanceEntity userTask = oneTimeTaskInstanceRepository.findById(task.getId())
+                .orElseThrow(EntityNotFoundException::new);
+        if (task.getName() != null && !task.getName().isEmpty()) {
+            userTask.setName(task.getName());
+        }
+        if (task.getNecessaryCompletions() != null) {
+            userTask.setNecessaryCompletions(task.getNecessaryCompletions());
+        }
+        if (task.getWeight() != null) {
+            userTask.setWeight(task.getWeight());
+        }
+        if (task.getDueDate() != null) {
+            userTask.setDueDate(task.getDueDate());
+        }
+        if (task.getActive() == FALSE) {
+            userTask.setActive(FALSE);
+        }
+        oneTimeTaskInstanceRepository.save(userTask);
+        return mapper.oneTimeTaskInstanceEntityToOneTimeTaskDTO(userTask);
     }
 
     public Boolean verifyOneTimeTask(UserEntity user, Integer taskId) {
