@@ -2,12 +2,14 @@ package tracker.task.subscription
 
 import spock.lang.Specification
 import spock.lang.Subject
+import tracker.task.analytics.TaskCompletionEntity
 import tracker.user.UserEntity
 import tracker.user.UserRepository
 import tracker.user.UserService
 import tracker.web.EntityNotFoundException
 
 import java.time.LocalDate
+import java.time.LocalDateTime
 
 import static tracker.task.subscription.TaskPeriod.*
 
@@ -157,6 +159,28 @@ class SubscribedTaskServiceSpec extends Specification {
         1 * mockSubscriptionRepo.findById(taskUpdateRequest.id) >> Optional.empty()
         0 * mockSubscriptionRepo.save(_)
         thrown(EntityNotFoundException)
+    }
+
+    def "getting completion data for a user returns a merged list of their completions"() {
+        given:
+        def taskCompletion1 = new TaskCompletionEntity(id: 1, completionTime: LocalDateTime.now().minusDays(1))
+        def taskCompletion2 = new TaskCompletionEntity(id: 2, completionTime: LocalDateTime.now())
+        def taskCompletion3 = new TaskCompletionEntity(id: 3, completionTime: LocalDateTime.now())
+        def taskCompletion4 = new TaskCompletionEntity(id: 3, completionTime: LocalDateTime.now())
+        def taskinstance1 = new TaskInstanceEntity(taskCompletions: [taskCompletion1, taskCompletion2])
+        def taskinstance2 = new TaskInstanceEntity(taskCompletions: [taskCompletion3])
+        def taskinstance3 = new TaskInstanceEntity(taskCompletions: [taskCompletion4])
+        def subscription1 = new TaskSubscriptionEntity(name: "my first task", weight: 2, taskInstances: [taskinstance1])
+        def subscription2 = new TaskSubscriptionEntity(name: "my second task", weight: 3, taskInstances: [taskinstance2, taskinstance3])
+        def user = new UserEntity(taskSubscriptions: [subscription1, subscription2])
+
+        when:
+        def result = service.datapointsForUser(user)
+        then:
+        result.size() == 4
+        result.findAll { it -> it.name == subscription1.name }.size() == 2
+        result.findAll { it -> it.name == subscription2.name }.size() == 2
+
     }
 
 }

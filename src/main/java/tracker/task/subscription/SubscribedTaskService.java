@@ -5,6 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tracker.task.TaskInstanceDTO;
 import tracker.task.analytics.TaskCompletionEntity;
+import tracker.task.analytics.TaskDataPointDTO;
+import tracker.task.mapper.AnalyticsMapper;
 import tracker.task.mapper.TaskMapper;
 import tracker.user.UserEntity;
 import tracker.user.UserRepository;
@@ -36,11 +38,20 @@ public class SubscribedTaskService {
 
     TaskMapper mapper = Mappers.getMapper(TaskMapper.class);
 
+    AnalyticsMapper analyticsMapper = new AnalyticsMapper();
+
     public void newTask(TaskSubscriptionDTO task) {
         TaskSubscriptionEntity taskSubscriptionEntity = mapper.taskSubscriptionDTOToTaskSubscriptionEntity(task);
         UserEntity user = userService.getUser();
         user.getTaskSubscriptions().add(taskSubscriptionEntity);
         userRepository.save(user);
+    }
+
+    public List<TaskDataPointDTO> datapointsForUser(UserEntity user) {
+        return user.getTaskSubscriptions().stream()
+                .flatMap(n -> analyticsMapper.subscriptionToDataPoints(n)
+                        .stream())
+                .collect(Collectors.toList());
     }
 
     public TaskSubscriptionDTO updateTask(TaskSubscriptionDTO task) {
@@ -66,12 +77,6 @@ public class SubscribedTaskService {
         }
         taskSubscriptionRepository.save(userTaskSubscription);
         return mapper.taskSubscriptionEntityToTaskSubscriptionDTO(userTaskSubscription);
-    }
-
-    private TaskInstanceEntity updateTaskInstanceDueDate(TaskInstanceEntity currentInstance, TaskPeriod newPeriod) {
-        currentInstance.setDueAt(dueDateForNextInstance(newPeriod));
-        taskInstanceRepository.save(currentInstance);
-        return currentInstance;
     }
 
     public List<TaskSubscriptionDTO> returnTaskSubscriptionsForUser(UserEntity user) {
@@ -127,13 +132,6 @@ public class SubscribedTaskService {
                 .collect(Collectors.toList());
     }
 
-    private List<TaskSubscriptionEntity> getActiveSubscriptions(UserEntity user) {
-        return user.getTaskSubscriptions()
-                .stream()
-                .filter(TaskSubscriptionEntity::getActive)
-                .collect(Collectors.toList());
-    }
-
     public void updateTaskInstanceCompletions(Integer id, Integer value) {
         TaskInstanceEntity taskToUpdate = taskInstanceRepository.findById(id).get();
 
@@ -152,6 +150,19 @@ public class SubscribedTaskService {
             }
         }
         taskInstanceRepository.save(taskToUpdate);
+    }
+
+    private List<TaskSubscriptionEntity> getActiveSubscriptions(UserEntity user) {
+        return user.getTaskSubscriptions()
+                .stream()
+                .filter(TaskSubscriptionEntity::getActive)
+                .collect(Collectors.toList());
+    }
+
+    private TaskInstanceEntity updateTaskInstanceDueDate(TaskInstanceEntity currentInstance, TaskPeriod newPeriod) {
+        currentInstance.setDueAt(dueDateForNextInstance(newPeriod));
+        taskInstanceRepository.save(currentInstance);
+        return currentInstance;
     }
 
     private void generateNewInstanceForPeriod(TaskSubscriptionEntity taskSubscriptionEntity) {
