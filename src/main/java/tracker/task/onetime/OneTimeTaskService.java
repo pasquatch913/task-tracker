@@ -44,6 +44,12 @@ public class OneTimeTaskService {
         return tasks;
     }
 
+    public OneTimeTaskDTO getOneTimeTaskById(Integer taskId) {
+        return oneTimeTaskInstanceRepository.findById(taskId)
+                .map(mapper::oneTimeTaskInstanceEntityToOneTimeTaskDTO)
+                .orElseThrow(EntityNotFoundException::new);
+    }
+
     public OneTimeTaskDTO updateOneTimeTask(OneTimeTaskDTO task) {
         OneTimeTaskInstanceEntity userTask = oneTimeTaskInstanceRepository.findById(task.getId())
                 .orElseThrow(EntityNotFoundException::new);

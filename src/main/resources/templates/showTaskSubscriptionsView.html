@@ -28,10 +28,6 @@
                 <td>
                     <a th:href="'/web/subscriptions/updateTask/' + ${element.id}" class="btn table-buttons">Edit Task
                         Subscription</a>
-                    <!--<button class="btn table-buttons" th:id="'completeTaskSubscription' + ${element.id}"-->
-                    <!--th:onclick="'completeTaskSubscription(' + ${element.id} + ')'">-->
-                    <!--Unsubscribe from periodic task-->
-                    <!--</button>-->
                 </td>
             </div>
         </tr>
@@ -47,10 +43,8 @@
                 <td class="table-data" th:text="${element.weight}"></td>
                 <td class="table-data" th:text="${element.necessaryCompletions}"></td>
                 <td>
-                    <button class="btn table-buttons" th:id="'completeOneTime' + ${element.id}"
-                            th:onclick="'completeOneTime(' + ${element.id} + ')'">
-                        Complete one-time task
-                    </button>
+                    <a th:href="'/web/oneTimes/updateTask/' + ${element.id}" class="btn table-buttons">Edit one-time
+                        task</a>
                 </td>
             </div>
         </tr>

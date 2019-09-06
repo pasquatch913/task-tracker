@@ -3,6 +3,7 @@ package tracker.task.onetime;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import tracker.user.UserEntity;
 import tracker.user.UserService;
@@ -26,6 +27,18 @@ public class OneTimeTaskController {
         oneTimeTaskService.newOneTimeTask(oneTimeTask);
 
         return "redirect:/web/showTaskInstances";
+    }
+
+    @GetMapping(value = "/updateTask/{taskId}")
+    public String updateTaskView(Model model, @PathVariable Integer taskId) {
+        model.addAttribute("task", oneTimeTaskService.getOneTimeTaskById(taskId));
+        return "updateOneTimeTaskView";
+    }
+
+    @PostMapping(value = "/updateTask")
+    public String updateTask(@ModelAttribute("updateOneTimeTaskRequest") OneTimeTaskDTO updateTaskRequest) {
+        oneTimeTaskService.updateOneTimeTask(updateTaskRequest);
+        return "redirect:/web/showTaskSubscriptions";
     }
 
     @PostMapping(value = "/{id}/completions/{value}")

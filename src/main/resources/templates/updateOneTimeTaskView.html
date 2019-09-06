@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      layout:decorate="~{fragments/layout}">
+<head>
+    <title>Update One Time Task Details</title>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta th:name="_csrf" th:content="${_csrf.token}"/>
+    <meta th:name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <script type="text/javascript" th:src="@{~/js/TaskSubscriptions.js}"></script>
+</head>
+<body>
+<div layout:fragment="content" th:remove="tag">
+    <fieldset>
+        <legend th:text="'Update one time task ' + ${task.name}"></legend>
+        <form modelAttribute="updateOneTimeTaskRequest" action="/web/oneTimes/updateTask" method="post">
+            <input
+                    type="hidden"
+                    th:name="${_csrf.parameterName}"
+                    th:value="${_csrf.token}"/>
+            <input
+                    type="hidden"
+                    th:name="id"
+                    th:value="${task.id}"/>
+
+            <div class="row">
+                <label for="changeName" class="col-md-6">Update task name?</label>
+                <input id="changeName" class="col-md-3 form-control" name="changeName" type="checkbox">
+            </div>
+            <div class="row" id="changeNameInput">
+                <label class="col-md-3" for="name">Name:
+                </label>
+                <input type="text" class="form-control col-md-9" id="name" name="name"
+                       th:placeholder="${task.name}">
+                <span></span>
+            </div>
+
+            <div class="row">
+                <label for="changePeriod" class="col-md-6">Update task due date?</label>
+                <input id="changePeriod" class="col-md-3 form-control" name="changePeriod" type="checkbox">
+            </div>
+            <div id="changePeriodInput">
+                <div class="row">What is the new due date for the task?</div>
+                <div class="row">
+                    <label class="col-md-9" for="date-select">By which day should the task be completed?</label>
+                    <input id="date-select" class="form-control col-md-3" type="date" name="dueDate"/>
+                </div>
+            </div>
+
+            <div class="row">
+                <label for="changeWeight" class="col-md-6">Update task weight?</label>
+                <input id="changeWeight" class="col-md-3 form-control" name="changeWeight" type="checkbox">
+            </div>
+            <div class="row" id="changeWeightInput">
+                <label class="col-md-3" for="weight">Weight:
+                </label>
+                <input type="text" class="form-control col-md-9" id="weight" name="weight"
+                       th:placeholder="${task.weight}">
+                <span></span>
+            </div>
+
+            <div class="row">
+                <label for="changeGoal" class="col-md-6">Update task completion goal?</label>
+                <input id="changeGoal" class="col-md-3 form-control" name="changeGoal" type="checkbox">
+            </div>
+            <div class="row" id="changeGoalInput">
+                <label class="col-md-3" for="weight">Completion goal:
+                </label>
+                <input type="text" class="form-control col-md-9" id="necessaryCompletions" name="necessaryCompletions"
+                       th:placeholder="${task.necessaryCompletions}">
+                <span></span>
+            </div>
+
+            <div class="row">
+                <label for="changeActive" class="col-md-6">Change task active status?</label>
+                <input id="changeActive" class="col-md-3 form-control" name="changeActive" type="checkbox">
+            </div>
+            <div id="changeActiveInput">
+                <div class="row">Select deactivate to remove task from view</div>
+                <div id="active" class="row">
+                    <div class="btn-group-vertical" style="margin-left:200px">
+                        <div class="row">
+                            <input id="active-option-true" type="radio" name="active" th:value="true" checked/>
+                            <label for="active-option-true">active</label>
+                        </div>
+                        <div class="row">
+                            <input id="active-option-false" type="radio" name="active" th:value="false"/>
+                            <label for="active-option-false">deactivate</label>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+
+            <div>
+                <input type="submit" class="submit btn btn-info app-buttons" value="Update"/>
+            </div>
+
+
+        </form>
+    </fieldset>
+</div>
+</body>
