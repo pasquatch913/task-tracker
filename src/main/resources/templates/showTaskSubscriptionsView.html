@@ -26,10 +26,12 @@
                 <td class="table-data" th:text="${element.weight}"></td>
                 <td class="table-data" th:text="${element.necessaryCompletions}"></td>
                 <td>
-                    <button class="btn table-buttons" th:id="'completeTaskSubscription' + ${element.id}"
-                            th:onclick="'completeTaskSubscription(' + ${element.id} + ')'">
-                        Unsubscribe from periodic task
-                    </button>
+                    <a th:href="'/web/subscriptions/updateTask/' + ${element.id}" class="btn table-buttons">Edit Task
+                        Subscription</a>
+                    <!--<button class="btn table-buttons" th:id="'completeTaskSubscription' + ${element.id}"-->
+                    <!--th:onclick="'completeTaskSubscription(' + ${element.id} + ')'">-->
+                    <!--Unsubscribe from periodic task-->
+                    <!--</button>-->
                 </td>
             </div>
         </tr>

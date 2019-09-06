@@ -27,6 +27,19 @@ public class SubscribedTaskController {
         return "newTaskSubscriptionView";
     }
 
+    @GetMapping(value = "/updateTask/{subscriptionId}")
+    public String updateTaskView(Model model, @PathVariable Integer subscriptionId) {
+        model.addAttribute("periods", Arrays.asList(TaskPeriod.values()));
+        model.addAttribute("subscription", subscribedTaskService.getTaskSubscriptionById(subscriptionId));
+        return "updateTaskSubscriptionView";
+    }
+
+    @PostMapping(value = "/updateTask")
+    public String updateTask(@ModelAttribute("updateTaskSubscriptionRequest") TaskSubscriptionDTO updateTaskSubscriptionRequest) {
+        subscribedTaskService.updateTask(updateTaskSubscriptionRequest);
+        return "redirect:/web/showTaskSubscriptions";
+    }
+
     @PostMapping(value = "/newTask")
     public String addTaskSubscription(@ModelAttribute("newTaskSubscription") TaskSubscriptionDTO subscription) {
         subscribedTaskService.newTask(subscription);

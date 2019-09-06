@@ -45,7 +45,7 @@ public class SubscribedTaskService {
     public TaskSubscriptionDTO updateTask(TaskSubscriptionDTO task) {
         TaskSubscriptionEntity userTaskSubscription = taskSubscriptionRepository.findById(task.getId())
                 .orElseThrow(EntityNotFoundException::new);
-        if (task.getName() != null) {
+        if (task.getName() != null && !task.getName().isEmpty()) {
             userTaskSubscription.setName(task.getName());
         }
         if (task.getNecessaryCompletions() != null) {
@@ -78,6 +78,12 @@ public class SubscribedTaskService {
         return tasks.stream()
                 .map(mapper::taskSubscriptionEntityToTaskSubscriptionDTO)
                 .collect(Collectors.toList());
+    }
+
+    public TaskSubscriptionDTO getTaskSubscriptionById(Integer id) {
+        return taskSubscriptionRepository.findById(id)
+                .map(mapper::taskSubscriptionEntityToTaskSubscriptionDTO)
+                .orElseThrow(EntityNotFoundException::new);
     }
 
     public List<TaskInstanceDTO> returnTaskInstancesForUser(UserEntity user) {
