@@ -40,9 +40,9 @@
                 <label for="changePeriod" class="col-md-6">Update task subscription period?</label>
                 <input id="changePeriod" class="col-md-3 form-control" name="changePeriod" type="checkbox">
             </div>
-            <div class="row" id="changePeriodInput">
-                <label for="period">On what schedule should the task recur?</label>
-                <div style="margin-left:200px">
+            <div id="changePeriodInput">
+                <div class="row">On what schedule should the task recur?</div>
+                <div class="row btn-group-vertical" style="margin-left:200px">
                     <div id="period" th:each="period : ${periods}">
                         <input th:id="'period-option' + ${period}" type="radio" name="period" th:value="${period}"/>
                         <label th:for="'period-option' + ${period}" th:text="| &nbsp; ${period} |">Something is wrong
@@ -79,17 +79,19 @@
                 <label for="changeActive" class="col-md-6">Change task subscription status?</label>
                 <input id="changeActive" class="col-md-3 form-control" name="changeActive" type="checkbox">
             </div>
-            <div class="row" id="changeActiveInput">
+            <div id="changeActiveInput">
                 <div class="row">Select deactivate to unsubscribe from task</div>
                 <div id="active" class="row">
-                    <div class="row">
-                        <input th:id="'period-option-true'" type="radio" name="active" th:value="true" checked/>
-                        <label th:for="'period-option-true'" th:text="| &nbsp; active |">Something is wrong
-                            !</label>
+                    <div class="btn-group-vertical" style="margin-left:200px">
+                        <div class="row">
+                            <input id="active-option-true" type="radio" name="active" th:value="true" checked/>
+                            <label for="active-option-true">active</label>
+                        </div>
+                        <div class="row">
+                            <input id="active-option-false" type="radio" name="active" th:value="false"/>
+                            <label for="active-option-false">deactivate</label>
+                        </div>
 
-                        <input th:id="'period-option-false'" type="radio" name="active" th:value="false"/>
-                        <label th:for="'period-option-false'" th:text="| &nbsp; deactivate |">Something is wrong
-                            !</label>
                     </div>
                 </div>
             </div>
