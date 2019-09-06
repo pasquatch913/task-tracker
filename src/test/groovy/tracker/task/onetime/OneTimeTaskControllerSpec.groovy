@@ -9,6 +9,7 @@ import tracker.user.UserService
 
 import java.time.LocalDate
 
+import static java.lang.Boolean.TRUE
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
@@ -61,6 +62,38 @@ class OneTimeTaskControllerSpec extends Specification {
         then:
         1 * mockOneTimeService.newOneTimeTask(request)
         model.get("newOneTimeTask").name == request.name
+    }
+
+    def "requests for the update subscription details page return the update view"() {
+        given:
+        def taskId = 3
+        when:
+        def response = mockMvc.perform(get("${baseURL}updateTask/${taskId}"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("updateOneTimeTaskView"))
+                .andReturn()
+        def model = response.modelAndView.model
+
+        then:
+        1 * mockOneTimeService.getOneTimeTaskById(_) >> new OneTimeTaskDTO(id: taskId)
+        model.get("task").id == taskId
+    }
+
+    def "requests to update task subscription details result in service method calls"() {
+        given:
+        def requestParams = ['id': 1, 'name': "my updated name"]
+
+        when:
+        mockMvc.perform(
+                post("${baseURL}/updateTask")
+                        .param("id", requestParams.get("id").toString())
+                        .param("name", requestParams.get("name"))
+        )
+                .andExpect(status().isFound())
+                .andReturn()
+
+        then:
+        1 * mockOneTimeService.updateOneTimeTask(new OneTimeTaskDTO(id: requestParams.id, name: requestParams.name, active: TRUE))
     }
 
     def "requests to update one time task completions result in service method calls"() {
