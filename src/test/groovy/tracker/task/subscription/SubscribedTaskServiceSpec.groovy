@@ -2,14 +2,17 @@ package tracker.task.subscription
 
 import spock.lang.Specification
 import spock.lang.Subject
-import tracker.task.analytics.TaskCompletionEntity
+import spock.lang.Unroll
+import tracker.task.analytics.TaskDataPointEntity
 import tracker.user.UserEntity
 import tracker.user.UserRepository
 import tracker.user.UserService
 import tracker.web.EntityNotFoundException
 
+import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.LocalDateTime
+import java.time.temporal.TemporalAdjusters
 
 import static tracker.task.subscription.TaskPeriod.*
 
@@ -45,6 +48,7 @@ class SubscribedTaskServiceSpec extends Specification {
         1 * mockUserRepository.save(_)
     }
 
+    @Unroll
     def "due date calculator works as expected"() {
         given:
         def taskSubscription = new TaskSubscriptionEntity(id: 1, name: "my task", period: period, weight: 2, taskInstances: [])
@@ -57,7 +61,7 @@ class SubscribedTaskServiceSpec extends Specification {
         where:
         period  | expected
         DAILY   | LocalDate.now()
-        WEEKLY  | LocalDate.now().plusDays(7 - LocalDate.now().getDayOfWeek().value - 1)
+        WEEKLY  | LocalDate.now().with(TemporalAdjusters.nextOrSame(DayOfWeek.SATURDAY))
         // contrived but *shrug* best i can do right now
         MONTHLY | LocalDate.now().withDayOfMonth(LocalDate.now().lengthOfMonth())
     }
@@ -163,24 +167,19 @@ class SubscribedTaskServiceSpec extends Specification {
 
     def "getting completion data for a user returns a merged list of their completions"() {
         given:
-        def taskCompletion1 = new TaskCompletionEntity(id: 1, completionTime: LocalDateTime.now().minusDays(1))
-        def taskCompletion2 = new TaskCompletionEntity(id: 2, completionTime: LocalDateTime.now())
-        def taskCompletion3 = new TaskCompletionEntity(id: 3, completionTime: LocalDateTime.now())
-        def taskCompletion4 = new TaskCompletionEntity(id: 3, completionTime: LocalDateTime.now())
-        def taskinstance1 = new TaskInstanceEntity(taskCompletions: [taskCompletion1, taskCompletion2])
-        def taskinstance2 = new TaskInstanceEntity(taskCompletions: [taskCompletion3])
-        def taskinstance3 = new TaskInstanceEntity(taskCompletions: [taskCompletion4])
-        def subscription1 = new TaskSubscriptionEntity(name: "my first task", weight: 2, taskInstances: [taskinstance1])
-        def subscription2 = new TaskSubscriptionEntity(name: "my second task", weight: 3, taskInstances: [taskinstance2, taskinstance3])
-        def user = new UserEntity(taskSubscriptions: [subscription1, subscription2])
+        def user = new UserEntity(id: 1)
+        def task1 = new TaskDataPointEntity(name: "cook", time: LocalDateTime.now(), weight: 2)
+        def task2 = new TaskDataPointEntity(name: "cook", time: LocalDateTime.now().minusDays(1), weight: 2)
+        def task3 = new TaskDataPointEntity(name: "lift", time: LocalDateTime.now(), weight: 3)
+        def task4 = new TaskDataPointEntity(name: "lift", time: LocalDateTime.now().minusMinutes(1), weight: 3)
+        def queryResult = [task1, task2, task3, task4]
 
         when:
         def result = service.datapointsForUser(user)
-        then:
-        result.size() == 4
-        result.findAll { it -> it.name == subscription1.name }.size() == 2
-        result.findAll { it -> it.name == subscription2.name }.size() == 2
 
+        then:
+        1 * mockSubscriptionRepo.findPointsByTimeAndDate(user.id) >> queryResult
+        result.size() == 2
     }
 
 }

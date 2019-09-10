@@ -1,5 +1,6 @@
 package tracker.task.analytics;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -10,6 +11,8 @@ import java.time.LocalDateTime;
 @Data
 @Entity
 @NoArgsConstructor
+@AllArgsConstructor
+@Table(name = "task_completion_entity")
 public class TaskCompletionEntity {
 
     @Id

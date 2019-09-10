@@ -6,9 +6,12 @@ import spock.lang.Specification
 import spock.lang.Subject
 import tracker.task.DataFixture
 import tracker.task.SharedTaskController
+import tracker.task.analytics.TaskDataPointDTO
 import tracker.task.onetime.OneTimeTaskService
 import tracker.task.subscription.SubscribedTaskService
 import tracker.user.UserService
+
+import java.time.LocalDate
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
@@ -77,6 +80,23 @@ class SharedTaskControllerSpec extends Specification {
         model.size() == 2
         model.get("tasks").get(0).name == data.taskSubs().get(0).name
         model.get("oneTimeTasks").get(1).name == data.taskOneTimes().get(1).name
+    }
+
+    def "request for the analytics view shows the correct page"() {
+        when:
+        def response = mockMvc.perform(get("${baseURL}taskData"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("showTaskDataView"))
+                .andExpect(model().attributeExists("subscriptionData"))
+                .andReturn()
+        def model = response.modelAndView.model
+
+        then:
+        1 * mockUserService.getUser() >> data.user()
+        1 * mockSubService.datapointsForUser(_) >> [new TaskDataPointDTO(date: LocalDate.now().minusDays(1), points: 1), new TaskDataPointDTO(date: LocalDate.now(), points: 2)]
+        model.size() == 1
+        model.get("subscriptionData").get(0).points == 1
+        model.get("subscriptionData").get(0).date == LocalDate.now().minusDays(1)
     }
 
 }

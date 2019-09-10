@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import tracker.task.analytics.TaskDataPointDTO;
 import tracker.task.onetime.OneTimeTaskDTO;
 import tracker.task.onetime.OneTimeTaskService;
 import tracker.task.subscription.SubscribedTaskService;
@@ -55,6 +56,14 @@ public class SharedTaskController {
         model.addAttribute("oneTimeTasks", oneTimeTasks);
         return "showTaskInstancesView";
     }
+
+    @GetMapping(value = "/taskData")
+    public String showUserTaskCompletionData(Model model) {
+        List<TaskDataPointDTO> subscriptionData = subscribedTaskService.datapointsForUser(userService.getUser());
+        model.addAttribute("subscriptionData", subscriptionData);
+        return "showTaskDataView";
+    }
+
 
     @PostMapping(value = "/tasks/{id}/completions/{value}")
     public ResponseEntity updateTaskCompletions(@PathVariable Integer id,

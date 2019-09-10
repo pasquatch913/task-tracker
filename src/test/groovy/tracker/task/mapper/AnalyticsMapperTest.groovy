@@ -1,14 +1,9 @@
 package tracker.task.mapper
 
 import spock.lang.Specification
-import tracker.task.analytics.TaskCompletionEntity
-import tracker.task.subscription.TaskInstanceEntity
-import tracker.task.subscription.TaskSubscriptionEntity
+import tracker.task.analytics.TaskDataPointEntity
 
-import java.time.LocalDate
 import java.time.LocalDateTime
-
-import static tracker.task.subscription.TaskPeriod.DAILY
 
 class AnalyticsMapperTest extends Specification {
 
@@ -16,31 +11,18 @@ class AnalyticsMapperTest extends Specification {
 
     def "Task Subscription to Data"() {
         given:
-        def completion1 = new TaskCompletionEntity(id: 2, completionTime: LocalDateTime.now().minusDays(1))
-        def completion2 = new TaskCompletionEntity(id: 2, completionTime: LocalDateTime.now())
-
-        def instance = new TaskInstanceEntity(dueAt: LocalDate.now().minusDays(3),
-                taskCompletions: [completion1, completion2])
-        def subscription = new TaskSubscriptionEntity(id: 1,
-                name: "my old task",
-                period: DAILY,
-                weight: 2,
-                necessaryCompletions: 4,
-                active: true,
-                taskInstances: [instance])
-
+        def task1 = new TaskDataPointEntity(name: "cook", time: LocalDateTime.now(), weight: 2)
+        def task2 = new TaskDataPointEntity(name: "cook", time: LocalDateTime.now().minusDays(1), weight: 2)
+        def task3 = new TaskDataPointEntity(name: "lift", time: LocalDateTime.now(), weight: 3)
+        def task4 = new TaskDataPointEntity(name: "lift", time: LocalDateTime.now().minusMinutes(1), weight: 3)
+        def queryResult = [task1, task2, task3, task4]
 
         when:
-        def result = mapper.subscriptionToDataPoints(subscription)
+        def result = mapper.taskDataPointEntityToTaskDataPointDTO(queryResult)
 
         then:
         result.size() == 2
-        result.every {
-            it ->
-                it.name == subscription.name &&
-                        it.weight == subscription.weight &&
-                        (it.time.toLocalDate() == LocalDate.now() ||
-                                it.time.toLocalDate() == LocalDate.now().minusDays(1))
-        }
+        result.get(0).points == 2
+        result.get(1).points == 8
     }
 }

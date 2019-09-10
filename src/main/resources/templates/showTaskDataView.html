@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      layout:decorate="~{fragments/layout}">
+<head>
+    <title>Task Data page</title>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta th:name="_csrf" th:content="${_csrf.token}"/>
+    <meta th:name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <script type="text/javascript" th:src="@{~/js/TaskSubscriptions.js}"></script>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+</head>
+<body>
+<div layout:fragment="content" th:remove="tag">
+
+    <h2>Points earned by date:</h2>
+
+    <div id="tester" style="width:600px;height:250px;"></div>
+
+    <script th:inline="javascript">
+        TESTER = document.getElementById('tester');
+        var data = [[${subscriptionData}]];
+
+        var dates = [],
+            points = [];
+
+        for (item of data) {
+            dates.push(item.date);
+            points.push(item.points);
+        }
+
+        Plotly.plot(TESTER, [{
+            x: dates,
+            y: points
+        }], {
+            margin: {t: 0}
+        });
+    </script>
+
+</div>
+
+</body>
+</html>

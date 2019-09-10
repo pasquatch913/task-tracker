@@ -48,10 +48,8 @@ public class SubscribedTaskService {
     }
 
     public List<TaskDataPointDTO> datapointsForUser(UserEntity user) {
-        return user.getTaskSubscriptions().stream()
-                .flatMap(n -> analyticsMapper.subscriptionToDataPoints(n)
-                        .stream())
-                .collect(Collectors.toList());
+        return analyticsMapper.taskDataPointEntityToTaskDataPointDTO(
+                taskSubscriptionRepository.findPointsByTimeAndDate(user.getId()));
     }
 
     public TaskSubscriptionDTO updateTask(TaskSubscriptionDTO task) {
