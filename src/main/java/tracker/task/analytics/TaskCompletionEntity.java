@@ -22,4 +22,8 @@ public class TaskCompletionEntity {
     @Column(name = "created_at")
     private LocalDateTime completionTime = LocalDateTime.now();
 
+    public TaskCompletionEntity(LocalDateTime completionTime) {
+        this.completionTime = completionTime;
+    }
+
 }
