@@ -30,13 +30,13 @@
                 <td class="table-due-date table-data" th:text="${task.dueDate}"></td>
                 <td>
                     <button class="btn table-buttons" th:id="'incrementCompletions' + ${task.taskInstanceId}"
-                            th:onclick="'updateCompletions(' + ${task.taskInstanceId} + ',1)'">
+                            th:onclick="'incrementCompletions(' + ${task.taskInstanceId} + ')'">
                         +1 completions
                     </button>
                 </td>
                 <td>
                     <button class="btn table-buttons" th:id="'decrementCompletions' + ${task.taskInstanceId}"
-                            th:onclick="'updateCompletions(' + ${task.taskInstanceId} + ',-1)'">
+                            th:onclick="'decrementCompletions(' + ${task.taskInstanceId} + ')'">
                         -1 completions
                     </button>
                 </td>
@@ -56,13 +56,13 @@
                 <td class="table-data" th:text="${task.dueDate}"></td>
                 <td>
                     <button class="btn table-buttons" th:id="'incrementCompletions' + ${task.id}"
-                            th:onclick="'updateOneTimeCompletions(' + ${task.id} + ', 1)'">
+                            th:onclick="'incrementCompletions(' + ${task.id} + ')'">
                         +1 completions
                     </button>
                 </td>
                 <td>
                     <button class="btn table-buttons" th:id="'decrementCompletions' + ${task.id}"
-                            th:onclick="'updateOneTimeCompletions(' + ${task.id} + ', -1)'">
+                            th:onclick="'decrementCompletions(' + ${task.id} + ')'">
                         -1 completions
                     </button>
                 </td>

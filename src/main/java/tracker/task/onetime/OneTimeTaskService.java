@@ -3,7 +3,6 @@ package tracker.task.onetime;
 import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import tracker.task.analytics.TaskCompletionEntity;
 import tracker.task.mapper.TaskMapper;
 import tracker.user.UserEntity;
 import tracker.user.UserRepository;
@@ -76,26 +75,6 @@ public class OneTimeTaskService {
         return user.getOneTimeTaskInstances().stream()
                 .filter(n -> n.getId().equals(taskId))
                 .collect(Collectors.toList()).size() == 1;
-    }
-
-    public OneTimeTaskDTO updateOneTimeTaskCompletions(Integer id, Integer value) {
-        OneTimeTaskInstanceEntity taskToUpdate = oneTimeTaskInstanceRepository.findById(id).get();
-        if (value > taskToUpdate.getCompletions()) {
-            taskToUpdate.setCompletions(value);
-            while (taskToUpdate.getTaskCompletions().size() < value) {
-                taskToUpdate.getTaskCompletions().add(new TaskCompletionEntity());
-            }
-        }
-        if (0 < value && value < taskToUpdate.getCompletions()) {
-            taskToUpdate.setCompletions(value);
-            while (taskToUpdate.getTaskCompletions().size() > value) {
-                TaskCompletionEntity lastElement = taskToUpdate.getTaskCompletions()
-                        .get(taskToUpdate.getTaskCompletions().size() - 1);
-                taskToUpdate.getTaskCompletions().remove(lastElement);
-            }
-        }
-        oneTimeTaskInstanceRepository.save(taskToUpdate);
-        return mapper.oneTimeTaskInstanceEntityToOneTimeTaskDTO(oneTimeTaskInstanceRepository.findById(id).get());
     }
 
     public void unsubscribeOneTime(Integer id) {

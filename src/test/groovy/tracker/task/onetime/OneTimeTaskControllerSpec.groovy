@@ -96,38 +96,6 @@ class OneTimeTaskControllerSpec extends Specification {
         1 * mockOneTimeService.updateOneTimeTask(new OneTimeTaskDTO(id: requestParams.id, name: requestParams.name, active: TRUE))
     }
 
-    def "requests to update one time task completions result in service method calls"() {
-        given:
-        def taskId = data.taskOneTimes().get(0).id
-        def value = 47
-
-        when:
-        mockMvc.perform(
-                post("${baseURL}${taskId}/completions/${value}"))
-                .andExpect(status().isAccepted())
-                .andReturn()
-
-        then:
-        1 * mockUserService.getUser() >> data.user()
-        1 * mockOneTimeService.updateOneTimeTaskCompletions(taskId, value)
-    }
-
-    def "requests to update one time task completions executes no service calls if the user doesn't own task"() {
-        given:
-        def taskId = 37
-        def value = 47
-
-        when:
-        mockMvc.perform(
-                post("${baseURL}${taskId}/completions/${value}"))
-                .andExpect(status().isAccepted())
-                .andReturn()
-
-        then:
-        1 * mockUserService.getUser() >> data.user()
-        0 * mockOneTimeService.updateOneTimeTaskCompletions(taskId, value)
-    }
-
     def "requests to complete one time task result in service method calls"() {
         given:
         def taskId = data.taskOneTimes().get(0).id

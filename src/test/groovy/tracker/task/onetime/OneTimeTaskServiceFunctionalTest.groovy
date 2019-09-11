@@ -14,7 +14,6 @@ import tracker.user.UserService
 
 import javax.transaction.Transactional
 import java.time.LocalDate
-import java.time.LocalDateTime
 
 import static org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace.ANY
 
@@ -84,54 +83,6 @@ class OneTimeTaskServiceFunctionalTest extends Specification {
 
         then:
         result.size() == 2
-    }
-
-    def "updates to one time task results in correct completion number and create task completions list"() {
-        given:
-        def taskToUpdate = oneTimeTaskInstanceRepository.findAllByName(task1.name).get(0)
-
-        expect:
-        taskToUpdate.taskCompletions.size() == 0
-
-        when:
-        def resultTask1 = service.updateOneTimeTaskCompletions(taskToUpdate.id, 3)
-
-        then:
-        resultTask1.completions == 3
-        def firstTaskCompletionsList = oneTimeTaskInstanceRepository.findAllByName(task1.name).get(0).taskCompletions
-        firstTaskCompletionsList.size() == 3
-        firstTaskCompletionsList.every {
-            it ->
-                it.completionTime.isBefore(LocalDateTime.now()) &&
-                        it.completionTime.isAfter(LocalDateTime.now().minusMinutes(5))
-        }
-
-        when:
-        def resultTask2 = service.updateOneTimeTaskCompletions(taskToUpdate.id, 1)
-
-        then:
-        resultTask2.completions == 1
-        def secondTaskCompletionsList = oneTimeTaskInstanceRepository.findAllByName(task1.name).get(0).taskCompletions
-        secondTaskCompletionsList.size() == 1
-        secondTaskCompletionsList.get(0).completionTime.isBefore(LocalDateTime.now()) &&
-                secondTaskCompletionsList.get(0).completionTime.isAfter(LocalDateTime.now().minusMinutes(5))
-
-        when:
-        def resultTask3 = service.updateOneTimeTaskCompletions(taskToUpdate.id, 1)
-
-        then:
-        resultTask3.completions == 1
-        def thirdTaskCompletionsList = oneTimeTaskInstanceRepository.findAllByName(task1.name).get(0).taskCompletions
-        thirdTaskCompletionsList.size() == 1
-        thirdTaskCompletionsList.get(0).completionTime.isBefore(LocalDateTime.now()) &&
-                thirdTaskCompletionsList.get(0).completionTime.isAfter(LocalDateTime.now().minusMinutes(5))
-
-        when:
-        def resultTask4 = service.updateOneTimeTaskCompletions(taskToUpdate.id, -5)
-
-        then:
-        resultTask4.completions == 1
-        oneTimeTaskInstanceRepository.findAllByName(task1.name).get(0).taskCompletions.size() == 1
     }
 
     def "unsubscribing from a task sets it inactive"() {

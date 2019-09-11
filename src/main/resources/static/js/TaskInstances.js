@@ -1,24 +1,24 @@
-function updateCompletions(instanceId, value) {
+function incrementCompletions(instanceId) {
     //find the right element to increment in browser
     var elementToUpdate = document.getElementById("completions" + instanceId);
-    var newCompletionsValue = parseInt(elementToUpdate.innerText) + value;
+    var newCompletionsValue = parseInt(elementToUpdate.innerText) + 1;
     elementToUpdate.innerText =  newCompletionsValue;
 
     //increment the correct taskInstance's counter
-    var url = '/web/subscriptions/instances/' + instanceId + '/completions/' + newCompletionsValue;
+    var url = '/web/tasks/complete/' + instanceId;
     $.post(url, function (data, status) {
         console.log('request sent!');
     });
 }
 
-function updateOneTimeCompletions(id, value) {
+function decrementCompletions(instanceId) {
     //find the right element to increment in browser
-    var elementToUpdate = document.getElementById("completions" + id);
-    var newCompletionsValue = parseInt(elementToUpdate.innerText) + value;
+    var elementToUpdate = document.getElementById("completions" + instanceId);
+    var newCompletionsValue = parseInt(elementToUpdate.innerText) - 1;
     elementToUpdate.innerText = newCompletionsValue;
 
     //increment the correct taskInstance's counter
-    var url = '/web/oneTimes/' + id + '/completions/' + newCompletionsValue;
+    var url = '/web/tasks/complete/' + instanceId;
     $.post(url, function (data, status) {
         console.log('request sent!');
     });

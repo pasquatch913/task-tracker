@@ -4,7 +4,6 @@ import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tracker.task.TaskInstanceDTO;
-import tracker.task.analytics.TaskCompletionEntity;
 import tracker.task.analytics.TaskDataPointDTO;
 import tracker.task.mapper.AnalyticsMapper;
 import tracker.task.mapper.TaskMapper;
@@ -128,26 +127,6 @@ public class SubscribedTaskService {
                         // TODO: should clean up as this is hacky
                         .filter(m -> m.getDueAt().isAfter(LocalDate.now().minusMonths(2))))
                 .collect(Collectors.toList());
-    }
-
-    public void updateTaskInstanceCompletions(Integer id, Integer value) {
-        TaskInstanceEntity taskToUpdate = taskInstanceRepository.findById(id).get();
-
-        if (value > taskToUpdate.getCompletions()) {
-            taskToUpdate.setCompletions(value);
-            while (taskToUpdate.getTaskCompletions().size() < value) {
-                taskToUpdate.getTaskCompletions().add(new TaskCompletionEntity());
-            }
-        }
-        if (0 < value && value < taskToUpdate.getCompletions()) {
-            taskToUpdate.setCompletions(value);
-            while (taskToUpdate.getTaskCompletions().size() > value) {
-                TaskCompletionEntity lastElement = taskToUpdate.getTaskCompletions()
-                        .get(taskToUpdate.getTaskCompletions().size() - 1);
-                taskToUpdate.getTaskCompletions().remove(lastElement);
-            }
-        }
-        taskInstanceRepository.save(taskToUpdate);
     }
 
     private List<TaskSubscriptionEntity> getActiveSubscriptions(UserEntity user) {

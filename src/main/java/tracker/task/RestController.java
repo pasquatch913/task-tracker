@@ -99,16 +99,14 @@ public class RestController {
         return ResponseEntity.accepted().build();
     }
 
-    @PostMapping("tasks/{id}/completions/{value}")
-    public ResponseEntity updateTaskCompletions(@PathVariable Integer id,
-                                                @PathVariable Integer value) {
-        return sharedTaskController.updateTaskCompletions(id, value);
+    @PostMapping("tasks/complete/{id}")
+    public ResponseEntity newTaskCompletion(@PathVariable Integer id) {
+        return sharedTaskController.newTaskCompletion(id);
     }
 
-    @PostMapping("tasks/instances/{id}/completions/{value}")
-    public ResponseEntity updateTaskInstanceCompletions(@PathVariable Integer id,
-                                                        @PathVariable Integer value) {
-        return subscribedTaskController.updateTaskInstanceCompletions(id, value);
+    @PostMapping("tasks/uncomplete/{id}")
+    public ResponseEntity removeTaskCompletion(@PathVariable Integer id) {
+        return sharedTaskController.removeTaskCompletion(id);
     }
 
     @PostMapping("/oneTimeTask")
@@ -117,14 +115,9 @@ public class RestController {
         return ResponseEntity.accepted().build();
     }
 
-    @PostMapping("/tasks/oneTime/{id}/completions/{value}")
-    public ResponseEntity updateOneTimeTaskCompletions(@PathVariable Integer id, @PathVariable Integer value) {
-        return oneTimeTaskController.updateOneTimeTaskCompletions(id, value);
-    }
-
-    @PostMapping("/tasks/complete/{id}")
+    @PostMapping("/tasks/deactivate/{id}")
     public ResponseEntity completeTask(@PathVariable Integer id) {
-        return sharedTaskController.completeTask(id);
+        return sharedTaskController.deactivateTask(id);
     }
 
 

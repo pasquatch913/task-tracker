@@ -5,12 +5,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import tracker.task.TaskInstanceDTO;
 import tracker.user.UserEntity;
 import tracker.user.UserService;
 
 import java.util.Arrays;
-import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Controller
@@ -46,25 +44,6 @@ public class SubscribedTaskController {
         subscribedTaskService.generateTaskInstances(userService.getUser());
 
         return "redirect:/web/showTaskSubscriptions";
-    }
-
-    @PostMapping(value = "/instances/{id}/completions/{value}")
-    public ResponseEntity updateTaskInstanceCompletions(
-                                                        @PathVariable Integer id,
-                                                        @PathVariable Integer value) {
-        UserEntity user = userService.getUser();
-
-        // only update task instance if it belongs to current user
-        if (subscribedTaskService.verifyTaskInstance(user, id)) {
-            TaskInstanceDTO instance = subscribedTaskService.returnTaskInstancesForUser(user).stream()
-                    .filter(n -> n.getTaskInstanceId().equals(id))
-                    .collect(Collectors.toList()).get(0);
-
-            subscribedTaskService.updateTaskInstanceCompletions(instance.getTaskInstanceId(), value);
-            return ResponseEntity.accepted().build();
-        } else {
-            return ResponseEntity.badRequest().body("no such task for this user");
-        }
     }
 
     @PostMapping(value = "/complete/{id}")
