@@ -18,7 +18,7 @@ function decrementCompletions(instanceId) {
     elementToUpdate.innerText = newCompletionsValue;
 
     //increment the correct taskInstance's counter
-    var url = '/web/tasks/complete/' + instanceId;
+    var url = '/web/tasks/uncomplete/' + instanceId;
     $.post(url, function (data, status) {
         console.log('request sent!');
     });
