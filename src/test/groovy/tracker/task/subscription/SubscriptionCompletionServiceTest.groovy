@@ -68,7 +68,7 @@ class SubscriptionCompletionServiceTest extends Specification {
         userRepository.deleteAll()
     }
 
-    def "updates to one time task results in correct completion number and create task completions list"() {
+    def "updates to subscribed task results in correct completion number and create task completions list"() {
         given:
         def taskToUpdate = taskInstanceRepository.findAll().get(0)
 
