@@ -37,26 +37,4 @@ public class OneTimeTaskCompletionService {
 
         oneTimeTaskInstanceRepository.save(taskToUpdate);
     }
-
-
-    public OneTimeTaskDTO updateOneTimeTaskCompletions(Integer id, Integer value) {
-        OneTimeTaskInstanceEntity taskToUpdate = oneTimeTaskInstanceRepository.findById(id).get();
-        if (value > taskToUpdate.getCompletions()) {
-            taskToUpdate.setCompletions(value);
-            while (taskToUpdate.getTaskCompletions().size() < value) {
-                taskToUpdate.getTaskCompletions().add(new TaskCompletionEntity());
-            }
-        }
-        if (0 < value && value < taskToUpdate.getCompletions()) {
-            taskToUpdate.setCompletions(value);
-            while (taskToUpdate.getTaskCompletions().size() > value) {
-                TaskCompletionEntity lastElement = taskToUpdate.getTaskCompletions()
-                        .get(taskToUpdate.getTaskCompletions().size() - 1);
-                taskToUpdate.getTaskCompletions().remove(lastElement);
-            }
-        }
-        oneTimeTaskInstanceRepository.save(taskToUpdate);
-        return mapper.oneTimeTaskInstanceEntityToOneTimeTaskDTO(oneTimeTaskInstanceRepository.findById(id).get());
-    }
-
 }
