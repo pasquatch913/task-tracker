@@ -92,19 +92,19 @@ public class RestController {
                 .body(oneTimeTaskService.returnOneTimeTaskForUser(userService.getUser()));
     }
 
-    @PostMapping("tasks")
+    @PostMapping("/tasks")
     public ResponseEntity createTaskSubscription(@RequestBody TaskSubscriptionDTO taskSubscriptionDTO) {
         subscribedTaskService.newTask(taskSubscriptionDTO);
         subscribedTaskService.generateTaskInstances(userService.getUser());
         return ResponseEntity.accepted().build();
     }
 
-    @PostMapping("tasks/complete/{id}")
+    @PostMapping("/tasks/complete/{id}")
     public ResponseEntity newTaskCompletion(@PathVariable Integer id) {
         return sharedTaskController.newTaskCompletion(id);
     }
 
-    @PostMapping("tasks/uncomplete/{id}")
+    @PostMapping("/tasks/uncomplete/{id}")
     public ResponseEntity removeTaskCompletion(@PathVariable Integer id) {
         return sharedTaskController.removeTaskCompletion(id);
     }
