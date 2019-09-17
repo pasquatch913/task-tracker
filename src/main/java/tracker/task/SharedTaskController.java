@@ -1,22 +1,23 @@
 package tracker.task;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import tracker.task.analytics.TaskDataPointDTO;
 import tracker.task.onetime.OneTimeTaskCompletionService;
 import tracker.task.onetime.OneTimeTaskDTO;
+import tracker.task.onetime.OneTimeTaskInstanceEntity;
 import tracker.task.onetime.OneTimeTaskService;
 import tracker.task.subscription.SubscribedTaskService;
 import tracker.task.subscription.SubscriptionCompletionService;
 import tracker.user.UserEntity;
 import tracker.user.UserService;
+import tracker.web.EntityNotFoundException;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -70,7 +71,8 @@ public class SharedTaskController {
     }
 
     @PostMapping(value = "/tasks/complete/{id}")
-    public ResponseEntity newTaskCompletion(@PathVariable Integer id) {
+    public ResponseEntity newTaskCompletion(@PathVariable Integer id,
+                                            @RequestParam(value = "time", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm") LocalDateTime time) {
         UserEntity user = userService.getUser();
 
         // only update task instance if it belongs to current user
@@ -79,20 +81,29 @@ public class SharedTaskController {
                     .filter(n -> n.getTaskInstanceId().equals(id))
                     .collect(Collectors.toList()).get(0);
 
-            subscriptionCompletionService.newTaskInstanceCompletion(instance.getTaskInstanceId());
+            if (time == null) {
+                subscriptionCompletionService.newTaskInstanceCompletion(instance.getTaskInstanceId());
+            } else {
+                subscriptionCompletionService.newTaskInstanceCompletion(instance.getTaskInstanceId(), time);
+            }
             return ResponseEntity.accepted().build();
         } else if (oneTimeTaskService.verifyOneTimeTask(user, id)) {
-            user.getOneTimeTaskInstances()
+            OneTimeTaskInstanceEntity task = user.getOneTimeTaskInstances()
                     .stream()
                     .filter(n -> n.getId().equals(id))
-                    .forEach(m -> oneTimeTaskCompletionService.newTaskCompletion(m.getId()));
+                    .findFirst().orElseThrow(EntityNotFoundException::new);
+
+            if (time == null) {
+                oneTimeTaskCompletionService.newTaskCompletion(task.getId());
+            } else {
+                oneTimeTaskCompletionService.newTaskCompletion(task.getId(), time);
+            }
+
             return ResponseEntity.accepted().build();
         } else {
             return ResponseEntity.badRequest().body("no such task for this user");
         }
     }
-
-    // TODO write controller spec tests for complete/uncomplete
 
     @PostMapping(value = "/tasks/uncomplete/{id}")
     public ResponseEntity removeTaskCompletion(@PathVariable Integer id) {

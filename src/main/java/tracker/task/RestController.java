@@ -101,7 +101,7 @@ public class RestController {
 
     @PostMapping("/tasks/complete/{id}")
     public ResponseEntity newTaskCompletion(@PathVariable Integer id) {
-        return sharedTaskController.newTaskCompletion(id);
+        return sharedTaskController.newTaskCompletion(id, null);
     }
 
     @PostMapping("/tasks/uncomplete/{id}")
