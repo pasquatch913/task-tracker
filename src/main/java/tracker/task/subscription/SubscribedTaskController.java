@@ -1,11 +1,9 @@
 package tracker.task.subscription;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import tracker.user.UserEntity;
 import tracker.user.UserService;
 
 import java.util.Arrays;
@@ -44,17 +42,6 @@ public class SubscribedTaskController {
         subscribedTaskService.generateTaskInstances(userService.getUser());
 
         return "redirect:/web/showTaskSubscriptions";
-    }
-
-    @PostMapping(value = "/complete/{id}")
-    public ResponseEntity completeTaskSubscription(@PathVariable Integer id) {
-        UserEntity user = userService.getUser();
-        // only unsubscribe from a task subscription if the id belongs to the current user
-        user.getTaskSubscriptions()
-                .stream()
-                .filter(n -> n.getId().equals(id))
-                .forEach(m -> subscribedTaskService.unsubscribe(m.getId()));
-        return ResponseEntity.accepted().build();
     }
 
 }

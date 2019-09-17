@@ -1,11 +1,9 @@
 package tracker.task.onetime;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import tracker.user.UserEntity;
 import tracker.user.UserService;
 
 @RequiredArgsConstructor
@@ -39,17 +37,6 @@ public class OneTimeTaskController {
     public String updateTask(@ModelAttribute("updateOneTimeTaskRequest") OneTimeTaskDTO updateTaskRequest) {
         oneTimeTaskService.updateOneTimeTask(updateTaskRequest);
         return "redirect:/web/showTaskSubscriptions";
-    }
-
-    @PostMapping(value = "/complete/{id}")
-    public ResponseEntity completeOneTimeTask(@PathVariable Integer id) {
-        UserEntity user = userService.getUser();
-        // only unsubscribe from a one time task if the id belongs to the current user
-        user.getOneTimeTaskInstances()
-                .stream()
-                .filter(n -> n.getId().equals(id))
-                .forEach(m -> oneTimeTaskService.unsubscribeOneTime(m.getId()));
-        return ResponseEntity.accepted().build();
     }
 
 }
