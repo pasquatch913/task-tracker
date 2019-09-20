@@ -12,10 +12,9 @@ There's an Android client application that I've developed as the primary consump
 I don't currently have plans to develop an iOS client application.
 
 # Features awaiting development on the webapp
-1. Analytics view that will allow the user to view completion data over a particular date range.
+1. Enhanced analytics view that will allow the user to view how well they're keeping up with each of their commitments.
 2. Planning view that will allow the user to set/view target completion dates on a weekly-ish calendar.
-3. Custom task completions. Currently when a task is completed, the application assumes that a completion event should be created with a creationTime of now(). This feature will allow users to do something like mark a completion on a daily task for the previous date in the event that they forgot to mark it initially.
-4. Homepage with screenshots detailing application usage and better readme.
-5. Moving off AWS RDS to self-managed EC2 postgres instance to reduce monthly billing.
-6. Possibly a notes field for a subscription or completion event. My thoughts are less clear on this use-case at the moment.
-7. Possibly a CI/CD pipeline server run locally and integration with github if any additional developers want to contribute. 
+3. Homepage with screenshots detailing application usage and better readme.
+4. Moving off AWS RDS to self-managed EC2 postgres instance to reduce monthly billing.
+5. Possibly a notes field for a subscription or completion event. My thoughts are less clear on this use-case at the moment.
+6. Possibly a CI/CD pipeline server run locally and integration with github if any additional developers want to contribute. 
