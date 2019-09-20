@@ -98,34 +98,4 @@ class SubscribedTaskControllerSpec extends Specification {
         model.get("newTaskSubscription").name == request.name
     }
 
-    def "requests to deactivate task succeed if the user owns the task"() {
-        given:
-        def subscriptionId = data.taskInstances().get(0).id
-
-        when:
-        mockMvc.perform(
-                post("${baseURL}complete/${subscriptionId}"))
-                .andExpect(status().isAccepted())
-                .andReturn()
-
-        then:
-        1 * mockUserService.getUser() >> data.user()
-        1 * mockSubService.unsubscribe(subscriptionId)
-    }
-
-    def "requests to deactivate task fail if the user doesn't own the task"() {
-        given:
-        def subscriptionId = 32
-
-        when:
-        mockMvc.perform(
-                post("${baseURL}complete/${subscriptionId}"))
-                .andExpect(status().isAccepted())
-                .andReturn()
-
-        then:
-        1 * mockUserService.getUser() >> data.user()
-        0 * mockSubService.unsubscribe(subscriptionId)
-    }
-
 }
