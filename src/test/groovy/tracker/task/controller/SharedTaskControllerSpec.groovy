@@ -169,7 +169,7 @@ class SharedTaskControllerSpec extends Specification {
         given:
         def instanceId = data.taskOneTimes().get(0).id
         def completionTime = LocalDateTime.of(2019, 1, 1, 11, 11)
-
+        println(completionTime.toString())
 
         when:
         mockMvc.perform(

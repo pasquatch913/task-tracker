@@ -12,22 +12,24 @@
 </head>
 <body>
 <div layout:fragment="content" th:remove="tag">
-    <table>
+    <table task>
         <tr>
             <td>Task name</td>
+            <td>Due date</td>
             <td>Task points</td>
             <td>Completions goal for this time period</td>
             <td>Completions so far</td>
-            <td>Due date</td>
+
         </tr>
         <tr th:each="task : ${tasks}">
             <div th:if="${task.active}">
                 <td th:text="${task.name}"></td>
+                <td class="table-due-date table-data" th:text="${task.dueDate}"></td>
                 <td class="table-data" th:text="${task.weight}"></td>
                 <td class="table-data" th:text="${task.necessaryCompletions}"></td>
                 <td class="table-data" th:text="${task.completions}"
-                    th:id="'completions' + ${task.taskInstanceId}"></td>
-                <td class="table-due-date table-data" th:text="${task.dueDate}"></td>
+                    th:id="'completions' + ${task.taskInstanceId}">
+                </td>
                 <td>
                     <button class="btn table-buttons" th:id="'incrementCompletions' + ${task.taskInstanceId}"
                             th:onclick="'incrementCompletions(' + ${task.taskInstanceId} + ')'">
@@ -40,6 +42,27 @@
                         -1 completions
                     </button>
                 </td>
+                <td class="col-md-12">
+                    <div class="customTime" th:with="rowId=${task.taskInstanceId}">
+                        <div class="row">
+                            <label th:for="'customTimeCheckbox' + ${rowId}" class="col-md-6">Complete with custom
+                                time?</label>
+                            <input th:id="'customTimeCheckbox'+ ${rowId}" class="col-md-3 form-control"
+                                   name="customTimeCheckbox" type="checkbox">
+                        </div>
+
+                        <div class="row col-md-12 dateSection input-group date" th:id="'datetimepicker' + ${rowId}"
+                             data-target-input="nearest">
+                            <input type="text" class="form-control datetimepicker-input"
+                                   th:data-target="'#datetimepicker' + ${rowId}"
+                                   th:id="'datetimeinput' + ${rowId}"/>
+                            <div class="input-group-append" th:data-target="'#datetimepicker' + ${rowId}"
+                                 th:data-toggle="datetimepicker">
+                                <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                            </div>
+                        </div>
+                    </div>
+                </td>
             </div>
         </tr>
         <tr>
@@ -50,10 +73,10 @@
         <tr th:each="task : ${oneTimeTasks}">
             <div th:if="${task.active}">
                 <td th:text="${task.name}"></td>
+                <td class="table-data" th:text="${task.dueDate}"></td>
                 <td class="table-data" th:text="${task.weight}"></td>
                 <td class="table-data" th:text="${task.necessaryCompletions}"></td>
                 <td class="table-data" th:text="${task.completions}" th:id="'completions' + ${task.id}"></td>
-                <td class="table-data" th:text="${task.dueDate}"></td>
                 <td>
                     <button class="btn table-buttons" th:id="'incrementCompletions' + ${task.id}"
                             th:onclick="'incrementCompletions(' + ${task.id} + ')'">
@@ -65,6 +88,27 @@
                             th:onclick="'decrementCompletions(' + ${task.id} + ')'">
                         -1 completions
                     </button>
+                </td>
+                <td class="col-md-12">
+                    <div class="customTime" th:with="rowId=${task.id}">
+                        <div class="row">
+                            <label th:for="'customTimeCheckbox' + ${rowId}" class="col-md-6">Complete with custom
+                                time?</label>
+                            <input th:id="'customTimeCheckbox'+ ${rowId}" class="col-md-3 form-control"
+                                   name="customTimeCheckbox" type="checkbox">
+                        </div>
+
+                        <div class="row col-md-12 dateSection input-group date" th:id="'datetimepicker' + ${rowId}"
+                             data-target-input="nearest">
+                            <input type="text" class="form-control datetimepicker-input"
+                                   th:data-target="'#datetimepicker' + ${rowId}"
+                                   th:id="'datetimeinput' + ${rowId}"/>
+                            <div class="input-group-append" th:data-target="'#datetimepicker' + ${rowId}"
+                                 th:data-toggle="datetimepicker">
+                                <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                            </div>
+                        </div>
+                    </div>
                 </td>
             </div>
         </tr>
