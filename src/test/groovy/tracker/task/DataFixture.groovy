@@ -21,12 +21,12 @@ class DataFixture {
     }
 
     def taskInstances() {
-        [new TaskInstanceDTO(id: 3, name: "my first subscription", weight: 3, necessaryCompletions: 2,
-                completions: 1, dueDate: LocalDate.now().minusDays(1), taskInstanceId: 11, active: true),
-         new TaskInstanceDTO(id: 3, name: "my first subscription", weight: 3, necessaryCompletions: 2,
-                 completions: 1, dueDate: LocalDate.now(), taskInstanceId: 12, active: true),
-         new TaskInstanceDTO(id: 6, name: "my second subscription", weight: 2, necessaryCompletions: 3,
-                 completions: 0, dueDate: LocalDate.now().plusDays(4), taskInstanceId: 13, active: true)]
+        [new TaskInstanceDTO(taskSubscriptionId: 3, name: "my first subscription", weight: 3, necessaryCompletions: 2,
+                completions: 1, dueDate: LocalDate.now().minusDays(1), id: 11, active: true),
+         new TaskInstanceDTO(taskSubscriptionId: 3, name: "my first subscription", weight: 3, necessaryCompletions: 2,
+                 completions: 1, dueDate: LocalDate.now(), id: 12, active: true),
+         new TaskInstanceDTO(taskSubscriptionId: 6, name: "my second subscription", weight: 2, necessaryCompletions: 3,
+                 completions: 0, dueDate: LocalDate.now().plusDays(4), id: 13, active: true)]
     }
 
     def taskOneTimes() {

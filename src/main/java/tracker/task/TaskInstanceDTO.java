@@ -11,13 +11,13 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class TaskInstanceDTO {
 
-    private Integer id;
+    private Integer taskSubscriptionId;
     private String name;
     private Integer weight;
     private Integer necessaryCompletions;
     private Integer completions;
     private LocalDate dueDate;
-    private Integer taskInstanceId;
+    private Integer id;
     private Boolean active;
 
 }

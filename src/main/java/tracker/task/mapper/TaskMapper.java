@@ -16,8 +16,9 @@ import tracker.task.subscription.TaskSubscriptionEntity;
 public interface TaskMapper {
 
     @Mappings({
-    @Mapping(target = "dueDate", ignore = true),
-    @Mapping(target = "completions", ignore = true)})
+            @Mapping(source = "id", target = "taskSubscriptionId"),
+            @Mapping(target = "dueDate", ignore = true),
+            @Mapping(target = "completions", ignore = true)})
     TaskInstanceDTO taskSubscriptionEntityToTaskInstanceDTO(TaskSubscriptionEntity taskSubscription);
 
     TaskSubscriptionEntity taskSubscriptionDTOToTaskSubscriptionEntity(TaskSubscriptionDTO taskSubscriptionDTO);
@@ -29,7 +30,6 @@ public interface TaskMapper {
     OneTimeTaskInstanceEntity oneTimeTaskDTOToOneTimeTaskInstanceEntity(OneTimeTaskDTO oneTimeTaskDTO);
 
     // same data type for subscriptions and instances
-    @Mapping(source = "taskInstanceId", target = "id")
     @Mapping(target = "recurring", constant = "true")
     TaskDTO taskInstanceDTOToTaskDTO(TaskInstanceDTO instanceDTO);
 

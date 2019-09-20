@@ -1,5 +1,6 @@
 package tracker.task.controller
 
+
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.setup.MockMvcBuilders
 import spock.lang.Specification
@@ -79,7 +80,7 @@ class SharedTaskControllerSpec extends Specification {
         def response = mockMvc.perform(get("${baseURL}showTaskInstances"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("showTaskInstancesView"))
-                .andExpect(model().attributeExists("tasks", "oneTimeTasks"))
+                .andExpect(model().attributeExists("tasks"))
                 .andReturn()
         def model = response.modelAndView.model
 
@@ -87,9 +88,9 @@ class SharedTaskControllerSpec extends Specification {
         3 * mockUserService.getUser() >> data.user()
         1 * mockSubService.returnTaskInstancesForUser(_) >> data.taskInstances()
         1 * mockOneTimeService.returnOneTimeTaskForUser(_) >> data.taskOneTimes()
-        model.size() == 2
+        model.size() == 1
         model.get("tasks").get(0).name == data.taskSubs().get(0).name
-        model.get("oneTimeTasks").get(1).name == data.taskOneTimes().get(1).name
+        model.get("tasks").get(4).name == data.taskOneTimes().get(1).name
     }
 
     def "request for the analytics view shows the correct page"() {
@@ -111,7 +112,7 @@ class SharedTaskControllerSpec extends Specification {
 
     def "requests to update task completions result in service method calls"() {
         given:
-        def instanceId = data.taskInstances().get(0).taskInstanceId
+        def instanceId = data.taskInstances().get(0).id
 
         when:
         mockMvc.perform(
@@ -129,7 +130,7 @@ class SharedTaskControllerSpec extends Specification {
 
     def "requests to update task completions for a subscription with time result invoke custom time service method"() {
         given:
-        def instanceId = data.taskInstances().get(0).taskInstanceId
+        def instanceId = data.taskInstances().get(0).id
         def completionTime = LocalDateTime.of(2019, 1, 1, 11, 11)
 
         when:
@@ -188,7 +189,7 @@ class SharedTaskControllerSpec extends Specification {
 
     def "requests to update task completions for a one time task don't invoke service methods if user mismatch"() {
         given:
-        def instanceId = data.taskInstances().get(0).taskInstanceId
+        def instanceId = data.taskInstances().get(0).id
 
         when:
         mockMvc.perform(

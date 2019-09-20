@@ -20,7 +20,7 @@ public abstract class TaskMapperDecorator implements TaskMapper {
         TaskInstanceEntity latestTaskInstance = Collections.max(taskSubscription.getTaskInstances(), new TaskInstanceComparator());
         taskInstanceDTO.setDueDate(latestTaskInstance.getDueAt());
         taskInstanceDTO.setCompletions(latestTaskInstance.getCompletions());
-        taskInstanceDTO.setTaskInstanceId(latestTaskInstance.getId());
+        taskInstanceDTO.setId(latestTaskInstance.getId());
         return taskInstanceDTO;
     }
 

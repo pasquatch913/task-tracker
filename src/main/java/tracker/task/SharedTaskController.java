@@ -1,12 +1,14 @@
 package tracker.task;
 
 import lombok.RequiredArgsConstructor;
+import org.mapstruct.factory.Mappers;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import tracker.task.analytics.TaskDataPointDTO;
+import tracker.task.mapper.TaskMapper;
 import tracker.task.onetime.OneTimeTaskCompletionService;
 import tracker.task.onetime.OneTimeTaskDTO;
 import tracker.task.onetime.OneTimeTaskInstanceEntity;
@@ -36,6 +38,8 @@ public class SharedTaskController {
 
     private final UserService userService;
 
+    private final TaskMapper mapper = Mappers.getMapper(TaskMapper.class);
+
     @GetMapping(path = "/")
     public String index(Model model) {
         return "redirect:/web/showTaskInstances";
@@ -58,8 +62,16 @@ public class SharedTaskController {
 
         List<OneTimeTaskDTO> oneTimeTasks = oneTimeTaskService.returnOneTimeTaskForUser(userService.getUser());
 
-        model.addAttribute("tasks", taskInstances);
-        model.addAttribute("oneTimeTasks", oneTimeTasks);
+        List<TaskDTO> allTasks = taskInstances.stream()
+                .map(mapper::taskInstanceDTOToTaskDTO)
+                .collect(Collectors.toList());
+        allTasks.addAll(
+                oneTimeTasks.stream()
+                        .map(mapper::oneTimeTaskDTOToTaskDTO)
+                        .collect(Collectors.toList()));
+
+        model.addAttribute("tasks", allTasks);
+//        model.addAttribute("oneTimeTasks", oneTimeTasks);
         return "showTaskInstancesView";
     }
 
@@ -78,13 +90,13 @@ public class SharedTaskController {
         // only update task instance if it belongs to current user
         if (subscribedTaskService.verifyTaskInstance(user, id)) {
             TaskInstanceDTO instance = subscribedTaskService.returnTaskInstancesForUser(user).stream()
-                    .filter(n -> n.getTaskInstanceId().equals(id))
+                    .filter(n -> n.getId().equals(id))
                     .collect(Collectors.toList()).get(0);
 
             if (time == null) {
-                subscriptionCompletionService.newTaskInstanceCompletion(instance.getTaskInstanceId());
+                subscriptionCompletionService.newTaskInstanceCompletion(instance.getId());
             } else {
-                subscriptionCompletionService.newTaskInstanceCompletion(instance.getTaskInstanceId(), time);
+                subscriptionCompletionService.newTaskInstanceCompletion(instance.getId(), time);
             }
             return ResponseEntity.accepted().build();
         } else if (oneTimeTaskService.verifyOneTimeTask(user, id)) {
@@ -112,10 +124,10 @@ public class SharedTaskController {
         // only update task instance if it belongs to current user
         if (subscribedTaskService.verifyTaskInstance(user, id)) {
             TaskInstanceDTO instance = subscribedTaskService.returnTaskInstancesForUser(user).stream()
-                    .filter(n -> n.getTaskInstanceId().equals(id))
+                    .filter(n -> n.getId().equals(id))
                     .collect(Collectors.toList()).get(0);
 
-            subscriptionCompletionService.removeTaskCompletion(instance.getTaskInstanceId());
+            subscriptionCompletionService.removeTaskCompletion(instance.getId());
             return ResponseEntity.accepted().build();
         } else if (oneTimeTaskService.verifyOneTimeTask(user, id)) {
             user.getOneTimeTaskInstances()
@@ -135,7 +147,7 @@ public class SharedTaskController {
         // only update task instance if it belongs to current user
         if (subscribedTaskService.verifyTaskInstance(user, id)) {
             TaskInstanceDTO instance = subscribedTaskService.returnTaskInstancesForUser(user).stream()
-                    .filter(n -> n.getTaskInstanceId().equals(id))
+                    .filter(n -> n.getId().equals(id))
                     .collect(Collectors.toList()).get(0);
 
             subscribedTaskService.unsubscribe(instance.getId());
