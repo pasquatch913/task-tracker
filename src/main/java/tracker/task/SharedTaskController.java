@@ -71,7 +71,6 @@ public class SharedTaskController {
                         .collect(Collectors.toList()));
 
         model.addAttribute("tasks", allTasks);
-//        model.addAttribute("oneTimeTasks", oneTimeTasks);
         return "showTaskInstancesView";
     }
 
