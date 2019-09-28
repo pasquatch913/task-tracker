@@ -27,20 +27,19 @@
                 <td class="table-due-date table-data" th:text="${task.dueDate}"></td>
                 <td class="table-data" th:text="${task.weight}"></td>
                 <td class="table-data" th:text="${task.necessaryCompletions}"></td>
-                <td class="table-data" th:text="${task.completions}"
-                    th:id="'completions' + ${task.id}">
-                </td>
-                <td>
-                    <button class="btn table-buttons" th:id="'incrementCompletions' + ${task.id}"
-                            th:onclick="'incrementCompletions(' + ${task.id} + ')'">
-                        +1 completions
-                    </button>
-                </td>
-                <td>
-                    <button class="btn table-buttons" th:id="'decrementCompletions' + ${task.id}"
-                            th:onclick="'decrementCompletions(' + ${task.id} + ')'">
-                        -1 completions
-                    </button>
+                <td class="table-data"
+                    th:id="'completionsBox' + ${task.id}">
+                    <div class="completionBox">
+                        <div>
+                            <p th:text="${task.completions}" th:id="'completions' + ${task.id}"></p>
+                        </div>
+                        <div class="completionButtonContainer">
+                            <i class="fas fa-caret-square-up"
+                               th:onclick="'incrementCompletions(' + ${task.id} + ')'"></i>
+                            <i class="fas fa-caret-square-down"
+                               th:onclick="'decrementCompletions(' + ${task.id} + ')'"></i>
+                        </div>
+                    </div>
                 </td>
                 <td class="col-md-12">
                     <div class="customTime" th:with="rowId=${task.id}">

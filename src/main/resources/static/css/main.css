@@ -43,6 +43,14 @@ h1 {
     text-align: center;
 }
 
+.completionBox > div > i {
+    display: block;
+}
+
+.completionBox > div {
+    float: left;
+}
+
 .app-buttons {
     background-color: #564d80;
     border-color: #564d80;

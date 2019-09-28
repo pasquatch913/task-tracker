@@ -2,7 +2,6 @@ function incrementCompletions(instanceId) {
     //find the right element to increment in browser
     var elementToUpdate = document.getElementById("completions" + instanceId);
     var newCompletionsValue = parseInt(elementToUpdate.innerText) + 1;
-    elementToUpdate.innerText = newCompletionsValue;
 
     //base URL used when no custom time is provided
     var url = '/web/tasks/complete/' + instanceId;
@@ -18,6 +17,7 @@ function incrementCompletions(instanceId) {
     $.post(url, function (data, status) {
         console.log('request sent!');
     });
+    elementToUpdate.innerText = newCompletionsValue;
 }
 
 function decrementCompletions(instanceId) {
